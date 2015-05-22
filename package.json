@@ -1,8 +1,9 @@
 {
-  "name": "Magic Clone",
+  "name": "magic-clone",
   "version": "0.0.1",
   "description": "A Magic (TG) clone",
   "dependencies": {
-    "socket.io": "~1.3.x"
+    "socket.io": "~1.3.x",
+    "underscore": "^1.8.3"
   }
 }

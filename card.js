@@ -1,4 +1,5 @@
-function Card(type, attack, defense, name, image, mana, description, flying, firstStrike, vigilance, haste, trample, shadow) {
+function Card(id, type, attack, defense, name, image, mana, description, flying, firstStrike, vigilance, haste, trample, shadow) {
+  this.id = id;
   this.type = type;
   this.attack = attack;
   this.defense = defense;
@@ -6,12 +7,13 @@ function Card(type, attack, defense, name, image, mana, description, flying, fir
   this.image = image;
   this.mana = mana;
   this.description = description;
-  this.flying = flying;
-  this.firstStrike = firstStrike;
-  this.vigilance = vigilance;
-  this.haste = haste;
-  this.trample = trample;
-  this.shadow = shadow;
+  this.flying = flying || false;
+  this.firstStrike = firstStrike || false;
+  this.vigilance = vigilance || false;
+  this.haste = haste || false;
+  this.trample = trample || false;
+  this.shadow = shadow || false;
+  this.attrs = [];
   //this.infects
 };
 

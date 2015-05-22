@@ -1,6 +1,7 @@
 function Card(id, type, attack, defense, name, image, mana, description, flying, firstStrike, vigilance, haste, trample, shadow) {
   this.id = id;
   this.type = type;
+  this.summoned = true;
   this.attack = attack;
   this.defense = defense;
   this.name = name;

@@ -1,9 +1,11 @@
 var _ = require('underscore');
+var global = require('./global');
 var Deck = require('./deck');
 
 function Player(socket) {
-  this.health = 20;
+  this.health = global.maxHealth;
   this.mana = 0;
+  this.usedMana = 0;
   this.deck = new Deck();
   this.hand = this.deck.getHand();
   this.graveyard = [];
@@ -16,7 +18,7 @@ Player.prototype.canDraw = function(cardId) {
   var card = _.find(this.hand, function(c) {
     return c.id === cardId;
   });
-  return (this.mana >= card.mana);
+  return (this.usedMana + card.mana <= this.mana);
 };
 
 Player.prototype.drawCard = function(cardId) {
@@ -26,11 +28,14 @@ Player.prototype.drawCard = function(cardId) {
   this.hand = _.filter(this.hand, function(c) {
     return c.id !== cardId;
   });
+  this.usedMana += card.mana;
   return card;
 };
 
-Player.prototype.hasMana = function(amount) {
-  return (this.mana >= amount);
+Player.prototype.increaseMana = function() {
+  this.mana += 1;
+  if (this.mana > global.maxMana)
+    this.mana = global.maxMana;
 };
 
 module.exports = Player;

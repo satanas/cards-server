@@ -15,12 +15,10 @@ var server = require('socket.io')(app);
 server.on('connection', function(socket) {
   if (Object.keys(players).length === 0) {
     players[socket.id] = new Player(socket);
-    players[socket.id].mana = 1;
     battlefield[socket.id] = {};
     socket.emit('joined', 'Waiting for opponent to start');
   } else if (Object.keys(players).length === 1) {
     players[socket.id] = new Player(socket);
-    players[socket.id].mana = 1;
     battlefield[socket.id] = {};
     socket.emit('joined', 'Ready to start');
     server.emit('ready');
@@ -32,13 +30,15 @@ server.on('connection', function(socket) {
     Object.keys(players).forEach(function(key) {
       players[key].socket.emit('hand', players[key].hand);
       if (key === turnOrder[turnIndex]) {
-        players[key].socket.emit('turn');
+        console.log('Player', key, 'goes first');
+        players[key].mana = 1;
+        players[key].socket.emit('turn', players[key].mana);
       } else {
-        players[key].socket.emit('no-turn');
+        players[key].socket.emit('wait', players[key].mana);
       }
     });
   } else {
-    server.emit('rejected', 'Battle started');
+    socket.emit('rejected', 'Battle started');
     console.log('Connection refused, battle started');
   }
 
@@ -47,13 +47,34 @@ server.on('connection', function(socket) {
     if (players[socket.id].canDraw(cardId)) {
       var card = players[socket.id].drawCard(cardId);
       battlefield[socket.id][card.id] = card;
-      console.log('drawed card to battlefield', cardId);
+      console.log('Player', socket.id, 'drawed card', cardId, 'to battlefield');
+      server.emit('drawed-card', {
+        'player': socket.id,
+        'card': cardId,
+        'mana': players[socket.id].mana,
+        'usedMana': players[socket.id].usedMana
+      });
     } else {
       socket.emit('no-mana');
     }
   });
 
   socket.on('end-turn', function(data) {
+    console.log('Player', socket.id, 'ended turn');
+    turnIndex += 1;
+    if (turnIndex >= turnOrder.length) {
+      turnIndex = 0;
+    }
+    console.log('New turn for player', turnOrder[turnIndex], turnIndex);
+    Object.keys(players).forEach(function(key) {
+      if (key === turnOrder[turnIndex]) {
+        players[key].usedMana = 0;
+        players[key].increaseMana();
+        players[key].socket.emit('turn', players[key].mana);
+      } else {
+        players[key].socket.emit('wait', players[key].mana);
+      }
+    });
   });
 
   socket.on('disconnect', function(socket) {

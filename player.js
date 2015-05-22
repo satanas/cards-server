@@ -12,6 +12,13 @@ function Player(socket) {
   console.log('Created player for socket', socket.id);
 };
 
+Player.prototype.canDraw = function(cardId) {
+  var card = _.find(this.hand, function(c) {
+    return c.id === cardId;
+  });
+  return (this.mana >= card.mana);
+};
+
 Player.prototype.drawCard = function(cardId) {
   var card = _.find(this.hand, function(c) {
     return c.id === cardId;
@@ -20,6 +27,10 @@ Player.prototype.drawCard = function(cardId) {
     return c.id !== cardId;
   });
   return card;
+};
+
+Player.prototype.hasMana = function(amount) {
+  return (this.mana >= amount);
 };
 
 module.exports = Player;

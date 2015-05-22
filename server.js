@@ -6,47 +6,54 @@ var Player = require('./player');
 var port = process.argv[2] || 3000;
 var app = http.createServer();
 
-var players = [];
+var players = {};
 var battlefield = {};
+var turnOrder = [];
+var turnIndex = 0;
 
 var server = require('socket.io')(app);
 server.on('connection', function(socket) {
-  if (players.length === 0) {
-    //console.log('Connected player 1');
-    players.push(new Player(socket));
+  if (Object.keys(players).length === 0) {
+    players[socket.id] = new Player(socket);
+    players[socket.id].mana = 1;
+    battlefield[socket.id] = {};
     socket.emit('joined', 'Waiting for opponent to start');
-  } else if (players.length === 1) {
-    //console.log('Connected player 2');
-    players.push(new Player(socket));
+  } else if (Object.keys(players).length === 1) {
+    players[socket.id] = new Player(socket);
+    players[socket.id].mana = 1;
+    battlefield[socket.id] = {};
     socket.emit('joined', 'Ready to start');
     server.emit('ready');
     console.log('Ready!');
-    players[0].socket.emit('hand', players[0].hand);
-    players[1].socket.emit('hand', players[1].hand);
-    var turn = random.integer(0, 1);
-    for (var i=0; i < players.length; i++) {
-      battlefield[players[i].socket.id] = {};
-      if (turn === i) {
-        players[i].socket.emit('turn');
+    turnOrder = Object.keys(players);
+    random.shuffle(turnOrder);
+
+    // Send hands to users
+    Object.keys(players).forEach(function(key) {
+      players[key].socket.emit('hand', players[key].hand);
+      if (key === turnOrder[turnIndex]) {
+        players[key].socket.emit('turn');
       } else {
-        players[i].socket.emit('no-turn');
+        players[key].socket.emit('no-turn');
       }
-    }
-    console.log('battlefields', battlefield);
+    });
   } else {
     server.emit('rejected', 'Battle started');
     console.log('Connection refused, battle started');
   }
 
   socket.on('draw', function(cardId) {
-    console.log('drawing card', cardId);
-    var player = _.find(players, function(p) {
-      return p.id === socket.id;
-    });
-    var card = player.drawCard(cardId);
-    battlefield[socket.id][card.id] = card;
-    console.log('hand', player.hand);
-    console.log('battlefields', battlefield);
+    var player = players[socket.id];
+    if (players[socket.id].canDraw(cardId)) {
+      var card = players[socket.id].drawCard(cardId);
+      battlefield[socket.id][card.id] = card;
+      console.log('drawed card to battlefield', cardId);
+    } else {
+      socket.emit('no-mana');
+    }
+  });
+
+  socket.on('end-turn', function(data) {
   });
 
   socket.on('disconnect', function(socket) {

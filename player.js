@@ -18,7 +18,12 @@ Player.prototype.canDraw = function(cardId) {
   var card = _.find(this.hand, function(c) {
     return c.id === cardId;
   });
-  return (this.usedMana + card.mana <= this.mana);
+  if (card === undefined) {
+    return global.errors.CARD_NOT_FOUND;
+  } else if (this.usedMana + card.mana > this.mana) {
+    return global.errors.NO_MANA;
+  }
+  return 1;
 };
 
 Player.prototype.drawCard = function(cardId) {

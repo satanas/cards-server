@@ -6,6 +6,10 @@ module.exports = {
     'INSTANT': 3,
     'SORCERY': 4
   },
+  errors: {
+    'NO_MANA': -1,
+    'CARD_NOT_FOUND': -2
+  },
   maxMana: 10,
   maxHealth: 30
 }

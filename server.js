@@ -1,6 +1,7 @@
 var http = require('http');
 var _ = require('underscore');
 var random = require('./random');
+var global = require('./global');
 var Player = require('./player');
 
 var port = process.argv[2] || 3000;
@@ -44,7 +45,8 @@ server.on('connection', function(socket) {
 
   socket.on('draw', function(cardId) {
     var player = players[socket.id];
-    if (players[socket.id].canDraw(cardId)) {
+    var canDraw = players[socket.id].canDraw(cardId);
+    if (canDraw == true) {
       var card = players[socket.id].drawCard(cardId);
       battlefield[socket.id][card.id] = card;
       console.log('Player', socket.id, 'drawed card', cardId, 'to battlefield');
@@ -55,7 +57,11 @@ server.on('connection', function(socket) {
         'usedMana': players[socket.id].usedMana
       });
     } else {
-      socket.emit('no-mana');
+      if (canDraw === global.errors.NO_MANA) {
+        socket.emit('no-mana');
+      } else if (canDraw === global.errors.CARD_NOT_FOUND) {
+        socket.emit('card-not-found');
+      }
     }
   });
 

@@ -1,21 +1,22 @@
-function Card(id, type, attack, defense, name, image, mana, description, flying, firstStrike, vigilance, haste, trample, shadow) {
+function Card(id, type, attack, health, name, image, mana, description, flying, firstStrike, vigilance, haste, trample, shadow) {
   this.id = id;
   this.type = type;
-  this.summoned = true;
   this.attack = attack;
-  this.defense = defense;
+  this.health = health;
   this.name = name;
   this.image = image;
   this.mana = mana;
   this.description = description;
-  this.flying = flying || false;
-  this.firstStrike = firstStrike || false;
-  this.vigilance = vigilance || false;
-  this.haste = haste || false;
-  this.trample = trample || false;
-  this.shadow = shadow || false;
+  this.firstStrike = firstStrike || false; // Attack first, can survive if the other is killed
+  this.haste = haste || false; // Attack when drawn
+  this.trample = trample || false; // Do damage even when blocked
+  this.sick = (this.haste) ? false : true;
+
   this.attrs = [];
   //this.infects
+  //this.vigilance = vigilance || false;
+  //this.flying = flying || false; // Can only be blocked by flying
+  //this.shadow = shadow || false;
 };
 
 module.exports = Card;

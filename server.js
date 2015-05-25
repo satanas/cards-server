@@ -44,6 +44,8 @@ server.on('connection', function(socket) {
   }
 
   socket.on('draw', function(cardId) {
+    if (!isInTurn(socket.id)) return socket.emit('no-turn');
+
     var player = players[socket.id];
     var canDraw = players[socket.id].canDraw(cardId);
     if (canDraw == true) {
@@ -52,7 +54,7 @@ server.on('connection', function(socket) {
       console.log('Player', socket.id, 'drawed card', cardId, 'to battlefield');
       server.emit('drawed-card', {
         'player': socket.id,
-        'card': cardId,
+        'card': card,
         'mana': players[socket.id].mana,
         'usedMana': players[socket.id].usedMana
       });
@@ -65,7 +67,52 @@ server.on('connection', function(socket) {
     }
   });
 
+  socket.on('attack', function(data) {
+    if (!isInTurn(socket.id)) return socket.emit('no-turn');
+
+    var attacker = battlefield[socket.id][data.attacker.cardId],
+        defender = battlefield[data.defender.playerId][data.defender.cardId];
+
+    if (attacker && defender) {
+      if (!attacker.sick) {
+        console.log('Battle between card', attacker.id, '(from player', socket.id, ') and card', defender.id, '(from player', data.defender.playerId, ')');
+        defender.health -= attacker.attack;
+        attacker.health -= defender.attack;
+        if (attacker.health <= 0) {
+          console.log('Card', attacker.id, 'from player', socket.id, 'died');
+          delete battlefield[socket.id][data.attacker.cardId];
+        }
+        if (defender.health <= 0) {
+          console.log('Card', defender.id, 'from player', data.defender.playerId, 'died');
+          delete battlefield[data.defender.playerId][data.defender.cardId];
+        }
+        server.emit('battle', {
+          'attacker': {
+            'playerId': socket.id,
+            'cardId': attacker.id,
+            'damageDealt': attacker.attack,
+            'damageReceive': defender.attack,
+            'health': attacker.health
+          },
+          'defender': {
+            'playerId': data.defender.playerId,
+            'cardId': defender.id,
+            'damageDealt': defender.attack,
+            'damageReceive': attacker.attack,
+            'health': defender.health
+          }
+        });
+      } else {
+        socket.emit('card-sick');
+      }
+    } else {
+      socket.emit('card-not-found');
+    }
+  });
+
   socket.on('end-turn', function(data) {
+    if (!isInTurn(socket.id)) return socket.emit('no-turn');
+
     console.log('Player', socket.id, 'ended turn');
     turnIndex += 1;
     if (turnIndex >= turnOrder.length) {
@@ -74,6 +121,15 @@ server.on('connection', function(socket) {
     console.log('New turn for player', turnOrder[turnIndex], turnIndex);
     Object.keys(players).forEach(function(key) {
       if (key === turnOrder[turnIndex]) {
+        // Unsick creatures from previous turn
+        Object.keys(battlefield[key]).forEach(function(cardId) {
+          var card = battlefield[key][cardId];
+          console.log('Checking for unsick', card.id, ':', card.sick)
+          if (card.sick) {
+            card.sick = false;
+            server.emit('unsick', {playerId: key, cardId: card.id});
+          }
+        });
         players[key].usedMana = 0;
         players[key].increaseMana();
         players[key].socket.emit('turn', players[key].mana);
@@ -90,3 +146,7 @@ server.on('connection', function(socket) {
 
 app.listen(port, "0.0.0.0");
 console.log('Listening on port', port);
+
+function isInTurn(playerId) {
+  return (playerId === turnOrder[turnIndex]);
+}

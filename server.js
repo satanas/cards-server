@@ -73,6 +73,7 @@ server.on('connection', function(socket) {
 
   socket.on('attack', function(data) {
     if (!isPlayerInTurn(socket.id)) return socket.emit('no-turn');
+    if (!isPlayer(data.defender.playerId)) return socket.emit('no-player');
 
     var attacker = battlefield[socket.id][data.attacker.cardId],
         defender = battlefield[data.defender.playerId][data.defender.cardId];
@@ -84,6 +85,7 @@ server.on('connection', function(socket) {
     console.log('Battle between card', attacker.id, '(from player', socket.id, ') and card', defender.id, '(from player', data.defender.playerId, ')');
     defender.health -= attacker.attack;
     attacker.health -= defender.attack;
+    attacker.used = true;
     if (attacker.health <= 0) {
       console.log('Card', attacker.id, 'from player', socket.id, 'died');
       delete battlefield[socket.id][data.attacker.cardId];
@@ -92,6 +94,7 @@ server.on('connection', function(socket) {
       console.log('Card', defender.id, 'from player', data.defender.playerId, 'died');
       delete battlefield[data.defender.playerId][data.defender.cardId];
     }
+
     server.emit('battle', {
       'attacker': {
         'playerId': socket.id,
@@ -110,53 +113,52 @@ server.on('connection', function(socket) {
     });
   });
 
-  socket.on('attack-leader', function(data) {
+  socket.on('direct-attack', function(data) {
     if (!isPlayerInTurn(socket.id)) return socket.emit('no-turn');
+    if (!isPlayer(data.defender.playerId)) return socket.emit('no-player');
 
     var attacker = battlefield[socket.id][data.attacker.cardId],
         defender = players[data.defender.playerId];
 
-    if (attacker && defender) {
-      if (!attacker.sick) {
-        console.log('Card', attacker.id, '(from player', socket.id, ') attacking player', defender.id);
-        defender.health -= attacker.attack;
-        server.emit('direct-attack', {
-          'attacker': {
-            'playerId': socket.id,
-            'cardId': attacker.id,
-            'damageDealt': attacker.attack,
-            'damageReceive': 0,
-            'health': attacker.health
-          },
-          'player': {
-            'id': data.defender.playerId,
-            'damageDealt': 0,
-            'damageReceive': attacker.attack,
-            'health': defender.health
-          }
-        });
-        if (defender.health <= 0) {
-          console.log('Leader', defender.id, 'defeated');
-          console.log(players[defender.id]);
-          players[defender.id].socket.emit('lose');
-          delete players[defender.id];
+    if (!attacker || !defender) return socket.emit('card-not-found');
+    if (attacker.sick) return socket.emit('card-sick');
+    if (attacker.used) return socket.emit('card-used');
 
-          console.log('players', Object.keys(players).length);
-          if (Object.keys(players).length === 1) {
-            console.log('won', players[Object.keys(players)[0]]);
-            players[Object.keys(players)[0]].socket.emit('won');
-          } else {
-            Object.keys(players).forEach(function(key) {
-              console.log('leader.defeate', players[key]);
-              players[key].emit('leader-defeated', defender.id);
-            });
-          }
-        }
-      } else {
-        socket.emit('card-sick');
+    console.log('Card', attacker.id, 'from player', socket.id, 'attacked player', defender.id, 'with', attacker.attack, 'pt(s) of damage');
+    defender.health -= attacker.attack;
+    attacker.used = true;
+
+    server.emit('direct-damage', {
+      'attacker': {
+        'playerId': socket.id,
+        'cardId': attacker.id,
+        'damageDealt': attacker.attack,
+        'damageReceive': 0,
+        'health': attacker.health
+      },
+      'player': {
+        'id': data.defender.playerId,
+        'damageDealt': 0,
+        'damageReceive': attacker.attack,
+        'health': defender.health
       }
-    } else {
-      socket.emit('invalid-operation');
+    });
+    if (defender.health <= 0) {
+      console.log('Leader', defender.id, 'defeated');
+      console.log(players[defender.id]);
+      players[defender.id].socket.emit('lose');
+      delete players[defender.id];
+
+      console.log('players', Object.keys(players).length);
+      if (Object.keys(players).length === 1) {
+        console.log('won', players[Object.keys(players)[0]]);
+        players[Object.keys(players)[0]].socket.emit('won');
+      } else {
+        Object.keys(players).forEach(function(key) {
+          console.log('leader.defeate', players[key]);
+          players[key].emit('leader-defeated', defender.id);
+        });
+      }
     }
 
   });
@@ -175,9 +177,10 @@ server.on('connection', function(socket) {
         // Unsick creatures from previous turn
         Object.keys(battlefield[key]).forEach(function(cardId) {
           var card = battlefield[key][cardId];
-          console.log('Checking for unsick', card.id, ':', card.sick)
+          card.used = false;
           if (card.sick) {
             card.sick = false;
+            console.log('Unsick card', card.id, 'for player', key);
             server.emit('unsick', {playerId: key, cardId: card.id});
           }
         });
@@ -197,6 +200,10 @@ server.on('connection', function(socket) {
 
 app.listen(port, "0.0.0.0");
 console.log('Listening on port', port);
+
+function isPlayer(playerId) {
+  return (Object.keys(players).indexOf(playerId) >= 0);
+}
 
 function isPlayerInTurn(playerId) {
   return (playerId === turnOrder[turnIndex]);

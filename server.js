@@ -97,17 +97,25 @@ server.on('connection', function(socket) {
 
     server.emit('battle', {
       'attacker': {
-        'playerId': socket.id,
-        'cardId': attacker.id,
+        'player': {
+          'id': socket.id
+        },
+        'card': {
+          'id': attacker.id
+        },
         'damageDealt': attacker.attack,
-        'damageReceive': defender.attack,
+        'damageReceived': defender.attack,
         'health': attacker.health
       },
       'defender': {
-        'playerId': data.defender.playerId,
-        'cardId': defender.id,
+        'player': {
+          'id': data.defender.playerId
+        },
+        'card': {
+          'id': defender.id
+        },
         'damageDealt': defender.attack,
-        'damageReceive': attacker.attack,
+        'damageReceived': attacker.attack,
         'health': defender.health
       }
     });
@@ -130,8 +138,12 @@ server.on('connection', function(socket) {
 
     server.emit('direct-damage', {
       'attacker': {
-        'playerId': socket.id,
-        'cardId': attacker.id,
+        'player': {
+          'id': socket.id
+        },
+        'card': {
+          'id': attacker.id
+        },
         'damageDealt': attacker.attack,
         'damageReceive': 0,
         'health': attacker.health

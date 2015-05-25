@@ -29,6 +29,10 @@ server.on('connection', function(socket) {
 
     // Send hands to users
     Object.keys(players).forEach(function(key) {
+      var opponents = _.filter(Object.keys(players), function(k) {
+        return (k !== key);
+      });
+      players[key].socket.emit('opponents', opponents);
       players[key].socket.emit('hand', players[key].hand);
       if (key === turnOrder[turnIndex]) {
         console.log('Player', key, 'goes first');

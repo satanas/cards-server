@@ -110,6 +110,57 @@ server.on('connection', function(socket) {
     }
   });
 
+  socket.on('attack-leader', function(data) {
+    if (!isInTurn(socket.id)) return socket.emit('no-turn');
+
+    var attacker = battlefield[socket.id][data.attacker.cardId],
+        defender = players[data.defender.playerId];
+
+    if (attacker && defender) {
+      if (!attacker.sick) {
+        console.log('Card', attacker.id, '(from player', socket.id, ') attacking player', defender.id);
+        defender.health -= attacker.attack;
+        server.emit('direct-attack', {
+          'attacker': {
+            'playerId': socket.id,
+            'cardId': attacker.id,
+            'damageDealt': attacker.attack,
+            'damageReceive': 0,
+            'health': attacker.health
+          },
+          'player': {
+            'id': data.defender.playerId,
+            'damageDealt': 0,
+            'damageReceive': attacker.attack,
+            'health': defender.health
+          }
+        });
+        if (defender.health <= 0) {
+          console.log('Leader', defender.id, 'defeated');
+          console.log(players[defender.id]);
+          players[defender.id].socket.emit('lose');
+          delete players[defender.id];
+
+          console.log('players', Object.keys(players).length);
+          if (Object.keys(players).length === 1) {
+            console.log('won', players[Object.keys(players)[0]]);
+            players[Object.keys(players)[0]].socket.emit('won');
+          } else {
+            Object.keys(players).forEach(function(key) {
+              console.log('leader.defeate', players[key]);
+              players[key].emit('leader-defeated', defender.id);
+            });
+          }
+        }
+      } else {
+        socket.emit('card-sick');
+      }
+    } else {
+      socket.emit('invalid-operation');
+    }
+
+  });
+
   socket.on('end-turn', function(data) {
     if (!isInTurn(socket.id)) return socket.emit('no-turn');
 

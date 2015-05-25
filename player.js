@@ -23,7 +23,7 @@ Player.prototype.canDraw = function(cardId) {
   } else if (this.usedMana + card.mana > this.mana) {
     return global.errors.NO_MANA;
   }
-  return 1;
+  return 0;
 };
 
 Player.prototype.drawCard = function(cardId) {

@@ -11,6 +11,7 @@ function Card(id, type, attack, health, name, image, mana, description, flying, 
   this.haste = haste || false; // Attack when drawn
   this.trample = trample || false; // Do damage even when blocked
   this.sick = (this.haste) ? false : true;
+  this.used = false;
 
   this.attrs = [];
   //this.infects

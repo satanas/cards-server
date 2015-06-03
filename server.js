@@ -14,14 +14,13 @@ var turnIndex = 0;
 
 var server = require('socket.io')(app);
 server.on('connection', function(socket) {
+  socket.emit('joined', socket.id);
   if (Object.keys(players).length === 0) {
     players[socket.id] = new Player(socket);
     battlefield[socket.id] = {};
-    socket.emit('joined', 'Waiting for opponent to start');
   } else if (Object.keys(players).length === 1) {
     players[socket.id] = new Player(socket);
     battlefield[socket.id] = {};
-    socket.emit('joined', 'Ready to start');
     server.emit('ready');
     console.log('Ready!');
     turnOrder = Object.keys(players);
@@ -57,7 +56,9 @@ server.on('connection', function(socket) {
       battlefield[socket.id][card.id] = card;
       console.log('Player', socket.id, 'drawed card', cardId, 'to battlefield');
       server.emit('drawed-card', {
-        'player': socket.id,
+        'player': {
+          'id': socket.id
+        },
         'card': card,
         'mana': players[socket.id].mana,
         'usedMana': players[socket.id].usedMana

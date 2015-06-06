@@ -32,7 +32,18 @@ server.on('connection', function(socket) {
         return (k !== key);
       });
       players[key].socket.emit('opponents', opponents);
-      players[key].socket.emit('hand', players[key].hand);
+      var hands = {
+        you: {
+          hand: players[key].hand
+        }
+      }
+      opponents.forEach(function(o) {
+        hands[o] = {
+          count: players[o].hand.length
+        }
+      });
+      players[key].socket.emit('hands', hands);
+
       if (key === turnOrder[turnIndex]) {
         console.log('Player', key, 'goes first');
         players[key].mana = 1;

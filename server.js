@@ -205,7 +205,14 @@ server.on('connection', function(socket) {
           if (card.sick) {
             card.sick = false;
             console.log('Unsick card', card.id, 'for player', key);
-            server.emit('unsick', {playerId: key, cardId: card.id});
+            server.emit('unsick', {
+              player: {
+                id: key
+              },
+              card: {
+                id: card.id
+              }
+            });
           }
         });
         players[key].usedMana = 0;

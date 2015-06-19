@@ -33,6 +33,7 @@ Player.prototype.drawCard = function(cardId) {
   this.hand = _.filter(this.hand, function(c) {
     return c.id !== cardId;
   });
+  card.drawed = true;
   this.usedMana += card.mana;
   return card;
 };

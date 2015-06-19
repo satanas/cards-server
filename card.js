@@ -1,4 +1,4 @@
-function Card(id, type, attack, health, name, image, mana, description, flying, firstStrike, vigilance, haste, trample, shadow) {
+var Card = function(id, type, attack, health, name, image, mana, description, flying, firstStrike, vigilance, haste, trample, shadow) {
   this.id = id;
   this.type = type;
   this.attack = attack;
@@ -12,6 +12,7 @@ function Card(id, type, attack, health, name, image, mana, description, flying, 
   this.trample = trample || false; // Do damage even when blocked
   this.sick = (this.haste) ? false : true;
   this.used = false;
+  this.drawed = false;
 
   this.attrs = [];
   //this.infects

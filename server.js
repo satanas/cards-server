@@ -14,13 +14,24 @@ var turnIndex = 0;
 
 var server = require('socket.io')(app);
 server.on('connection', function(socket) {
-  socket.emit('joined', socket.id);
   if (Object.keys(players).length === 0) {
     players[socket.id] = new Player(socket);
     battlefield[socket.id] = {};
+    socket.emit('joined', {
+      'player': {
+        'id': socket.id,
+        'health': players[socket.id].health
+      }
+    });
   } else if (Object.keys(players).length === 1) {
     players[socket.id] = new Player(socket);
     battlefield[socket.id] = {};
+    socket.emit('joined', {
+      'player': {
+        'id': socket.id,
+        'health': players[socket.id].health
+      }
+    });
     server.emit('ready');
     console.log('Ready!');
     turnOrder = Object.keys(players);
@@ -28,8 +39,17 @@ server.on('connection', function(socket) {
 
     // Send hands to users
     Object.keys(players).forEach(function(key) {
-      var opponents = _.filter(Object.keys(players), function(k) {
+      var opponentKeys = _.filter(Object.keys(players), function(k) {
         return (k !== key);
+      });
+      var opponents = [];
+      opponentKeys.forEach(function(key) {
+        opponents.push({
+          'player': {
+            'id': key,
+            'health': players[key].health
+          }
+        });
       });
       players[key].socket.emit('opponents', opponents);
       var hands = {
@@ -38,8 +58,8 @@ server.on('connection', function(socket) {
         }
       }
       opponents.forEach(function(o) {
-        hands[o] = {
-          count: players[o].hand.length
+        hands[o.player.id] = {
+          count: players[o.player.id].hand.length
         }
       });
       players[key].socket.emit('hands', hands);
@@ -53,6 +73,7 @@ server.on('connection', function(socket) {
       }
     });
   } else {
+    socket.emit('joined', null);
     socket.emit('rejected', 'Battle started');
     console.log('Connection refused, battle started');
   }

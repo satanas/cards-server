@@ -38,6 +38,12 @@ Player.prototype.drawCard = function(cardId) {
   return card;
 };
 
+Player.prototype.cardFromDeck = function() {
+  var card = this.deck.getCard();
+  this.hand.push(card);
+  return card;
+};
+
 Player.prototype.increaseMana = function() {
   this.mana += 1;
   if (this.mana > global.maxMana)

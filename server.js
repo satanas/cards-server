@@ -67,13 +67,20 @@ server.on('connection', function(socket) {
       if (key === turnOrder[turnIndex]) {
         console.log('Player', key, 'goes first');
         players[key].mana = 1;
-        players[key].socket.emit('turn', players[key].mana);
+        var newCard = players[key].cardFromDeck();
+        players[key].socket.emit('turn', {
+          'mana': players[key].mana,
+          'card': newCard
+        });
       } else {
-        players[key].socket.emit('wait', players[key].mana);
+        players[key].socket.emit('wait', {
+          'mana': players[key].mana,
+          'card_for': turnOrder[turnIndex]
+        });
       }
     });
   } else {
-    socket.emit('joined', null);
+    socket.emit('joined', {'player': {'id': null}});
     socket.emit('rejected', 'Battle started');
     console.log('Connection refused, battle started');
   }
@@ -238,9 +245,16 @@ server.on('connection', function(socket) {
         });
         players[key].usedMana = 0;
         players[key].increaseMana();
-        players[key].socket.emit('turn', players[key].mana);
+        var newCard = players[key].cardFromDeck();
+        players[key].socket.emit('turn', {
+          'mana': players[key].mana,
+          'card': newCard
+        });
       } else {
-        players[key].socket.emit('wait', players[key].mana);
+        players[key].socket.emit('wait', {
+          'mana': players[key].mana,
+          'card_for': turnOrder[turnIndex]
+        });
       }
     });
   });

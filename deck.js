@@ -33,7 +33,7 @@ Deck.prototype.getCard = function() {
 
 Deck.prototype.getHand = function() {
   var hand = [];
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < 3; i++) {
     hand.push(this.cards.pop());
   }
   return hand;

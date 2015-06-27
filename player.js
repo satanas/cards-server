@@ -3,14 +3,14 @@ var global = require('./global');
 var Deck = require('./deck');
 
 function Player(socket) {
+  this.id = socket.id;
   this.health = global.maxHealth;
   this.mana = 0;
   this.usedMana = 0;
-  this.deck = new Deck();
+  this.deck = new Deck(this.id);
   this.hand = this.deck.getHand();
   this.graveyard = [];
   this.socket = socket;
-  this.id = socket.id;
   console.log('Created player for socket', socket.id);
 };
 

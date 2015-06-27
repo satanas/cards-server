@@ -119,7 +119,9 @@ server.on('connection', function(socket) {
     if (!isPlayer(data.defender.playerId)) return socket.emit('no-player');
 
     var attacker = battlefield[socket.id][data.attacker.cardId],
-        defender = battlefield[data.defender.playerId][data.defender.cardId];
+        defender = battlefield[data.defender.playerId][data.defender.cardId],
+        opponent = players[data.defender.playerId],
+        opponentStats = null;
 
     if (!attacker || !defender) return socket.emit('card-not-found');
     if (attacker.sick) return socket.emit('card-sick');
@@ -129,6 +131,19 @@ server.on('connection', function(socket) {
     defender.health -= attacker.attack;
     attacker.health -= defender.attack;
     attacker.used = true;
+
+    if (attacker.overwhelm) {
+      var extraDamage = attacker.attack - defender.health;
+      if (extraDamage > 0) {
+        opponentStats = {
+          'id': opponent.id,
+          'damageDealt': 0,
+          'damageReceived': extraDamage,
+          'health': opponent.health
+        }
+      }
+    }
+
     if (attacker.health <= 0) {
       console.log('Card', attacker.id, 'from player', socket.id, 'died');
       delete battlefield[socket.id][data.attacker.cardId];
@@ -160,7 +175,8 @@ server.on('connection', function(socket) {
         'damageDealt': defender.attack,
         'damageReceived': attacker.attack,
         'health': defender.health
-      }
+      },
+      'player': opponentStats
     });
   });
 
@@ -188,13 +204,13 @@ server.on('connection', function(socket) {
           'id': attacker.id
         },
         'damageDealt': attacker.attack,
-        'damageReceive': 0,
+        'damageReceived': 0,
         'health': attacker.health
       },
       'player': {
         'id': data.defender.playerId,
         'damageDealt': 0,
-        'damageReceive': attacker.attack,
+        'damageReceived': attacker.attack,
         'health': defender.health
       }
     });

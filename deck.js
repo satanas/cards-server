@@ -17,7 +17,8 @@ var Deck = function(playerId) {
     new Card(9, global.cardTypes.CREATURE, 4, 4, 'Klo Monster', 'image.jpg', 4, 'Description'),
     new Card(10, global.cardTypes.CREATURE, 1, 4, 'Klu Monster', 'image.jpg', 5, 'Description'),
     new Card(11, global.cardTypes.CREATURE, 2, 3, 'Fla Monster', 'image.jpg', 5, 'Description'),
-    new Card(12, global.cardTypes.CREATURE, 1, 1, 'Huried Monster', 'image.jpg', 2, 'Description', false, false, false, true),
+    new Card(12, global.cardTypes.CREATURE, 1, 1, 'Hurried Monster', 'image.jpg', 2, 'Description', false, false, false, true),
+    new Card(13, global.cardTypes.CREATURE, 3, 2, 'Powerful Lad', 'image.jpg', 3, 'Description', false, false, false, false, true),
   ];
   this.playerId = playerId;
   this.cards = cardStorage.slice(0);

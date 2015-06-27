@@ -121,20 +121,23 @@ server.on('connection', function(socket) {
     var attacker = battlefield[socket.id][data.attacker.cardId],
         defender = battlefield[data.defender.playerId][data.defender.cardId],
         opponent = players[data.defender.playerId],
-        opponentStats = null;
+        opponentStats = null,
+        extraDamage = 0;
 
     if (!attacker || !defender) return socket.emit('card-not-found');
     if (attacker.sick) return socket.emit('card-sick');
     if (attacker.used) return socket.emit('card-used');
 
     console.log('Battle between card', attacker.id, '(from player', socket.id, ') and card', defender.id, '(from player', data.defender.playerId, ')');
+    extraDamage = attacker.attack - defender.health;
     defender.health -= attacker.attack;
     attacker.health -= defender.attack;
     attacker.used = true;
 
     if (attacker.overwhelm) {
-      var extraDamage = attacker.attack - defender.health;
       if (extraDamage > 0) {
+        console.log('Dealing', extraDamage, 'of extra damage due to overwhelm');
+        opponent.health -= extraDamage;
         opponentStats = {
           'id': opponent.id,
           'damageDealt': 0,

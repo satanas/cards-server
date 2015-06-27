@@ -136,6 +136,10 @@ server.on('connection', function(socket) {
       }
     }
 
+    if (attacker.deathtouch) {
+      defender.health = 0;
+    }
+
     if (attacker.health <= 0) {
       console.log('Card', attacker.id, 'from player', socket.id, 'died');
       delete battlefield[socket.id][data.attacker.cardId];

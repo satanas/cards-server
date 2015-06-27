@@ -21,6 +21,7 @@ var Deck = function(playerId) {
     new Card(13, global.cardTypes.CREATURE, 3, 2, 'Powerful Lad', 'image.jpg', 3, 'Description', false, false, false, false, true),
     new Card(14, global.cardTypes.CREATURE, 1, 1, 'Spearman', 'image.jpg', 2, 'Description', false, true),
     new Card(15, global.cardTypes.CREATURE, 2, 2, 'Master Sword', 'image.jpg', 3, 'Description', false, true),
+    new Card(16, global.cardTypes.CREATURE, 1, 1, 'Damned', 'image.jpg', 2, 'Description', false, false, false, false, false, true),
   ];
   this.playerId = playerId;
   this.cards = cardStorage.slice(0);

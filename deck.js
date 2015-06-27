@@ -19,6 +19,8 @@ var Deck = function(playerId) {
     new Card(11, global.cardTypes.CREATURE, 2, 3, 'Fla Monster', 'image.jpg', 5, 'Description'),
     new Card(12, global.cardTypes.CREATURE, 1, 1, 'Hurried Monster', 'image.jpg', 2, 'Description', false, false, false, true),
     new Card(13, global.cardTypes.CREATURE, 3, 2, 'Powerful Lad', 'image.jpg', 3, 'Description', false, false, false, false, true),
+    new Card(14, global.cardTypes.CREATURE, 1, 1, 'Spearman', 'image.jpg', 2, 'Description', false, true),
+    new Card(15, global.cardTypes.CREATURE, 2, 2, 'Master Sword', 'image.jpg', 3, 'Description', false, true),
   ];
   this.playerId = playerId;
   this.cards = cardStorage.slice(0);

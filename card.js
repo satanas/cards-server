@@ -16,7 +16,7 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
 
   this.attrs = [];
   //this.infects
-  //this.vigilance = vigilance || false;
+  //this.vigilance = vigilance || false; Can be renamed to provoke
   //this.flying = flying || false; // Can only be blocked by flying
   //this.shadow = shadow || false;
   //this.deathtouch = false; // It creature with deathtouch dies, the attacking creature also dies

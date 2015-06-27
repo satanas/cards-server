@@ -129,10 +129,14 @@ server.on('connection', function(socket) {
     if (attacker.used) return socket.emit('card-used');
 
     console.log('Battle between card', attacker.id, '(from player', socket.id, ') and card', defender.id, '(from player', data.defender.playerId, ')');
+    attacker.used = true;
     extraDamage = attacker.attack - defender.health;
     defender.health -= attacker.attack;
-    attacker.health -= defender.attack;
-    attacker.used = true;
+    if (!attacker.firstStrike || (attacker.firstStrike && defender.health > 0) || (attacker.firstStrike && defender.firstStrike)) {
+      attacker.health -= defender.attack;
+    } else {
+      console.log('Attacker did not receive damage because it killed the defender with the first strike');
+    }
 
     if (attacker.overwhelm) {
       if (extraDamage > 0) {

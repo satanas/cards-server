@@ -11,6 +11,7 @@ var players = {};
 var battlefield = {};
 var turnOrder = [];
 var turnIndex = 0;
+var matchEnded = false;
 
 var server = require('socket.io')(app);
 server.on('connection', function(socket) {
@@ -185,6 +186,8 @@ server.on('connection', function(socket) {
       },
       'player': opponentStats
     });
+
+    checkForVictory(opponent);
   });
 
   socket.on('direct-attack', function(data) {
@@ -221,24 +224,7 @@ server.on('connection', function(socket) {
         'health': defender.health
       }
     });
-    if (defender.health <= 0) {
-      console.log('Leader', defender.id, 'defeated');
-      console.log(players[defender.id]);
-      players[defender.id].socket.emit('lose');
-      delete players[defender.id];
-
-      console.log('players', Object.keys(players).length);
-      if (Object.keys(players).length === 1) {
-        console.log('won', players[Object.keys(players)[0]]);
-        players[Object.keys(players)[0]].socket.emit('won');
-      } else {
-        Object.keys(players).forEach(function(key) {
-          console.log('leader.defeate', players[key]);
-          players[key].emit('leader-defeated', defender.id);
-        });
-      }
-    }
-
+    checkForVictory(defender);
   });
 
   socket.on('end-turn', function(data) {
@@ -300,4 +286,23 @@ function isPlayer(playerId) {
 
 function isPlayerInTurn(playerId) {
   return (playerId === turnOrder[turnIndex]);
+}
+
+function checkForVictory(defender) {
+  if (defender.health <= 0) {
+    matchEnded = true;
+    console.log('Player', defender.id, 'defeated');
+    players[defender.id].socket.emit('lose');
+    delete players[defender.id];
+
+    if (Object.keys(players).length === 1) {
+      var victoryPlayer = players[Object.keys(players)[0]];
+      console.log('Player', victoryPlayer.id, 'won');
+      players[victoryPlayer.id].socket.emit('won');
+    } else {
+      Object.keys(players).forEach(function(key) {
+        players[key].emit('leader-defeated', defender.id);
+      });
+    }
+  }
 }

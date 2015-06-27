@@ -1,4 +1,4 @@
-var Card = function(id, type, attack, health, name, image, mana, description, flying, firstStrike, vigilance, haste, trample, shadow) {
+var Card = function(id, type, attack, health, name, image, mana, description, flying, firstStrike, vigilance, rush, trample, shadow) {
   this.id = id;
   this.type = type;
   this.attack = attack;
@@ -8,9 +8,9 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
   this.mana = mana;
   this.description = description;
   this.firstStrike = firstStrike || false; // Attack first, can survive if the other is killed
-  this.haste = haste || false; // Attack when drawn
-  this.trample = trample || false; // Do damage even when blocked
-  this.sick = (this.haste) ? false : true;
+  this.rush = rush || false; // Attack when drawn
+  this.trample = trample || false; // Inflicts the non-blocked damage to the player
+  this.sick = (this.rush) ? false : true;
   this.used = false;
   this.drawed = false;
 

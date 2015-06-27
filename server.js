@@ -66,23 +66,7 @@ server.on('connection', function(socket) {
       players[key].socket.emit('hands', hands);
     });
 
-    Object.keys(players).forEach(function(key) {
-      if (key === turnOrder[turnIndex]) {
-        console.log('Player', key, 'goes first');
-        players[key].mana = 1;
-        var newCard = players[key].cardFromDeck();
-        console.log('New card (' + newCard.id +') for player ' + key +', hand length:', players[key].hand.length);
-        players[key].socket.emit('turn', {
-          'mana': players[key].mana,
-          'card': newCard
-        });
-      } else {
-        players[key].socket.emit('wait', {
-          'mana': players[key].mana,
-          'card_for': turnOrder[turnIndex]
-        });
-      }
-    });
+    performTurn();
   } else {
     socket.emit('joined', {'player': {'id': null}});
     socket.emit('rejected', 'Battle started');
@@ -237,42 +221,7 @@ server.on('connection', function(socket) {
     }
     console.log('New turn for player', turnOrder[turnIndex], turnIndex);
 
-    var newCard = players[turnOrder[turnIndex]].cardFromDeck();
-    Object.keys(players).forEach(function(key) {
-      if (key === turnOrder[turnIndex]) {
-        // Unsick creatures from previous turn
-        Object.keys(battlefield[key]).forEach(function(cardId) {
-          var card = battlefield[key][cardId];
-          card.used = false;
-          if (card.sick) {
-            card.sick = false;
-            console.log('Unsick card', card.id, 'for player', key);
-            server.emit('unsick', {
-              player: {
-                id: key
-              },
-              card: {
-                id: card.id
-              }
-            });
-          }
-        });
-        players[key].usedMana = 0;
-        players[key].increaseMana();
-        if (newCard) {
-          console.log('New card with id ' + newCard.id +' for player ' + key +', hand length:', players[key].hand.length);
-        }
-        players[key].socket.emit('turn', {
-          'mana': players[key].mana,
-          'card': newCard
-        });
-      } else {
-        players[key].socket.emit('wait', {
-          'mana': players[key].mana,
-          'card_for': newCard ? turnOrder[turnIndex] : null
-        });
-      }
-    });
+    performTurn();
   });
 
   socket.on('disconnect', function(socket) {
@@ -309,3 +258,43 @@ function checkForVictory(defender) {
     }
   }
 }
+
+function performTurn() {
+  var newCard = players[turnOrder[turnIndex]].cardFromDeck();
+  Object.keys(players).forEach(function(key) {
+    if (key === turnOrder[turnIndex]) {
+      // Unsick creatures from previous turn
+      Object.keys(battlefield[key]).forEach(function(cardId) {
+        var card = battlefield[key][cardId];
+        card.used = false;
+        if (card.sick) {
+          card.sick = false;
+          console.log('Unsick card', card.id, 'for player', key);
+          server.emit('unsick', {
+            player: {
+              id: key
+            },
+            card: {
+              id: card.id
+            }
+          });
+        }
+      });
+      players[key].usedMana = 0;
+      players[key].increaseMana();
+      if (newCard) {
+        console.log('New card with id ' + newCard.id +' for player ' + key +', hand length:', players[key].hand.length);
+      }
+      players[key].socket.emit('turn', {
+        'mana': players[key].mana,
+        'card': newCard
+      });
+    } else {
+      players[key].socket.emit('wait', {
+        'mana': players[key].mana,
+        'card_for': newCard ? turnOrder[turnIndex] : null
+      });
+    }
+  });
+}
+

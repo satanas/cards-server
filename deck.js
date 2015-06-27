@@ -31,7 +31,6 @@ Deck.prototype.shuffle = function() {
 Deck.prototype.getCard = function() {
   var card = this.cards.pop();
   card.playerId = this.playerId;
-  console.log('getting card', card);
   return card;
 };
 
@@ -40,7 +39,6 @@ Deck.prototype.getHand = function() {
   for (var i = 0; i < 3; i++) {
     var card = this.cards.pop();
     card.playerId = this.playerId;
-    console.log('hadn card', card);
     hand.push(card);
   }
   return hand;

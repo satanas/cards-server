@@ -249,7 +249,7 @@ server.on('connection', function(socket) {
         players[key].usedMana = 0;
         players[key].increaseMana();
         var newCard = players[key].cardFromDeck();
-        console.log('New card (' + newCard.id +') for player ' + key +', hand length:', players[key].hand.length);
+        console.log('New card with id ' + newCard.id +' for player ' + key +', hand length:', players[key].hand.length);
         players[key].socket.emit('turn', {
           'mana': players[key].mana,
           'card': newCard

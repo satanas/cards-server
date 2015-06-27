@@ -40,7 +40,9 @@ Player.prototype.drawCard = function(cardId) {
 
 Player.prototype.cardFromDeck = function() {
   var card = this.deck.getCard();
-  this.hand.push(card);
+  if (card) {
+    this.hand.push(card);
+  }
   return card;
 };
 

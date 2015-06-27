@@ -236,6 +236,8 @@ server.on('connection', function(socket) {
       turnIndex = 0;
     }
     console.log('New turn for player', turnOrder[turnIndex], turnIndex);
+
+    var newCard = players[turnOrder[turnIndex]].cardFromDeck();
     Object.keys(players).forEach(function(key) {
       if (key === turnOrder[turnIndex]) {
         // Unsick creatures from previous turn
@@ -257,8 +259,9 @@ server.on('connection', function(socket) {
         });
         players[key].usedMana = 0;
         players[key].increaseMana();
-        var newCard = players[key].cardFromDeck();
-        console.log('New card with id ' + newCard.id +' for player ' + key +', hand length:', players[key].hand.length);
+        if (newCard) {
+          console.log('New card with id ' + newCard.id +' for player ' + key +', hand length:', players[key].hand.length);
+        }
         players[key].socket.emit('turn', {
           'mana': players[key].mana,
           'card': newCard
@@ -266,7 +269,7 @@ server.on('connection', function(socket) {
       } else {
         players[key].socket.emit('wait', {
           'mana': players[key].mana,
-          'card_for': turnOrder[turnIndex]
+          'card_for': newCard ? turnOrder[turnIndex] : null
         });
       }
     });

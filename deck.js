@@ -33,8 +33,10 @@ Deck.prototype.shuffle = function() {
 };
 
 Deck.prototype.getCard = function() {
-  var card = this.cards.pop();
-  card.playerId = this.playerId;
+  var card = this.cards.pop() || null;
+  if (card) {
+    card.playerId = this.playerId;
+  }
   return card;
 };
 

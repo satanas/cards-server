@@ -20,6 +20,7 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
   //this.vigilance = vigilance || false; Can be renamed to provoke
   //this.flying = flying || false; // Can only be blocked by flying
   //this.shadow = shadow || false;
+  //berserker
 };
 
 module.exports = Card;

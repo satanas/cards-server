@@ -20,7 +20,10 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
   //this.vigilance = vigilance || false; Can be renamed to provoke
   //this.flying = flying || false; // Can only be blocked by flying
   //this.shadow = shadow || false;
-  //berserker
+  //berserker: attacks twice
+  //unholy: can't be target of spells or abilities
+  //provoke: enemy can't attack other creatures
+  //stealth: can't be targeted until it attacks
 };
 
 module.exports = Card;

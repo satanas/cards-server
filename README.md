@@ -2,8 +2,12 @@
 
 ## Installation
 
-```npm install```
+```
+npm install
+```
 
 ## Running
 
-```npm start```
+```
+npm start
+```

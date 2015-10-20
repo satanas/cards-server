@@ -1,9 +1,9 @@
-# Game card server
+# Cards server
 
-Install:
+## Installation
 
 ```npm install```
 
-Run:
+## Running
 
-```node server.js```
+```npm start```

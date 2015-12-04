@@ -1,6 +1,5 @@
-var Card = require('./models/card');
-var global = require('./global');
-var random = require('./random');
+var Card = require('./card');
+var global = require('../global');
 
 var Deck = function(playerId) {
   console.log('playerId', playerId);
@@ -28,9 +27,8 @@ var Deck = function(playerId) {
   this.shuffle();
 };
 
-// http://en.wikipedia.org/wiki/Fisher-Yates_shuffle#The_modern_algorithm
 Deck.prototype.shuffle = function() {
-  random.shuffle(this.cards);
+  this.cards.shuffle();
 };
 
 Deck.prototype.getCard = function() {

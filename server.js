@@ -1,8 +1,10 @@
+require('./lib/mixins');
+
 var http = require('http');
 var _ = require('underscore');
-var random = require('./random');
 var global = require('./global');
 var Player = require('./models/player');
+
 
 var port = process.argv[2] || 3000;
 var app = http.createServer();
@@ -36,7 +38,9 @@ server.on('connection', function(socket) {
     server.emit('ready');
     console.log('Ready!');
     turnOrder = Object.keys(players);
-    random.shuffle(turnOrder);
+    console.log('ble 1', turnOrder);
+    turnOrder.shuffle();
+    console.log('ble 2', turnOrder);
 
     // Send hands to users
     Object.keys(players).forEach(function(key) {

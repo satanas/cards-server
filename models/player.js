@@ -1,6 +1,6 @@
 var _ = require('underscore');
-var global = require('./global');
-var Deck = require('./models/deck');
+var global = require('../global');
+var Deck = require('./deck');
 
 function Player(socket) {
   this.id = socket.id;

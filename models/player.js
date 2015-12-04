@@ -14,6 +14,8 @@ function Player(socket) {
   console.log('Created player for socket', socket.id);
 };
 
+Player.prototype.constructor = Player;
+
 Player.prototype.canDraw = function(cardId) {
   var card = _.find(this.hand, function(c) {
     return c.id === cardId;

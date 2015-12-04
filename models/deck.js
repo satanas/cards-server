@@ -1,4 +1,4 @@
-var Card = require('./card');
+var Card = require('./models/card');
 var global = require('./global');
 var random = require('./random');
 

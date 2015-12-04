@@ -2,7 +2,7 @@ var http = require('http');
 var _ = require('underscore');
 var random = require('./random');
 var global = require('./global');
-var Player = require('./player');
+var Player = require('./models/player');
 
 var port = process.argv[2] || 3000;
 var app = http.createServer();

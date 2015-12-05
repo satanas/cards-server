@@ -2,7 +2,6 @@ var Card = require('./card');
 var global = require('../global');
 
 var Deck = function(playerId) {
-  console.log('playerId', playerId);
   // Read the cards storage and create a 60 cards deck
   cardStorage = [
     new Card(1, global.cardTypes.CREATURE, 1, 1, 'Bla Monster', 'image.jpg', 1, 'Description'),

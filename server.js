@@ -4,6 +4,7 @@ var http = require('http');
 var _ = require('underscore');
 var global = require('./global');
 var Player = require('./models/player');
+var Match = require('./models/match');
 
 
 var port = process.argv[2] || 3000;
@@ -14,9 +15,14 @@ var battlefield = {};
 var turnOrder = [];
 var turnIndex = 0;
 var matchEnded = false;
+var matches = [];
 
 var server = require('socket.io')(app);
 server.on('connection', function(socket) {
+  socket.on('new-match', function() {
+    matches.push(new Match(server, socket));
+  });
+
   if (Object.keys(players).length === 0) {
     players[socket.id] = new Player(socket);
     battlefield[socket.id] = {};

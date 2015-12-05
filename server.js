@@ -20,15 +20,16 @@ var matches = [];
 var server = require('socket.io')(app);
 server.on('connection', function(socket) {
   console.log('connectingaS:dA_S.dasñkdas');
+
   socket.on('new-match', function() {
-    console.log('new match bitch');
-    matches.push(new Match(server, socket));
-    matches[0].create();
+    var match = new Match(server, socket);
+    matches.push(match);
   });
 
   socket.on('join-match', function(matchId) {
+    // Search for match
     var match = matches[0];
-    match.joinPlayer();
+    match.joinPlayer(socket);
     if (Object.keys(match.players).length > 1) {
       match.start();
       performTurn();

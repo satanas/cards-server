@@ -13,6 +13,13 @@ function Match(server, socket) {
 }
 
 Match.prototype.create = function() {
+  this.joinPlayer();
+
+  console.log('Match ' + this.id + ' created');
+  socket.emit('match-created', this.id);
+};
+
+Math.prototype.joinPlayer = function() {
   this.players[this.socket.id] = new Player(this.socket);
   this.battlefield[this.socket.id] = {};
   this.socket.emit('joined', {
@@ -21,9 +28,6 @@ Match.prototype.create = function() {
       'health': this.players[this.socket.id].health
     }
   });
-
-  console.log('Match ' + this.id + ' created');
-  socket.emit('match-created', this.id);
 };
 
 module.exports = Match;

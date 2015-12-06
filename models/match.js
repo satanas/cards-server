@@ -2,36 +2,44 @@ var _ = require('underscore');
 var Global = require('../global');
 var Player = require('./player');
 
-function Match(server, socket) {
+function Match(socket) {
   this.status = Global.MATCH_STATUS.Open;
   this.players = {};
   this.battlefield = {};
   this.turnOrder = [];
   this.turnIndex = 0;
   //this.matchEnded = false;
-  this.server = server;
+
   // Generate
   this.id = '123120391280398102938';
-  console.log('Match ' + this.id + ' created');
+  console.log(`Match ${this.id} created`);
   socket.emit('match-created', this.id);
 
-  this.joinPlayer(socket);
+  this.join(socket);
 }
 
 Match.prototype.join = function(socket) {
   this.players[socket.id] = new Player(socket);
   this.battlefield[socket.id] = {};
-  socket.emit('joined', {
-    'player': {
-      'id': socket.id,
-      'health': this.players[socket.id].health
-    }
+  var playersList = [];
+  this.iterate(function(key) {
+    playersList.push(key);
   });
+  this.broadcast('joined', {
+    'players': playersList
+  });
+  //socket.emit('joined', {
+  //  'player': {
+  //    'id': socket.id,
+  //    'health': this.players[socket.id].health
+  //  }
+  //});
 };
 
 Match.prototype.start = function() {
-  this.server.emit('ready');
-  console.log('Ready!');
+  console.log('Match started');
+  this.broadcast('match-started');
+
   this.turnOrder = Object.keys(this.players);
   this.turnOrder.shuffle();
 
@@ -102,6 +110,25 @@ Match.prototype.turn = function() {
       });
     }
   });
+};
+
+// Emit event to socket associated to playerId
+Match.prototype.emit = function(playerId, command, data) {
+  this.players[playerId].socket.emit(command, data);
+};
+
+// Broadcast event to all players
+Match.prototype.broadcast = function(command, data) {
+  for (var id in this.players) {
+    this.players[id].socket.emit(command, data);
+  }
+};
+
+// Iterates over the players and executes a callback passing key, value
+Match.prototype.iterate = function(cb) {
+  Object.keys(this.players).forEach(function(key) {
+    cb(key, this.players[key]);
+  }, this);
 };
 
 module.exports = Match;

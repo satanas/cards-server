@@ -34,3 +34,15 @@
 
 * Server sends 'victory' to the player who wins the match and 'defeat' to the player who loses
 
+# Considerations
+
+* There are two ways to implement match making:
+  1. Client never sends match id. Instead, server associates sockets ids to match and validate that the requesting
+  client is a valid client for that match.
+  2. Client always sends match id. Server still associates socket ids with match id and also validate that the
+  requesting client is a valid client for that match.
+* Server app must be stateless. It doesn't matter the match, any server should be able to process the request from the
+client. Phase one will include only one process serving all requests but in order to server a high load, the match
+information should be stored in something like Redis (or maybe Mongo) and any server should be able to load the info,
+process the action and return a response to the client.
+

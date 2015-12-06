@@ -16,7 +16,7 @@ function Match(server, socket) {
   this.joinPlayer(socket);
 }
 
-Match.prototype.joinPlayer = function(socket) {
+Match.prototype.join = function(socket) {
   this.players[socket.id] = new Player(socket);
   this.battlefield[socket.id] = {};
   socket.emit('joined', {
@@ -60,6 +60,46 @@ Match.prototype.start = function() {
     }, this);
     this.players[key].socket.emit('hands', hands);
   }, this);
+};
+
+Match.prototype.turn = function() {
+  var newCard = players[turnOrder[turnIndex]].cardFromDeck();
+
+  Object.keys(players).forEach(function(key) {
+    if (key === turnOrder[turnIndex]) {
+      // Unsick creatures from previous turn
+      Object.keys(battlefield[key]).forEach(function(cardId) {
+        var card = battlefield[key][cardId];
+        card.used = false;
+        if (card.sick) {
+          card.sick = false;
+          console.log('Unsick card', card.id, 'for player', key);
+          server.emit('unsick', {
+            player: {
+              id: key
+            },
+            card: {
+              id: card.id
+            }
+          });
+        }
+      });
+      players[key].usedMana = 0;
+      players[key].increaseMana();
+      if (newCard) {
+        console.log('New card with id ' + newCard.id +' for player ' + key +', hand length:', players[key].hand.length);
+      }
+      players[key].socket.emit('turn', {
+        'mana': players[key].mana,
+        'card': newCard
+      });
+    } else {
+      players[key].socket.emit('wait', {
+        'mana': players[key].mana,
+        'card_for': newCard ? turnOrder[turnIndex] : null
+      });
+    }
+  });
 };
 
 module.exports = Match;

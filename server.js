@@ -3,8 +3,8 @@ require('./lib/mixins');
 var http = require('http');
 var _ = require('underscore');
 var global = require('./global');
-var Player = require('./models/player');
 var Match = require('./models/match');
+var Player = require('./models/player');
 
 
 var port = process.argv[2] || 3000;
@@ -19,82 +19,82 @@ var matches = [];
 
 var server = require('socket.io')(app);
 server.on('connection', function(socket) {
-  console.log('connectingaS:dA_S.dasñkdas');
+  console.log('connecting:dA_.daskdas');
 
-  socket.on('new-match', function() {
-    var match = new Match(server, socket);
-    matches.push(match);
-  });
+  //socket.on('new-match', function() {
+  //  var match = new Match(server, socket);
+  //  matches.push(match);
+  //});
 
-  socket.on('join-match', function(matchId) {
-    // Search for match
-    var match = matches[0];
-    match.joinPlayer(socket);
-    if (Object.keys(match.players).length > 1) {
-      match.start();
-      performTurn();
-    }
-  });
+  //socket.on('join-match', function(matchId) {
+  //  // Search for match
+  //  var match = matches[0];
+  //  match.join(socket);
+  //  if (Object.keys(match.players).length > 1) {
+  //    match.start();
+  //    match.turn();
+  //  }
+  //});
 
-  //if (Object.keys(players).length === 0) {
-  //  players[socket.id] = new Player(socket);
-  //  battlefield[socket.id] = {};
-  //  socket.emit('joined', {
-  //    'player': {
-  //      'id': socket.id,
-  //      'health': players[socket.id].health
-  //    }
-  //  });
-  //} else if (Object.keys(players).length === 1) {
-  //  players[socket.id] = new Player(socket);
-  //  battlefield[socket.id] = {};
-  //  socket.emit('joined', {
-  //    'player': {
-  //      'id': socket.id,
-  //      'health': players[socket.id].health
-  //    }
-  //  });
-  //  server.emit('ready');
-  //  console.log('Ready!');
-  //  turnOrder = Object.keys(players);
-  //  console.log('ble 1', turnOrder);
-  //  turnOrder.shuffle();
-  //  console.log('ble 2', turnOrder);
+  if (Object.keys(players).length === 0) {
+    players[socket.id] = new Player(socket);
+    battlefield[socket.id] = {};
+    socket.emit('joined', {
+      'player': {
+        'id': socket.id,
+        'health': players[socket.id].health
+      }
+    });
+  } else if (Object.keys(players).length === 1) {
+    players[socket.id] = new Player(socket);
+    battlefield[socket.id] = {};
+    socket.emit('joined', {
+      'player': {
+        'id': socket.id,
+        'health': players[socket.id].health
+      }
+    });
+    server.emit('ready');
+    console.log('Ready!');
+    turnOrder = Object.keys(players);
+    console.log('ble 1', turnOrder);
+    turnOrder.shuffle();
+    console.log('ble 2', turnOrder);
 
-  //  // Send hands to users
-  //  Object.keys(players).forEach(function(key) {
-  //    var opponentKeys = _.filter(Object.keys(players), function(k) {
-  //      return (k !== key);
-  //    });
-  //    var opponents = [];
-  //    opponentKeys.forEach(function(key) {
-  //      opponents.push({
-  //        'player': {
-  //          'id': key,
-  //          'health': players[key].health
-  //        }
-  //      });
-  //    });
-  //    players[key].socket.emit('opponents', opponents);
-  //    var hands = {
-  //      you: {
-  //        hand: players[key].hand
-  //      }
-  //    }
-  //    opponents.forEach(function(o) {
-  //      hands[o.player.id] = {
-  //        count: players[o.player.id].hand.length
-  //      }
-  //    });
-  //    players[key].socket.emit('hands', hands);
-  //  });
+    // Send hands to users
+    Object.keys(players).forEach(function(key) {
+      var opponentKeys = _.filter(Object.keys(players), function(k) {
+        return (k !== key);
+      });
+      var opponents = [];
+      opponentKeys.forEach(function(key) {
+        opponents.push({
+          'player': {
+            'id': key,
+            'health': players[key].health
+          }
+        });
+      });
+      players[key].socket.emit('opponents', opponents);
+      var hands = {
+        you: {
+          hand: players[key].hand
+        }
+      }
+      opponents.forEach(function(o) {
+        hands[o.player.id] = {
+          count: players[o.player.id].hand.length
+        }
+      });
+      players[key].socket.emit('hands', hands);
+    });
 
-  //  performTurn();
-  //} else {
-  //  socket.emit('joined', {'player': {'id': null}});
-  //  socket.emit('rejected', 'Battle started');
-  //  console.log('Connection refused, battle started');
-  //}
+    performTurn();
+  } else {
+    socket.emit('joined', {'player': {'id': null}});
+    socket.emit('rejected', 'Battle started');
+    console.log('Connection refused, battle started');
+  }
 
   socket.on('draw', function(cardId) {
     if (!isPlayerInTurn(socket.id)) return socket.emit('no-turn');

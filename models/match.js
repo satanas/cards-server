@@ -1,12 +1,14 @@
 var _ = require('underscore');
+var Global = require('../global');
 var Player = require('./player');
 
 function Match(server, socket) {
+  this.status = Global.MATCH_STATUS.Open;
   this.players = {};
   this.battlefield = {};
   this.turnOrder = [];
   this.turnIndex = 0;
-  this.matchEnded = false;
+  //this.matchEnded = false;
   this.server = server;
   // Generate
   this.id = '123120391280398102938';

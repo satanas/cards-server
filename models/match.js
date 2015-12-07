@@ -1,11 +1,12 @@
 var _ = require('underscore');
 var Global = require('../global');
 var Player = require('./player');
+var Battlefield = require('./battlefield');
 
 function Match(socket) {
   this.status = Global.MATCH_STATUS.Open;
   this.players = {};
-  this.battlefield = {};
+  this.battlefield = new Battlefield();
   this.turnOrder = [];
   this.turnIndex = 0;
   //this.matchEnded = false;
@@ -26,7 +27,7 @@ Match.prototype.join = function(socket) {
   });
 
   this.players[socket.id] = new Player(socket);
-  this.battlefield[socket.id] = {};
+  this.battlefield.addPlayer(socket.id);
 
   socket.emit('joined', {
     'id': socket.id,
@@ -78,41 +79,31 @@ Match.prototype.start = function() {
 };
 
 Match.prototype.turn = function() {
-  var newCard = players[turnOrder[turnIndex]].cardFromDeck();
+  var playerId = turnOrder[turnIndex];
+  var newCard = this.players[playerId].startTurn();
 
-  Object.keys(players).forEach(function(key) {
-    if (key === turnOrder[turnIndex]) {
-      // Unsick creatures from previous turn
-      Object.keys(battlefield[key]).forEach(function(cardId) {
-        var card = battlefield[key][cardId];
-        card.used = false;
-        if (card.sick) {
-          card.sick = false;
-          console.log('Unsick card', card.id, 'for player', key);
-          server.emit('unsick', {
-            player: {
-              id: key
-            },
-            card: {
-              id: card.id
-            }
-          });
-        }
-      });
-      players[key].usedMana = 0;
-      players[key].increaseMana();
-      if (newCard) {
-        console.log('New card with id ' + newCard.id +' for player ' + key +', hand length:', players[key].hand.length);
-      }
-      players[key].socket.emit('turn', {
-        'mana': players[key].mana,
-        'card': newCard
-      });
-    } else {
-      players[key].socket.emit('wait', {
-        'mana': players[key].mana,
-        'card_for': newCard ? turnOrder[turnIndex] : null
-      });
+  var cards = this.battlefield.untap(playerId);
+  this.broadcast('battlefield', {
+    player: {
+      id: playerId
+    },
+    cards: cards
+  });
+
+  if (newCard) {
+    console.log('New card with id ' + newCard.id +' for player ' + playerId +', hand length:', this.players[playerId].hand.length);
+  }
+
+  this.emit(playerId, 'turn', {
+    'mana': this.players[playerId].mana,
+    'card': card
+  });
+
+  this.emitAllBut(playerId, 'wait', {
+    'player': {
+      'id': playerId,
+      'mana': this.players[playerId].mana,
+      'new_card': !!newCard
     }
   });
 };

@@ -15,6 +15,7 @@ opponents
 
 ## Gameplay
 
+* Server sends 'battlefield' to all players with the status of each card in the enemy's battlefield (unsick, unused, etc)
 * Server sends 'turn' to the player with the current turn. This contains player statuses and one card drawn from the deck
 * Server sends 'wait' to the others players with player statuses
 * Player in turn can:

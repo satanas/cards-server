@@ -54,4 +54,10 @@ Player.prototype.increaseMana = function() {
     this.mana = global.maxMana;
 };
 
+Player.prototype.startTurn = function() {
+  this.usedMana = 0;
+  this.increaseMana();
+  return this.cardFromDeck();
+};
+
 module.exports = Player;

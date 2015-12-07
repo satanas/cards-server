@@ -19,24 +19,27 @@ function Match(socket) {
 }
 
 Match.prototype.join = function(socket) {
-  this.players[socket.id] = new Player(socket);
-  this.battlefield[socket.id] = {};
+  // Get players list before adding a new player
   var playersList = [];
   this.iterate(function(key) {
     playersList.push(key);
   });
-  this.broadcast('joined', {
-    'players': playersList
+
+  this.players[socket.id] = new Player(socket);
+  this.battlefield[socket.id] = {};
+
+  socket.emit('joined', {
+    'id': socket.id,
+    'others': playersList
   });
-  //socket.emit('joined', {
-  //  'player': {
-  //    'id': socket.id,
-  //    'health': this.players[socket.id].health
-  //  }
-  //});
+
+  this.emitAllBut(socket.id, 'new-player', {
+    'id': socket.id
+  })
 };
 
 Match.prototype.start = function() {
+  this.status = Global.MATCH_STATUS.Started;
   console.log('Match started');
   this.broadcast('match-started');
 
@@ -57,6 +60,7 @@ Match.prototype.start = function() {
         }
       });
     }, this);
+
     this.players[key].socket.emit('opponents', opponents);
     var hands = {
       you: {
@@ -68,7 +72,8 @@ Match.prototype.start = function() {
         count: this.players[o.player.id].hand.length
       }
     }, this);
-    this.players[key].socket.emit('hands', hands);
+    this.emit(key, 'hands', hands);
+
   }, this);
 };
 
@@ -121,6 +126,15 @@ Match.prototype.emit = function(playerId, command, data) {
 Match.prototype.broadcast = function(command, data) {
   for (var id in this.players) {
     this.players[id].socket.emit(command, data);
+  }
+};
+
+// Broadcast event to all players except the one indicated by playerId
+Match.prototype.emitAllBut = function(playerId, command, data) {
+  for (var id in this.players) {
+    if (id !== playerId) {
+      this.players[id].socket.emit(command, data);
+    }
   }
 };
 

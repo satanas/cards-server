@@ -9,13 +9,13 @@
 * Server also sends 'new-player' to the other players
 * First player sends 'start-match'
 * Server sends 'match-started' to all players in match
-* Server sends 'players' to all players with basic info about the players (position, health, mana, number of cards, etc)
+* Server sends 'opponents' to each players with basic info about the other players (position, health, mana, number of cards, etc)
 * Server sends 'hands' to each player with detailed information of all its cards and the number of cards of its
 opponents
 
 ## Gameplay
 
-* Server sends 'battlefield' to all players with the status of each card in the enemy's battlefield (unsick, unused, etc)
+* Server sends 'battlefield' to all players with the status of each card in the enemy`s battlefield (unsick, unused, etc)
 * Server sends 'turn' to the player with the current turn. This contains player statuses and one card drawn from the deck
 * Server sends 'wait' to the others players with player statuses
 * Player in turn can:

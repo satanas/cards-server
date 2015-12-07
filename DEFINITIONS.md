@@ -6,11 +6,12 @@
 * Server creates match and joins player 1 sending 'joined' with the list of participants
 * Second player sends 'join-match' to join Match
 * Server joins player 2 and sends 'joined' with the list of participants (it indicates who created the match)
+* Server also sends 'new-player' to the other players
 * First player sends 'start-match'
-* Server sends 'starting-match' to all players in match
-* Server sends 'match-started' to all players in match once the match started
-* Server sends 'players' with basic info about the players (position, health, mana, number of cards, etc)
-* Server sends 'hand' to each player with detailed information of all its cards
+* Server sends 'match-started' to all players in match
+* Server sends 'players' to all players with basic info about the players (position, health, mana, number of cards, etc)
+* Server sends 'hands' to each player with detailed information of all its cards and the number of cards of its
+opponents
 
 ## Gameplay
 

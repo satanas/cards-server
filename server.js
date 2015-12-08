@@ -18,10 +18,14 @@ var matchEnded = false;
 var matches = [];
 
 var server = require('socket.io')(app);
+
 server.on('connection', function(socket) {
   console.log(`Client ${socket.id} connecting`);
 
   socket.on('new-match', function() {
+    // FIXME: Remove me
+    matches = [];
+    // ***************
     var match = new Match(socket);
     matches.push(match);
   });

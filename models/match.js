@@ -30,7 +30,7 @@ Match.prototype.join = function(socket) {
 
   socket.emit('joined', {
     'id': socket.id,
-    'others': playersList
+    'others': playersList.length > 0 ? playersList : null
   });
 
   this.emitAllBut(socket.id, 'new-player', {
@@ -64,11 +64,20 @@ Match.prototype.start = function() {
       });
     }, this);
 
+    this.emit(playerId, 'player', {
+      'player': {
+        'id': playerId,
+        'health': this.players[playerId].health
+      }
+    });
     this.emit(playerId, 'opponents', {
       'opponents': opponents
     });
-    this.emit(playerId, 'hands', {
-      'hand': this.players[playerId].hand
+    this.emit(playerId, 'hand', {
+      'player': {
+        'id': playerId,
+        'hand': this.players[playerId].hand
+      }
     });
   }
 };

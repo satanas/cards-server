@@ -9,9 +9,9 @@
 * Server also sends 'new-player' to the other players
 * First player sends 'start-match'
 * Server sends 'match-started' to all players in match
-* Server sends 'opponents' to each players with basic info about the other players (position, health, mana, number of cards, etc)
-* Server sends 'hands' to each player with detailed information of all its cards and the number of cards of its
-opponents
+* Server sends 'player' to each player with basic info about itself (position, health, mana, number of cards, etc)
+* Server sends 'opponents' to each player with basic info about the other players (position, health, mana, number of cards, etc)
+* Server sends 'hand' to each player with detailed information of all its cards
 
 ## Gameplay
 

@@ -1,11 +1,11 @@
 var _ = require('underscore');
-var global = require('../global');
+var Global = require('../global');
 var Deck = require('./deck');
 
 function Player(socket) {
   this.id = socket.id;
   this.health = global.maxHealth;
-  this.mana = 0;
+  this.totalMana = 0;
   this.usedMana = 0;
   this.deck = new Deck(this.id);
   this.hand = this.deck.getHand();
@@ -21,11 +21,11 @@ Player.prototype.canDraw = function(cardId) {
     return c.id === cardId;
   });
   if (card === undefined) {
-    return global.errors.CARD_NOT_FOUND;
-  } else if (this.usedMana + card.mana > this.mana) {
-    return global.errors.NO_MANA;
+    return Global.ERRORS.CARD_NOT_FOUND;
+  } else if (this.usedMana + card.mana > this.totalMana) {
+    return Global.ERRORS.NO_MANA;
   }
-  return 0;
+  return 1;
 };
 
 Player.prototype.drawCard = function(cardId) {
@@ -49,9 +49,9 @@ Player.prototype.cardFromDeck = function() {
 };
 
 Player.prototype.increaseMana = function() {
-  this.mana += 1;
-  if (this.mana > global.maxMana)
-    this.mana = global.maxMana;
+  this.totalMana += 1;
+  if (this.totalMana > global.maxMana)
+    this.totalMana = global.maxMana;
 };
 
 Player.prototype.startTurn = function() {

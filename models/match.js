@@ -91,7 +91,7 @@ Match.prototype.turn = function() {
     player: {
       id: playerId
     },
-    cards: cards
+    cards: cards ? cards : null
   });
 
   if (newCard) {

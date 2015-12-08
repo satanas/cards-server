@@ -6,7 +6,7 @@ module.exports = {
     'INSTANT': 3,
     'SORCERY': 4
   },
-  errors: {
+  ERRORS: {
     'NO_MANA': -1,
     'CARD_NOT_FOUND': -2
   },

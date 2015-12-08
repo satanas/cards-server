@@ -99,17 +99,59 @@ Match.prototype.turn = function() {
   }
 
   this.emit(playerId, 'turn', {
-    'mana': this.players[playerId].mana,
-    'card': newCard
+    'player': {
+      'id': playerId,
+      'totalMana': this.players[playerId].totalMana,
+      'usedMana': this.players[playerId].usedMana,
+      'card': newCard
+    }
   });
 
   this.emitAllBut(playerId, 'wait', {
     'player': {
       'id': playerId,
-      'mana': this.players[playerId].mana,
+      'totalMana': this.players[playerId].totalMana,
+      'usedMana': this.players[playerId].usedMana,
       'new_card': !!newCard
     }
   });
+};
+
+Match.prototype.draw = function(playerId, cardId) {
+  if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
+
+  var player = this.players[playerId],
+      canDraw = player.canDraw(cardId);
+
+  if (canDraw > 0) {
+    var card = player.drawCard(cardId);
+    this.battlefield.draw(playerId, card);
+    console.log('Player', playerId, 'drawed card', cardId, 'to battlefield');
+    this.broadcast('drawed-card', {
+      'player': {
+        'id': playerId
+      },
+      'card': card,
+      'totalMana': player.totalMana,
+      'usedMana': player.usedMana
+    });
+  } else if (canDraw === Global.ERRORS.NO_MANA) {
+    this.emit(playerId, 'no-mana');
+  } else if (canDraw === Global.ERRORS.CARD_NOT_FOUND) {
+    this.emit(playerId, 'card-not-found');
+  }
+};
+
+Match.prototype.endTurn = function(playerId) {
+  if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
+
+  console.log('Player', playerId, 'ended turn');
+  this.turnIndex += 1;
+  if (this.turnIndex >= this.turnOrder.length) {
+    this.turnIndex = 0;
+  }
+  console.log('New turn for player', this.turnOrder[this.turnIndex], this.turnIndex);
+  this.turn();
 };
 
 // Emit event to socket associated to playerId
@@ -138,6 +180,10 @@ Match.prototype.iterate = function(cb) {
   Object.keys(this.players).forEach(function(key) {
     cb(key, this.players[key]);
   }, this);
+};
+
+Match.prototype.inTurn = function(playerId) {
+  return (playerId === this.turnOrder[this.turnIndex]);
 };
 
 module.exports = Match;

@@ -16,7 +16,7 @@ function Player(socket) {
 
 Player.prototype.constructor = Player;
 
-Player.prototype.canDraw = function(cardId) {
+Player.prototype.canPlayCard = function(cardId) {
   var card = _.find(this.hand, function(c) {
     return c.id === cardId;
   });
@@ -28,14 +28,14 @@ Player.prototype.canDraw = function(cardId) {
   return 1;
 };
 
-Player.prototype.drawCard = function(cardId) {
+Player.prototype.playCard = function(cardId) {
   var card = _.find(this.hand, function(c) {
     return c.id === cardId;
   });
   this.hand = _.filter(this.hand, function(c) {
     return c.id !== cardId;
   });
-  card.drawed = true;
+  card.played = true;
   this.usedMana += card.mana;
   return card;
 };

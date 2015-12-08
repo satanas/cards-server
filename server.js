@@ -45,9 +45,9 @@ server.on('connection', function(socket) {
     }
   });
 
-  socket.on('draw-card', function(cardId) {
+  socket.on('play-card', function(cardId) {
     var match = findMatch(socket.id);
-    match.draw(socket.id, cardId);
+    match.playCard(socket.id, cardId);
   });
 
   socket.on('attack', function(data) {

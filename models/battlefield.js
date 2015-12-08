@@ -25,7 +25,7 @@ Battlefield.prototype.untap = function(playerId) {
   return cards;
 };
 
-Battlefield.prototype.draw = function(playerId, card) {
+Battlefield.prototype.playCard = function(playerId, card) {
   this.fields[playerId][card.id] = card;
 };
 

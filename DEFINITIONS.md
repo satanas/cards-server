@@ -20,8 +20,8 @@
 * Server sends 'wait' to the others players with player statuses
 * Player in turn can:
   * Play card:
-    * Send 'draw-card' with the card id to put one card from the hand to the battlefield
-    * Server sends 'drawed-card' to all players with the card info
+    * Send 'play-card' with the card id to put one card from the hand to the battlefield
+    * Server sends 'played-card' to all players with the card info
   * Attack enemy card:
     * Send 'attack' with the card id of one of the cards in the battlefield to attack an enemy card
     * Server sends 'battle' to all players with the details of the battle

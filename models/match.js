@@ -117,17 +117,17 @@ Match.prototype.turn = function() {
   });
 };
 
-Match.prototype.draw = function(playerId, cardId) {
+Match.prototype.playCard = function(playerId, cardId) {
   if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
 
   var player = this.players[playerId],
-      canDraw = player.canDraw(cardId);
+      canPlayCard = player.canPlayCard(cardId);
 
-  if (canDraw > 0) {
-    var card = player.drawCard(cardId);
-    this.battlefield.draw(playerId, card);
-    console.log('Player', playerId, 'drawed card', cardId, 'to battlefield');
-    this.broadcast('drawed-card', {
+  if (canPlayCard > 0) {
+    var card = player.playCard(cardId);
+    this.battlefield.playCard(playerId, card);
+    console.log('Player', playerId, 'put card', cardId, 'into the battlefield');
+    this.broadcast('played-card', {
       'player': {
         'id': playerId
       },
@@ -135,9 +135,9 @@ Match.prototype.draw = function(playerId, cardId) {
       'totalMana': player.totalMana,
       'usedMana': player.usedMana
     });
-  } else if (canDraw === Global.ERRORS.NO_MANA) {
+  } else if (canPlayCard === Global.ERRORS.NO_MANA) {
     this.emit(playerId, 'no-mana');
-  } else if (canDraw === Global.ERRORS.CARD_NOT_FOUND) {
+  } else if (canPlayCard === Global.ERRORS.CARD_NOT_FOUND) {
     this.emit(playerId, 'card-not-found');
   }
 };

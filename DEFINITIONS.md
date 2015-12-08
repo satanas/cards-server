@@ -15,13 +15,13 @@
 
 ## Gameplay
 
-* Server sends 'battlefield' to all players with the status of each card in the enemy`s battlefield (unsick, unused, etc)
+* Server sends 'battlefield' to all players with the status of each card in the battlefield of the current player (unsick, unused, etc)
 * Server sends 'turn' to the player with the current turn. This contains player statuses and one card drawn from the deck
 * Server sends 'wait' to the others players with player statuses
 * Player in turn can:
   * Play card:
-    * Send 'play-card' with the card id to put one card from the hand to the battlefield
-    * Server sends 'played-card' to all players with the card info
+    * Send 'draw-card' with the card id to put one card from the hand to the battlefield
+    * Server sends 'drawed-card' to all players with the card info
   * Attack enemy card:
     * Send 'attack' with the card id of one of the cards in the battlefield to attack an enemy card
     * Server sends 'battle' to all players with the details of the battle

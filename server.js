@@ -19,6 +19,10 @@ var matches = [];
 
 var server = require('socket.io')(app);
 
+function findMatch(socketId) {
+  return matches[0];
+}
+
 server.on('connection', function(socket) {
   console.log(`Client ${socket.id} connecting`);
 
@@ -32,7 +36,7 @@ server.on('connection', function(socket) {
 
   socket.on('join-match', function(matchId) {
     // Search for match
-    var match = matches[0];
+    var match = findMatch(socket.id);
     // FIXME: Validate on started matches
     match.join(socket);
     if (Object.keys(match.players).length > 1) {
@@ -41,30 +45,9 @@ server.on('connection', function(socket) {
     }
   });
 
-  socket.on('draw', function(cardId) {
-    if (!isPlayerInTurn(socket.id)) return socket.emit('no-turn');
-
-    var player = players[socket.id];
-    var canDraw = players[socket.id].canDraw(cardId);
-    if (canDraw === 0) {
-      var card = players[socket.id].drawCard(cardId);
-      battlefield[socket.id][card.id] = card;
-      console.log('Player', socket.id, 'drawed card', cardId, 'to battlefield');
-      server.emit('drawed-card', {
-        'player': {
-          'id': socket.id
-        },
-        'card': card,
-        'mana': players[socket.id].mana,
-        'usedMana': players[socket.id].usedMana
-      });
-    } else {
-      if (canDraw === global.errors.NO_MANA) {
-        socket.emit('no-mana');
-      } else if (canDraw === global.errors.CARD_NOT_FOUND) {
-        socket.emit('card-not-found');
-      }
-    }
+  socket.on('draw-card', function(cardId) {
+    var match = findMatch(socket.id);
+    match.draw(socket.id, cardId);
   });
 
   socket.on('attack', function(data) {
@@ -184,16 +167,8 @@ server.on('connection', function(socket) {
   });
 
   socket.on('end-turn', function(data) {
-    if (!isPlayerInTurn(socket.id)) return socket.emit('no-turn');
-
-    console.log('Player', socket.id, 'ended turn');
-    turnIndex += 1;
-    if (turnIndex >= turnOrder.length) {
-      turnIndex = 0;
-    }
-    console.log('New turn for player', turnOrder[turnIndex], turnIndex);
-
-    performTurn();
+    var match = findMatch(socket.id);
+    match.endTurn(socket.id);
   });
 
   socket.on('disconnect', function(socket) {

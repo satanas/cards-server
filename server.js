@@ -41,7 +41,7 @@ server.on('connection', function(socket) {
     match.join(socket);
     if (Object.keys(match.players).length > 1) {
       match.start();
-      match.turn();
+      match.startTurn();
     }
   });
 

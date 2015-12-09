@@ -82,7 +82,7 @@ Match.prototype.start = function() {
   }
 };
 
-Match.prototype.turn = function() {
+Match.prototype.startTurn = function() {
   var playerId = this.turnOrder[this.turnIndex];
   var newCard = this.players[playerId].startTurn();
 

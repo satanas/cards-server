@@ -29,4 +29,8 @@ Battlefield.prototype.playCard = function(playerId, card) {
   this.fields[playerId][card.id] = card;
 };
 
+Battlefield.prototype.getCard = function(playerId, card) {
+  return this.fields[playerId][card.id];
+};
+
 module.exports = Battlefield;

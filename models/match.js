@@ -142,6 +142,89 @@ Match.prototype.playCard = function(playerId, cardId) {
   }
 };
 
+Match.prototype.attack = function(playerId, data) {
+  if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
+  if (!this.isPlayer(data.defender.playerId)) return this.emit(playerId, 'no-player');
+
+  var attacker = this.battlefield.getCard(playerId, data.attacker.cardId),
+      defender = this.battlefield.getCard(data.defender.playerId, data.defender.cardId),
+      opponent = this.players[data.defender.playerId],
+      opponentStats = null,
+      spareDamage = 0;
+
+  if (!attacker) return this.emit(playerId, 'attacked-not-found');
+  if (!defender) return this.emit(playerId, 'defender-not-found');
+  if (attacker.sick) return this.emit(playerId, 'card-sick');
+  if (attacker.used) return this.emit(playerId, 'card-used');
+
+  console.log('Battle between card', attacker.id, '(from player', playerId, ') and card', defender.id, '(from player', data.defender.playerId, ')');
+
+  attacker.used = true;
+  spareDamage = attacker.attack - defender.health;
+
+  // Execute damage against defender
+  defender.health -= attacker.attack;
+
+  // Execute damage against attacker
+  if (!attacker.firstStrike || (attacker.firstStrike && defender.health > 0) || (attacker.firstStrike && defender.firstStrike)) {
+    attacker.health -= defender.attack;
+  } else {
+    console.log('Attacker did not receive damage because it killed the defender first');
+  }
+
+  // Overwhelm
+  if (attacker.overwhelm && spareDamage > 0) {
+    console.log('Dealing', spareDamage, 'of extra damage due to overwhelm');
+    opponent.health -= spareDamage;
+    opponentStats = {
+      'id': opponent.id,
+      'damageDealt': 0,
+      'damageReceived': spareDamage,
+      'health': opponent.health
+    }
+  }
+
+  // Deathtouch
+  if (attacker.deathtouch) {
+    defender.health = 0;
+  }
+
+  // Remove death cards from battlefield
+  if (attacker.health <= 0) {
+    console.log('Attacking card ('+ attacker.id + ' from player '+ playerId + ') died');
+    delete battlefield[socket.id][data.attacker.cardId];
+  }
+  if (defender.health <= 0) {
+    console.log('Defending card ('+ defender.id+ ' from player ' + data.defender.playerId + ') died');
+    delete battlefield[data.defender.playerId][data.defender.cardId];
+  }
+
+  this.broadcast('battle', {
+    'attacker': {
+      'player': {
+        'id': playerId
+      },
+      'card': {
+        'id': attacker.id,
+        'damageDealt': attacker.attack,
+        'damageReceived': defender.attack,
+        'health': attacker.health
+      }
+    },
+    'defender': {
+      'player': opponentStats,
+      'card': {
+        'id': defender.id,
+        'damageDealt': defender.attack,
+        'damageReceived': attacker.attack,
+        'health': defender.health
+      }
+    }
+  });
+
+  //checkForVictory(opponent);
+};
+
 Match.prototype.endTurn = function(playerId) {
   if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
 
@@ -185,5 +268,13 @@ Match.prototype.iterate = function(cb) {
 Match.prototype.inTurn = function(playerId) {
   return (playerId === this.turnOrder[this.turnIndex]);
 };
+
+Match.prototype.isPlayer = function(playerId) {
+  return (Object.keys(this.players).indexOf(playerId) >= 0);
+}
+
+Match.prototype.checkForVictory = function(attacker, defender) {
+  return false;
+}
 
 module.exports = Match;

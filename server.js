@@ -51,82 +51,8 @@ server.on('connection', function(socket) {
   });
 
   socket.on('attack', function(data) {
-    if (!isPlayerInTurn(socket.id)) return socket.emit('no-turn');
-    if (!isPlayer(data.defender.playerId)) return socket.emit('no-player');
-
-    var attacker = battlefield[socket.id][data.attacker.cardId],
-        defender = battlefield[data.defender.playerId][data.defender.cardId],
-        opponent = players[data.defender.playerId],
-        opponentStats = null,
-        extraDamage = 0;
-
-    if (!attacker || !defender) return socket.emit('card-not-found');
-    if (attacker.sick) return socket.emit('card-sick');
-    if (attacker.used) return socket.emit('card-used');
-
-    console.log('Battle between card', attacker.id, '(from player', socket.id, ') and card', defender.id, '(from player', data.defender.playerId, ')');
-    attacker.used = true;
-    extraDamage = attacker.attack - defender.health;
-    defender.health -= attacker.attack;
-    if (!attacker.firstStrike || (attacker.firstStrike && defender.health > 0) || (attacker.firstStrike && defender.firstStrike)) {
-      attacker.health -= defender.attack;
-    } else {
-      console.log('Attacker did not receive damage because it killed the defender with the first strike');
-    }
-
-    if (attacker.overwhelm) {
-      if (extraDamage > 0) {
-        console.log('Dealing', extraDamage, 'of extra damage due to overwhelm');
-        opponent.health -= extraDamage;
-        opponentStats = {
-          'id': opponent.id,
-          'damageDealt': 0,
-          'damageReceived': extraDamage,
-          'health': opponent.health
-        }
-      }
-    }
-
-    if (attacker.deathtouch) {
-      defender.health = 0;
-    }
-
-    if (attacker.health <= 0) {
-      console.log('Card', attacker.id, 'from player', socket.id, 'died');
-      delete battlefield[socket.id][data.attacker.cardId];
-    }
-    if (defender.health <= 0) {
-      console.log('Card', defender.id, 'from player', data.defender.playerId, 'died');
-      delete battlefield[data.defender.playerId][data.defender.cardId];
-    }
-
-    server.emit('battle', {
-      'attacker': {
-        'player': {
-          'id': socket.id
-        },
-        'card': {
-          'id': attacker.id
-        },
-        'damageDealt': attacker.attack,
-        'damageReceived': defender.attack,
-        'health': attacker.health
-      },
-      'defender': {
-        'player': {
-          'id': data.defender.playerId
-        },
-        'card': {
-          'id': defender.id
-        },
-        'damageDealt': defender.attack,
-        'damageReceived': attacker.attack,
-        'health': defender.health
-      },
-      'player': opponentStats
-    });
-
-    checkForVictory(opponent);
+    var match = findMatch(socket.id);
+    match.attack(socket.id, data);
   });
 
   socket.on('direct-attack', function(data) {

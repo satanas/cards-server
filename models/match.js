@@ -225,6 +225,46 @@ Match.prototype.attack = function(playerId, data) {
   this.checkVictory();
 };
 
+Match.prototype.directAttack = function(playerId, data) {
+  if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
+  if (!this.isPlayer(data.defender.playerId)) return this.emit(playerId, 'no-player');
+
+  var attacker = this.battlefield.getCard(playerId, data.attacker.cardId),
+      opponent = this.players[data.defender.playerId];
+
+  if (!attacker) return this.emit(playerId, 'attacked-not-found');
+  if (attacker.sick) return this.emit(playerId, 'card-sick');
+  if (attacker.used) return this.emit(playerId, 'card-used');
+
+  console.log('Card', attacker.id, '(from player', playerID, ') attacked player', opponent.id, 'with', attacker.attack, 'pt(s) of damage');
+  opponent.health -= attacker.attack;
+  attacker.used = true;
+
+  this.broadcast('direct-damage', {
+    'attacker': {
+      'player': {
+        'id': socket.id
+      },
+      'card': {
+        'id': attacker.id,
+        'damageDealt': attacker.attack,
+        'damageReceived': 0,
+        'health': attacker.health
+      }
+    },
+    'defender': {
+      'player': {
+        'id': data.defender.playerId,
+        'damageDealt': 0,
+        'damageReceived': attacker.attack,
+        'health': opponent.health
+      }
+    }
+  });
+
+  this.checkVictory();
+};
+
 Match.prototype.endTurn = function(playerId) {
   if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
 

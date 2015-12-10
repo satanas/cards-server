@@ -54,40 +54,8 @@ server.on('connection', function(socket) {
   });
 
   socket.on('direct-attack', function(data) {
-    if (!isPlayerInTurn(socket.id)) return socket.emit('no-turn');
-    if (!isPlayer(data.defender.playerId)) return socket.emit('no-player');
-
-    var attacker = battlefield[socket.id][data.attacker.cardId],
-        defender = players[data.defender.playerId];
-
-    if (!attacker || !defender) return socket.emit('card-not-found');
-    if (attacker.sick) return socket.emit('card-sick');
-    if (attacker.used) return socket.emit('card-used');
-
-    console.log('Card', attacker.id, 'from player', socket.id, 'attacked player', defender.id, 'with', attacker.attack, 'pt(s) of damage');
-    defender.health -= attacker.attack;
-    attacker.used = true;
-
-    server.emit('direct-damage', {
-      'attacker': {
-        'player': {
-          'id': socket.id
-        },
-        'card': {
-          'id': attacker.id
-        },
-        'damageDealt': attacker.attack,
-        'damageReceived': 0,
-        'health': attacker.health
-      },
-      'player': {
-        'id': data.defender.playerId,
-        'damageDealt': 0,
-        'damageReceived': attacker.attack,
-        'health': defender.health
-      }
-    });
-    checkForVictory(defender);
+    var match = findMatch(socket);
+    if (match) match.attack(socket.id, data);
   });
 
   socket.on('end-turn', function(data) {

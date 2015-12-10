@@ -19,10 +19,6 @@ var matches = [];
 
 var server = require('socket.io')(app);
 
-function findMatch(socketId) {
-  return matches[0];
-}
-
 server.on('connection', function(socket) {
   console.log(`Client ${socket.id} connecting`);
 
@@ -36,23 +32,25 @@ server.on('connection', function(socket) {
 
   socket.on('join-match', function(matchId) {
     // Search for match
-    var match = findMatch(socket.id);
-    // FIXME: Validate on started matches
-    match.join(socket);
-    if (Object.keys(match.players).length > 1) {
-      match.start();
-      match.startTurn();
+    var match = findMatch(socket);
+    if (match) {
+      // FIXME: Validate on started matches
+      match.join(socket);
+      if (Object.keys(match.players).length > 1) {
+        match.start();
+        match.startTurn();
+      }
     }
   });
 
   socket.on('play-card', function(cardId) {
-    var match = findMatch(socket.id);
-    match.playCard(socket.id, cardId);
+    var match = findMatch(socket);
+    if (match) match.playCard(socket.id, cardId);
   });
 
   socket.on('attack', function(data) {
-    var match = findMatch(socket.id);
-    match.attack(socket.id, data);
+    var match = findMatch(socket);
+    if (match) match.attack(socket.id, data);
   });
 
   socket.on('direct-attack', function(data) {
@@ -93,8 +91,8 @@ server.on('connection', function(socket) {
   });
 
   socket.on('end-turn', function(data) {
-    var match = findMatch(socket.id);
-    match.endTurn(socket.id);
+    var match = findMatch(socket);
+    if (match) match.endTurn(socket.id);
   });
 
   socket.on('disconnect', function(socket) {
@@ -132,42 +130,25 @@ function checkForVictory(defender) {
   }
 }
 
-function performTurn() {
-  var newCard = players[turnOrder[turnIndex]].cardFromDeck();
-  Object.keys(players).forEach(function(key) {
-    if (key === turnOrder[turnIndex]) {
-      // Unsick creatures from previous turn
-      Object.keys(battlefield[key]).forEach(function(cardId) {
-        var card = battlefield[key][cardId];
-        card.used = false;
-        if (card.sick) {
-          card.sick = false;
-          console.log('Unsick card', card.id, 'for player', key);
-          server.emit('unsick', {
-            player: {
-              id: key
-            },
-            card: {
-              id: card.id
-            }
-          });
-        }
-      });
-      players[key].usedMana = 0;
-      players[key].increaseMana();
-      if (newCard) {
-        console.log('New card with id ' + newCard.id +' for player ' + key +', hand length:', players[key].hand.length);
-      }
-      players[key].socket.emit('turn', {
-        'mana': players[key].mana,
-        'card': newCard
-      });
-    } else {
-      players[key].socket.emit('wait', {
-        'mana': players[key].mana,
-        'card_for': newCard ? turnOrder[turnIndex] : null
-      });
-    }
-  });
-}
+function findMatch(socket) {
+  var match = null;
 
+  for (var i; i < matches.length; i++) {
+    var m = matches[i];
+    var players = Object.keys(m.players);
+    if (players.indexOf(socket.id) >= 0) {
+      match = m;
+      break;
+    }
+  }
+
+  if (match === null) {
+    console.log(`Match ${socket.id} not found`);
+    socket.emit('match-not-found');
+  } else if (match.isEnded()) {
+    console.log(`Match ${socket.id} ended`);
+    socket.emit('match-ended');
+    match = null;
+  }
+  return match;
+}

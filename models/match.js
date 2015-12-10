@@ -271,7 +271,11 @@ Match.prototype.inTurn = function(playerId) {
 
 Match.prototype.isPlayer = function(playerId) {
   return (Object.keys(this.players).indexOf(playerId) >= 0);
-}
+};
+
+Match.prototype.isEnded = function() {
+  return this.status === Global.MATCH_STATUS.Ended;
+};
 
 Match.prototype.checkVictory = function() {
   var playerKeys = Object.keys(this.players);
@@ -288,11 +292,12 @@ Match.prototype.checkVictory = function() {
   }
 
   if (Object.keys(this.players).length === 1) {
+    this.status = Global.MATCH_STATUS.Ended;
     console.log('Player', playerId, 'won');
     this.broadcast('victory', {
       'playerId': Object.keys(players)[0]
     });
   }
-}
+};
 
 module.exports = Match;

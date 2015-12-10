@@ -71,33 +71,6 @@ server.on('connection', function(socket) {
 app.listen(port, "0.0.0.0");
 console.log('Listening on port', port);
 
-function isPlayer(playerId) {
-  return (Object.keys(players).indexOf(playerId) >= 0);
-}
-
-function isPlayerInTurn(playerId) {
-  return (playerId === turnOrder[turnIndex]);
-}
-
-function checkForVictory(defender) {
-  if (defender.health <= 0) {
-    matchEnded = true;
-    console.log('Player', defender.id, 'defeated');
-    players[defender.id].socket.emit('lose');
-    delete players[defender.id];
-
-    if (Object.keys(players).length === 1) {
-      var victoryPlayer = players[Object.keys(players)[0]];
-      console.log('Player', victoryPlayer.id, 'won');
-      players[victoryPlayer.id].socket.emit('won');
-    } else {
-      Object.keys(players).forEach(function(key) {
-        players[key].emit('leader-defeated', defender.id);
-      });
-    }
-  }
-}
-
 function findMatch(socket) {
   var match = null;
 

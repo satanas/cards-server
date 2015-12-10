@@ -222,7 +222,7 @@ Match.prototype.attack = function(playerId, data) {
     }
   });
 
-  //checkForVictory(opponent);
+  this.checkVictory();
 };
 
 Match.prototype.endTurn = function(playerId) {
@@ -273,8 +273,26 @@ Match.prototype.isPlayer = function(playerId) {
   return (Object.keys(this.players).indexOf(playerId) >= 0);
 }
 
-Match.prototype.checkForVictory = function(attacker, defender) {
-  return false;
+Match.prototype.checkVictory = function() {
+  var playerKeys = Object.keys(this.players);
+
+  for (var key in playerKeys) {
+    var player = this.players[key];
+    if (player.health <= 0) {
+      console.log('Player', player.id, 'defeated');
+      this.broadcast(key, 'defeat', {
+        'playerId': key
+      });
+      delete this.players[key];
+    }
+  }
+
+  if (Object.keys(this.players).length === 1) {
+    console.log('Player', playerId, 'won');
+    this.broadcast('victory', {
+      'playerId': Object.keys(players)[0]
+    });
+  }
 }
 
 module.exports = Match;

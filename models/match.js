@@ -85,13 +85,13 @@ Match.prototype.startTurn = function() {
   var playerId = this.turnOrder[this.turnIndex];
   var newCard = this.players[playerId].startTurn();
 
-  var cards = this.battlefield.untap(playerId);
+  var players = {};
+  players[playerId] = {
+    cards: this.battlefield.untap(playerId)
+  }
+
   this.broadcast('battlefield', {
-    players: {
-      playerId: {
-        cards: cards ? cards : null
-      }
-    }
+    players: players
   });
 
   if (newCard) {

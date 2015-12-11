@@ -54,7 +54,6 @@ Match.prototype.start = function() {
     });
 
     opponentKeys.forEach(function(opponentId) {
-      console.log('opponentId', opponentId);
       opponents.push({
         'player': {
           'id': opponentId,
@@ -274,7 +273,7 @@ Match.prototype.endTurn = function(playerId) {
     this.turnIndex = 0;
   }
   console.log('New turn for player', this.turnOrder[this.turnIndex], this.turnIndex);
-  this.turn();
+  this.startTurn();
 };
 
 // Emit event to socket associated to playerId

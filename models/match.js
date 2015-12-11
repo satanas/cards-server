@@ -87,10 +87,11 @@ Match.prototype.startTurn = function() {
 
   var cards = this.battlefield.untap(playerId);
   this.broadcast('battlefield', {
-    player: {
-      id: playerId
-    },
-    cards: cards ? cards : null
+    players: {
+      playerId: {
+        cards: cards ? cards : null
+      }
+    }
   });
 
   if (newCard) {

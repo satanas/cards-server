@@ -32,7 +32,7 @@ server.on('connection', function(socket) {
 
   socket.on('join-match', function(matchId) {
     // Search for match
-    var match = findMatch(socket);
+    var match = findMatch(socket, matchId);
     if (match) {
       // FIXME: Validate on started matches
       match.join(socket);
@@ -71,15 +71,23 @@ server.on('connection', function(socket) {
 app.listen(port, "0.0.0.0");
 console.log('Listening on port', port);
 
-function findMatch(socket) {
+function findMatch(socket, matchId) {
   var match = null;
 
-  for (var i; i < matches.length; i++) {
+  for (var i=0; i < matches.length; i++) {
     var m = matches[i];
-    var players = Object.keys(m.players);
-    if (players.indexOf(socket.id) >= 0) {
-      match = m;
-      break;
+
+    if (!!matchId) {
+      if (m.id === matchId) {
+        match = m;
+        break;
+      }
+    } else {
+      var players = Object.keys(m.players);
+      if (players.indexOf(socket.id) >= 0) {
+        match = m;
+        break;
+      }
     }
   }
 

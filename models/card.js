@@ -11,7 +11,7 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
   this.rush = rush || false; // Attack when played
   this.overwhelm = overwhelm || false; // Inflicts the non-blocked damage to the player
   this.deathtouch = deathtouch || false; // If creature with deathtouch dies, the attacking creature also dies
-  this.sick = (this.rush) ? false : true;
+  this.sick = true;
   this.used = false;
   this.played = false;
 

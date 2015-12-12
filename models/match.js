@@ -57,6 +57,8 @@ Match.prototype.start = function() {
       opponents.push({
         'player': {
           'id': opponentId,
+          'totalMana': this.players[opponentId].totalMana,
+          'usedMana': this.players[opponentId].usedMana,
           'health': this.players[opponentId].health,
           'cards': this.players[opponentId].hand.length
         }

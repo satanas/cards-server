@@ -55,7 +55,7 @@ server.on('connection', function(socket) {
 
   socket.on('direct-attack', function(data) {
     var match = findMatch(socket);
-    if (match) match.attack(socket.id, data);
+    if (match) match.directAttack(socket.id, data);
   });
 
   socket.on('end-turn', function(data) {

@@ -178,6 +178,7 @@ Match.prototype.attack = function(playerId, data) {
   console.log('Battle between card', attacker.id, '(from player', playerId, ') and card', defender.id, '(from player', data.defender.playerId, ')');
 
   attacker.used = true;
+
   // Execute damage against defender
   defender.health -= attacker.attack;
 
@@ -334,12 +335,10 @@ Match.prototype.iterate = function(cb) {
 };
 
 Match.prototype.inTurn = function(playerId) {
-  console.log('inTurn', playerId === this.turnOrder[this.turnIndex]);
   return (playerId === this.turnOrder[this.turnIndex]);
 };
 
 Match.prototype.isPlayer = function(playerId) {
-  console.log('isPlayer', Object.keys(this.players).indexOf(playerId) >= 0);
   return (Object.keys(this.players).indexOf(playerId) >= 0);
 };
 
@@ -352,7 +351,7 @@ Match.prototype.checkVictory = function() {
     var player = this.players[key];
     if (player.health <= 0) {
       console.log('Player', player.id, 'defeated');
-      this.broadcast(key, 'defeat', {
+      this.broadcast('defeat', {
         'playerId': key
       });
       delete this.players[key];
@@ -360,10 +359,11 @@ Match.prototype.checkVictory = function() {
   }
 
   if (Object.keys(this.players).length === 1) {
+    var playerId = Object.keys(this.players)[0];
     this.status = Global.MATCH_STATUS.Ended;
     console.log('Player', playerId, 'won');
     this.broadcast('victory', {
-      'playerId': Object.keys(players)[0]
+      'playerId': playerId
     });
   }
 };

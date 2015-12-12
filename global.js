@@ -10,8 +10,8 @@ module.exports = {
     'NO_MANA': -1,
     'CARD_NOT_FOUND': -2
   },
-  maxMana: 10,
-  maxHealth: 30,
+  MAX_MANA: 10,
+  MAX_HEALTH: 30,
   MATCH_STATUS: {
     'Open': 0,
     'Starting': 1,

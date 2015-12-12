@@ -4,7 +4,7 @@ var Deck = require('./deck');
 
 function Player(socket) {
   this.id = socket.id;
-  this.health = global.maxHealth;
+  this.health = Global.MAX_HEALTH;
   this.totalMana = 0;
   this.usedMana = 0;
   this.deck = new Deck(this.id);
@@ -50,8 +50,8 @@ Player.prototype.cardFromDeck = function() {
 
 Player.prototype.increaseMana = function() {
   this.totalMana += 1;
-  if (this.totalMana > global.maxMana)
-    this.totalMana = global.maxMana;
+  if (this.totalMana > Global.MAX_MANA)
+    this.totalMana = Global.MAX_MANA;
 };
 
 Player.prototype.startTurn = function() {

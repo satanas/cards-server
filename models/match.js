@@ -143,25 +143,35 @@ Match.prototype.playCard = function(playerId, cardId) {
 };
 
 Match.prototype.attack = function(playerId, data) {
+  console.log('Attack requested');
   if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
   if (!this.isPlayer(data.defender.playerId)) return this.emit(playerId, 'no-player');
 
   var attacker = this.battlefield.getCard(playerId, data.attacker.cardId),
       defender = this.battlefield.getCard(data.defender.playerId, data.defender.cardId),
       opponent = this.players[data.defender.playerId],
-      opponentStats = null,
       spareDamage = 0;
 
-  if (!attacker) return this.emit(playerId, 'attacked-not-found');
-  if (!defender) return this.emit(playerId, 'defender-not-found');
-  if (attacker.sick) return this.emit(playerId, 'card-sick');
-  if (attacker.used) return this.emit(playerId, 'card-used');
+  if (!attacker) {
+    console.log('Attacker not found');
+    return this.emit(playerId, 'attacked-not-found');
+  }
+  if (!defender) {
+    console.log('Defender not found');
+    return this.emit(playerId, 'defender-not-found');
+  }
+  if (attacker.sick) {
+    console.log('Attacker is sick');
+    return this.emit(playerId, 'card-sick');
+  }
+  if (attacker.used) {
+    console.log('Attacker was used');
+    return this.emit(playerId, 'card-used');
+  }
 
   console.log('Battle between card', attacker.id, '(from player', playerId, ') and card', defender.id, '(from player', data.defender.playerId, ')');
 
   attacker.used = true;
-  spareDamage = attacker.attack - defender.health;
-
   // Execute damage against defender
   defender.health -= attacker.attack;
 
@@ -173,14 +183,11 @@ Match.prototype.attack = function(playerId, data) {
   }
 
   // Overwhelm
-  if (attacker.overwhelm && spareDamage > 0) {
-    console.log('Dealing', spareDamage, 'of extra damage due to overwhelm');
-    opponent.health -= spareDamage;
-    opponentStats = {
-      'id': opponent.id,
-      'damageDealt': 0,
-      'damageReceived': spareDamage,
-      'health': opponent.health
+  if (attacker.overwhelm) {
+    spareDamage = attacker.attack - defender.health;
+    if (spareDamage > 0) {
+      console.log('Dealing', spareDamage, 'of extra damage due to overwhelm');
+      opponent.health -= spareDamage;
     }
   }
 
@@ -191,12 +198,12 @@ Match.prototype.attack = function(playerId, data) {
 
   // Remove death cards from battlefield
   if (attacker.health <= 0) {
-    console.log('Attacking card ('+ attacker.id + ' from player '+ playerId + ') died');
-    delete battlefield[socket.id][data.attacker.cardId];
+    console.log('Attacking card with id '+ attacker.id + ' (from player '+ playerId + ') died');
+    delete this.battlefield.removeCard(playerId, data.attacker.cardId);
   }
   if (defender.health <= 0) {
-    console.log('Defending card ('+ defender.id+ ' from player ' + data.defender.playerId + ') died');
-    delete battlefield[data.defender.playerId][data.defender.cardId];
+    console.log('Defending card with id '+ defender.id+ ' (from player ' + data.defender.playerId + ') died');
+    delete this.battlefield.removeCard(data.defender.playerId, data.defender.cardId);
   }
 
   this.broadcast('battle', {
@@ -212,7 +219,12 @@ Match.prototype.attack = function(playerId, data) {
       }
     },
     'defender': {
-      'player': opponentStats,
+      'player': {
+        'id': opponent.id,
+        'damageDealt': 0,
+        'damageReceived': spareDamage,
+        'health': opponent.health
+      },
       'card': {
         'id': defender.id,
         'damageDealt': defender.attack,
@@ -226,24 +238,37 @@ Match.prototype.attack = function(playerId, data) {
 };
 
 Match.prototype.directAttack = function(playerId, data) {
+  console.log('Direct attack requested');
   if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
   if (!this.isPlayer(data.defender.playerId)) return this.emit(playerId, 'no-player');
 
   var attacker = this.battlefield.getCard(playerId, data.attacker.cardId),
       opponent = this.players[data.defender.playerId];
 
-  if (!attacker) return this.emit(playerId, 'attacked-not-found');
-  if (attacker.sick) return this.emit(playerId, 'card-sick');
-  if (attacker.used) return this.emit(playerId, 'card-used');
+  console.log('attacker', attacker);
+  console.log('opponent', opponent);
 
-  console.log('Card', attacker.id, '(from player', playerID, ') attacked player', opponent.id, 'with', attacker.attack, 'pt(s) of damage');
+  if (!attacker) {
+    console.log('Attacker not found');
+    return this.emit(playerId, 'attacked-not-found');
+  }
+  if (attacker.sick) {
+    console.log('Attacker is sick');
+    return this.emit(playerId, 'card-sick');
+  }
+  if (attacker.used) {
+    console.log('Attacker was used');
+    return this.emit(playerId, 'card-used');
+  }
+
+  console.log('Card', attacker.id, '(from player', playerId, ') attacked player', opponent.id, 'with', attacker.attack, 'pt(s) of damage');
   opponent.health -= attacker.attack;
   attacker.used = true;
 
   this.broadcast('direct-damage', {
     'attacker': {
       'player': {
-        'id': socket.id
+        'id': playerId
       },
       'card': {
         'id': attacker.id,
@@ -306,10 +331,12 @@ Match.prototype.iterate = function(cb) {
 };
 
 Match.prototype.inTurn = function(playerId) {
+  console.log('inTurn', playerId === this.turnOrder[this.turnIndex]);
   return (playerId === this.turnOrder[this.turnIndex]);
 };
 
 Match.prototype.isPlayer = function(playerId) {
+  console.log('isPlayer', Object.keys(this.players).indexOf(playerId) >= 0);
   return (Object.keys(this.players).indexOf(playerId) >= 0);
 };
 
@@ -318,9 +345,7 @@ Match.prototype.isEnded = function() {
 };
 
 Match.prototype.checkVictory = function() {
-  var playerKeys = Object.keys(this.players);
-
-  for (var key in playerKeys) {
+  for (var key in this.players) {
     var player = this.players[key];
     if (player.health <= 0) {
       console.log('Player', player.id, 'defeated');

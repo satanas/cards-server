@@ -11,7 +11,7 @@ module.exports = {
     'CARD_NOT_FOUND': -2
   },
   MAX_MANA: 10,
-  MAX_HEALTH: 30,
+  MAX_HEALTH: 10,
   MATCH_STATUS: {
     'Open': 0,
     'Starting': 1,

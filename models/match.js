@@ -245,9 +245,6 @@ Match.prototype.directAttack = function(playerId, data) {
   var attacker = this.battlefield.getCard(playerId, data.attacker.cardId),
       opponent = this.players[data.defender.playerId];
 
-  console.log('attacker', attacker);
-  console.log('opponent', opponent);
-
   if (!attacker) {
     console.log('Attacker not found');
     return this.emit(playerId, 'attacked-not-found');

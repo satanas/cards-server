@@ -29,8 +29,12 @@ Battlefield.prototype.playCard = function(playerId, card) {
   this.fields[playerId][card.id] = card;
 };
 
-Battlefield.prototype.getCard = function(playerId, card) {
-  return this.fields[playerId][card.id];
+Battlefield.prototype.getCard = function(playerId, cardId) {
+  return this.fields[playerId][cardId];
+};
+
+Battlefield.prototype.removeCard = function(playerId, cardId) {
+  delete this.fields[playerId][cardId];
 };
 
 module.exports = Battlefield;

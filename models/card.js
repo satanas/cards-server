@@ -1,4 +1,4 @@
-var Card = function(id, type, attack, health, name, image, mana, description, flying, firstStrike, vigilance, rush, overwhelm, deathtouch, shadow) {
+var Card = function(id, type, attack, health, name, image, mana, description, flying, firstStrike, vigilance, rush, overwhelm, deathtouch, shadow, venom) {
   this.id = id;
   this.type = type;
   this.attack = attack;
@@ -7,13 +7,17 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
   this.image = image;
   this.mana = mana;
   this.description = description;
+  // Abilities:
   this.firstStrike = firstStrike || false; // Attack first, can survive if the other is killed
   this.rush = rush || false; // Attack when played
   this.overwhelm = overwhelm || false; // Inflicts the non-blocked damage to the player
   this.deathtouch = deathtouch || false; // If creature with deathtouch dies, the attacking creature also dies
+  this.venom = venom || false;
+  // Props
   this.sick = true;
   this.used = false;
   this.played = false;
+  this.invenomed = false;
 
   this.attrs = [];
   //this.infects
@@ -25,5 +29,7 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
   //provoke: enemy can't attack other creatures
   //stealth: can't be targeted until it attacks
 };
+
+Card.prototype.constructor = Card;
 
 module.exports = Card;

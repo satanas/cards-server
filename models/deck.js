@@ -10,7 +10,7 @@ var Deck = function(playerId) {
     new Card(4, global.cardTypes.CREATURE, 4, 4, 'Blo Monster', 'image.jpg', 2, 'Description'),
     new Card(5, global.cardTypes.CREATURE, 1, 4, 'Blu Monster', 'image.jpg', 2, 'Description'),
     new Card(6, global.cardTypes.CREATURE, 1, 1, 'Kla Monster', 'image.jpg', 3, 'Description'),
-    new Card(7, global.cardTypes.CREATURE, 1, 2, 'Kle Monster', 'image.jpg', 3, 'Description'),
+    new Card(7, global.cardTypes.CREATURE, 1, 2, 'Klev Monster', 'image.jpg', 3, 'Description', false, false, false, false, false, false, false, true),
     new Card(8, global.cardTypes.CREATURE, 2, 2, 'Kli Monster', 'image.jpg', 4, 'Description'),
     new Card(9, global.cardTypes.CREATURE, 4, 4, 'Klo Monster', 'image.jpg', 4, 'Description'),
     new Card(10, global.cardTypes.CREATURE, 1, 4, 'Klu Monster', 'image.jpg', 5, 'Description'),

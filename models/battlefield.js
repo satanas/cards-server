@@ -30,7 +30,7 @@ Battlefield.prototype.untap = function(playerId) {
         console.log('Card', card.id, 'for player', playerId, 'dies due to venom');
         delete this.removeCard(playerId, card.id);
       } else {
-        console.log('Card', card.id, 'for player', playerId, 'loses 1 health due to venom');
+        console.log('Card', card.id, 'for player', playerId, 'lose 1 health due to venom');
       }
     }
 

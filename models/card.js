@@ -1,4 +1,4 @@
-var Card = function(id, type, attack, health, name, image, mana, description, flying, firstStrike, vigilance, rush, overwhelm, deathtouch, shadow, venom) {
+var Card = function(id, type, attack, health, name, image, mana, description, abilities) {
   this.id = id;
   this.type = type;
   this.attack = attack;
@@ -7,12 +7,19 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
   this.image = image;
   this.mana = mana;
   this.description = description;
+  abilities = abilities || {};
+
   // Abilities:
-  this.firstStrike = firstStrike || false; // Attack first, can survive if the other is killed
-  this.rush = rush || false; // Attack when played
-  this.overwhelm = overwhelm || false; // Inflicts the non-blocked damage to the player
-  this.deathtouch = deathtouch || false; // If creature with deathtouch dies, the attacking creature also dies
-  this.venom = venom || false;
+  // Attack first, can survive if the other is killed
+  this.firstStrike = abilities.firstStrike || false;
+  // Attack when played
+  this.rush = abilities.rush || false;
+  // Inflicts the non-blocked damage to the player
+  this.overwhelm = abilities.overwhelm || false;
+  // If creature with deathtouch dies, the attacking creature also dies
+  this.deathtouch = abilities.deathtouch || false;
+  // Invenom any creature that deals damage. Invenomed creature lose 1 health every turn until it dies
+  this.venom = abilities.venom || false;
   // Props
   this.sick = true;
   this.used = false;

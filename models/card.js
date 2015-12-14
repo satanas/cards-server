@@ -14,7 +14,7 @@ var Card = function(id, type, attack, health, name, image, mana, description, ab
   this.firstStrike = abilities.firstStrike || false;
   // Attack when played
   this.rush = abilities.rush || false;
-  // Inflicts the non-blocked damage to the player
+  // Inflicts the non-blocked damage to the player (only when attacking)
   this.overwhelm = abilities.overwhelm || false;
   // If creature with deathtouch dies, the attacking creature also dies
   this.deathtouch = abilities.deathtouch || false;
@@ -27,8 +27,6 @@ var Card = function(id, type, attack, health, name, image, mana, description, ab
   this.invenomed = false;
 
   this.attrs = [];
-  //this.infects
-  //this.vigilance = vigilance || false; Can be renamed to provoke
   //this.flying = flying || false; // Can only be blocked by flying
   //this.shadow = shadow || false;
   //berserker: attacks twice

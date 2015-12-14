@@ -199,8 +199,11 @@ Match.prototype.attack = function(playerId, data) {
   }
 
   // Deathtouch
-  if (attacker.deathtouch) {
+  if (attacker.health <= 0 && attacker.deathtouch) {
     defender.health = 0;
+  }
+  if (defender.health <= 0 && defender.deathtouch) {
+    attacker.health = 0;
   }
 
   // Invenom

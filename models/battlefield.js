@@ -39,6 +39,7 @@ Battlefield.prototype.untap = function(playerId) {
       sick: card.sick,
       used: card.used,
       health: card.health,
+      invenomed: card.invenomed,
       damage: damage
     });
   }

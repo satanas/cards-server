@@ -210,6 +210,9 @@ Match.prototype.attack = function(playerId, data) {
   if (attacker.venom) {
     defender.invenomed = true;
   }
+  if (defender.venom) {
+    attacker.invenomed = true;
+  }
 
   // Remove death cards from battlefield
   if (attacker.health <= 0) {
@@ -230,7 +233,8 @@ Match.prototype.attack = function(playerId, data) {
         'id': attacker.id,
         'damageDealt': attacker.attack,
         'damageReceived': defender.attack,
-        'health': attacker.health
+        'health': attacker.health,
+        'invenomed': attacker.invenomed
       }
     },
     'defender': {
@@ -245,7 +249,7 @@ Match.prototype.attack = function(playerId, data) {
         'damageDealt': defender.attack,
         'damageReceived': attacker.attack,
         'health': defender.health,
-        'invenomed': attacker.venom
+        'invenomed': attacker.invenomed
       }
     }
   });

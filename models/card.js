@@ -20,6 +20,9 @@ var Card = function(id, type, attack, health, name, image, mana, description, ab
   this.deathtouch = abilities.deathtouch || false;
   // Invenom any creature that deals damage. Invenomed creature lose 1 health every turn until it dies
   this.venom = abilities.venom || false;
+  // Give 1 health to player for each killed creature
+  this.transfusion = abilities.transfusion || false;
+
   // Props
   this.sick = true;
   this.used = false;

@@ -155,8 +155,10 @@ Match.prototype.attack = function(playerId, data) {
 
   var attacker = this.battlefield.getCard(playerId, data.attacker.cardId),
       defender = this.battlefield.getCard(data.defender.playerId, data.defender.cardId),
+      player = this.players[playerId],
       opponent = this.players[data.defender.playerId],
-      spareDamage = 0;
+      spareDamage = 0,
+      transfused = 0;
 
   if (!attacker) {
     console.log('Attacker not found');
@@ -200,18 +202,29 @@ Match.prototype.attack = function(playerId, data) {
 
   // Deathtouch
   if (attacker.health <= 0 && attacker.deathtouch) {
+    console.log('Defender killed due to deathtouch');
     defender.health = 0;
   }
   if (defender.health <= 0 && defender.deathtouch) {
+    console.log('Attacker killed due to deathtouch');
     attacker.health = 0;
   }
 
   // Invenom
   if (attacker.venom) {
+    console.log('Defender invenomed');
     defender.invenomed = true;
   }
   if (defender.venom) {
+    console.log('Attacker invenomed');
     attacker.invenomed = true;
+  }
+
+  // Transfusion
+  if (defender.health <= 0 && attacker.transfusion) {
+    console.log('Attacking player got 1 health due to transfusion');
+    transfused = 1;
+    player.health += transfused;
   }
 
   // Remove death cards from battlefield
@@ -227,7 +240,9 @@ Match.prototype.attack = function(playerId, data) {
   this.broadcast('battle', {
     'attacker': {
       'player': {
-        'id': playerId
+        'id': player.id,
+        'health': player.health,
+        'transfused': transfused
       },
       'card': {
         'id': attacker.id,

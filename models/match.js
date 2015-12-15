@@ -135,11 +135,11 @@ Match.prototype.playCard = function(playerId, cardId) {
     console.log('Player', playerId, 'put card', cardId, 'into the battlefield');
     this.broadcast('played-card', {
       'player': {
-        'id': playerId
+        'id': playerId,
+        'totalMana': player.totalMana,
+        'usedMana': player.usedMana
       },
       'card': card,
-      'totalMana': player.totalMana,
-      'usedMana': player.usedMana
     });
   } else if (canPlayCard === Global.ERRORS.NO_MANA) {
     this.emit(playerId, 'no-mana');

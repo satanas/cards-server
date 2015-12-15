@@ -193,7 +193,7 @@ Match.prototype.attack = function(playerId, data) {
 
   // Overwhelm
   if (attacker.overwhelm) {
-    spareDamage = attacker.attack - defender.health;
+    spareDamage = Math.abs(defender.health);
     if (spareDamage > 0) {
       console.log('Dealing', spareDamage, 'of extra damage due to overwhelm');
       opponent.health -= spareDamage;
@@ -246,6 +246,7 @@ Match.prototype.attack = function(playerId, data) {
       },
       'card': {
         'id': attacker.id,
+        'used': attacker.used,
         'damageDealt': attacker.attack,
         'damageReceived': defender.attack,
         'health': attacker.health,
@@ -256,7 +257,7 @@ Match.prototype.attack = function(playerId, data) {
       'player': {
         'id': opponent.id,
         'damageDealt': 0,
-        'damageReceived': spareDamage,
+        'overwhelmed': spareDamage,
         'health': opponent.health
       },
       'card': {

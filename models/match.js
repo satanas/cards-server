@@ -158,7 +158,8 @@ Match.prototype.attack = function(playerId, data) {
       player = this.players[playerId],
       opponent = this.players[data.defender.playerId],
       spareDamage = 0,
-      transfused = 0;
+      attackerTransfused = 0,
+      defenderTransfused = 0;
 
   if (!attacker) {
     console.log('Attacker not found');
@@ -223,8 +224,13 @@ Match.prototype.attack = function(playerId, data) {
   // Transfusion
   if (defender.health <= 0 && attacker.transfusion) {
     console.log('Attacking player got 1 health due to transfusion');
-    transfused = 1;
+    attackerTransfused = 1;
     player.health += transfused;
+  }
+  if (attacker.health <= 0 && defender.transfusion) {
+    console.log('Defending player got 1 health due to transfusion');
+    defenderTransfused = 1;
+    opponent.health += transfused;
   }
 
   // Remove death cards from battlefield
@@ -244,7 +250,7 @@ Match.prototype.attack = function(playerId, data) {
       'player': {
         'id': player.id,
         'health': player.health,
-        'transfused': transfused
+        'transfused': attackerTransfused
       },
       'card': {
         'id': attacker.id,
@@ -260,7 +266,8 @@ Match.prototype.attack = function(playerId, data) {
         'id': opponent.id,
         'damageDealt': 0,
         'overwhelmed': spareDamage,
-        'health': opponent.health
+        'health': opponent.health,
+        'transfused': defenderTransfused
       },
       'card': {
         'id': defender.id,

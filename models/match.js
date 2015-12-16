@@ -225,12 +225,12 @@ Match.prototype.attack = function(playerId, data) {
   if (defender.health <= 0 && attacker.transfusion) {
     console.log('Attacking player got 1 health due to transfusion');
     attackerTransfused = 1;
-    player.health += transfused;
+    player.health += attackerTransfused;
   }
   if (attacker.health <= 0 && defender.transfusion) {
     console.log('Defending player got 1 health due to transfusion');
     defenderTransfused = 1;
-    opponent.health += transfused;
+    opponent.health += defenderTransfused;
   }
 
   // Remove death cards from battlefield
@@ -274,7 +274,7 @@ Match.prototype.attack = function(playerId, data) {
         'damageDealt': defender.attack,
         'damageReceived': attacker.attack,
         'health': defender.health,
-        'invenomed': attacker.invenomed
+        'invenomed': defender.invenomed
       }
     }
   });

@@ -226,11 +226,13 @@ Match.prototype.attack = function(playerId, data) {
     console.log('Attacking player got 1 health due to transfusion');
     attackerTransfused = 1;
     player.health += attackerTransfused;
+    if (player.health > Global.MAX_HEALTH) player.health = Global.MAX_HEALTH;
   }
   if (attacker.health <= 0 && defender.transfusion) {
     console.log('Defending player got 1 health due to transfusion');
     defenderTransfused = 1;
     opponent.health += defenderTransfused;
+    if (opponent.health > Global.MAX_HEALTH) opponent.health = Global.MAX_HEALTH;
   }
 
   // Remove death cards from battlefield

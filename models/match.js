@@ -230,10 +230,12 @@ Match.prototype.attack = function(playerId, data) {
   // Remove death cards from battlefield
   if (attacker.health <= 0) {
     console.log('Attacking card with id '+ attacker.id + ' (from player '+ playerId + ') died');
+    attacker.health = 0;
     delete this.battlefield.removeCard(playerId, data.attacker.cardId);
   }
   if (defender.health <= 0) {
     console.log('Defending card with id '+ defender.id+ ' (from player ' + data.defender.playerId + ') died');
+    defender.health = 0;
     delete this.battlefield.removeCard(data.defender.playerId, data.defender.cardId);
   }
 

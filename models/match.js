@@ -309,7 +309,8 @@ Match.prototype.directAttack = function(playerId, data) {
         'id': attacker.id,
         'damageDealt': attacker.attack,
         'damageReceived': 0,
-        'health': attacker.health
+        'health': attacker.health,
+        'used': attacker.used
       }
     },
     'defender': {

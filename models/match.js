@@ -180,6 +180,10 @@ Match.prototype.attack = function(playerId, data) {
     console.log('Attacker was used');
     return this.emit(playerId, 'card-used');
   }
+  if (attacker.playerId === defender.playerId && attacker.id === defender.id) {
+    console.log('Attack rejected. Card can not attack itself');
+    return this.emit(playerId, 'invalid-op', 'Card can not attack itself');
+  }
 
   console.log('Battle between card', attacker.id, '(from player', playerId, ') and card', defender.id, '(from player', data.defender.playerId, ')');
 

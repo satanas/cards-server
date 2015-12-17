@@ -3,6 +3,7 @@ var Card = function(id, type, attack, health, name, image, mana, description, ab
   this.type = type;
   this.attack = attack;
   this.health = health;
+  this.maxHealth = health;
   this.name = name;
   this.image = image;
   this.mana = mana;
@@ -39,5 +40,10 @@ var Card = function(id, type, attack, health, name, image, mana, description, ab
 };
 
 Card.prototype.constructor = Card;
+
+Card.prototype.heal = function(value) {
+  this.health += value;
+  if (this.health > this.maxHealth) this.health = this.maxHealth;
+};
 
 module.exports = Card;

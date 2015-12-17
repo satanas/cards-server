@@ -159,6 +159,8 @@ Match.prototype.attack = function(playerId, data) {
       spareDamage = 0,
       attackerTransfused = 0,
       defenderTransfused = 0,
+      attackerBloodFed = 0,
+      defenderBloodFed = 0,
       damageReceivedByAttacker = 0,
       damageReceivedByDefender = 0;
 
@@ -257,6 +259,20 @@ Match.prototype.attack = function(playerId, data) {
     if (opponent.health > Global.MAX_HEALTH) opponent.health = Global.MAX_HEALTH;
   }
 
+  // Vampirism
+  if (defender.health <= 0 && attacker.vampirism) {
+    console.log('Attacking card got 1 health due to vampirism');
+    attackerBloodFed = 1;
+    attacker.heal(attackerBloodFed);
+  }
+  if (attacker.health <= 0 && defender.vampirism) {
+    console.log('Defending card got 1 health due to vampirism');
+    defenderBloodFed = 1;
+    defender.heal(defenderBloodFed);
+    if (opponent.health > Global.MAX_HEALTH) opponent.health = Global.MAX_HEALTH;
+  }
+
+
   // Remove death cards from battlefield
   if (attacker.health <= 0) {
     console.log('Attacking card with id '+ attacker.id + ' (from player '+ playerId + ') died');
@@ -282,7 +298,8 @@ Match.prototype.attack = function(playerId, data) {
         'damageDealt': attacker.attack,
         'damageReceived': damageReceivedByAttacker,
         'health': attacker.health,
-        'invenomed': attacker.invenomed
+        'invenomed': attacker.invenomed,
+        'bloodfed': attackerBloodFed
       }
     },
     'defender': {
@@ -298,7 +315,8 @@ Match.prototype.attack = function(playerId, data) {
         'damageDealt': defender.attack,
         'damageReceived': damageReceivedByDefender,
         'health': defender.health,
-        'invenomed': defender.invenomed
+        'invenomed': defender.invenomed,
+        'bloodfed': defenderBloodFed
       }
     }
   });

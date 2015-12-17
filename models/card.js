@@ -23,6 +23,8 @@ var Card = function(id, type, attack, health, name, image, mana, description, ab
   this.venom = abilities.venom || false;
   // Give 1 health to player for each killed creature
   this.transfusion = abilities.transfusion || false;
+  // Recovers 1 health to the card for each killed creature
+  this.vampirism = abilities.vampirism || false;
 
   // Props
   this.sick = true;

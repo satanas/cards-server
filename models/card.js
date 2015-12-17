@@ -25,12 +25,15 @@ var Card = function(id, type, attack, health, name, image, mana, description, ab
   this.transfusion = abilities.transfusion || false;
   // Recovers 1 health to the card for each killed creature
   this.vampirism = abilities.vampirism || false;
+  // Can attack twice in the same turn
+  this.berserker = abilities.berserker || false;
 
   // Props
   this.sick = true;
   this.used = false;
   this.played = false;
   this.invenomed = false;
+  this.secondAttack = false;
 
   this.attrs = [];
   //this.flying = flying || false; // Can only be blocked by flying

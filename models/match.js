@@ -185,6 +185,14 @@ Match.prototype.attack = function(playerId, data) {
 
   attacker.used = true;
 
+  // Berserker
+  if (attacker.berserker) {
+    if (!attacker.secondAttack) {
+      attacker.used = false;
+      attacker.secondAttack = true;
+    }
+  }
+
   // First strike
   if (attacker.firstStrike && !defender.firstStrike) {
     defender.health -= attacker.attack;

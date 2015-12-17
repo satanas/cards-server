@@ -5,11 +5,11 @@ var Deck = function(playerId) {
   // Read the cards storage and create a 60 cards deck
   cardStorage = [
     new Card(1, Global.cardTypes.CREATURE, 1, 1, 'Bla Monster', 'image.jpg', 1, 'Description'),
-    new Card(2, Global.cardTypes.CREATURE, 1, 2, 'Ble Monster', 'image.jpg', 1, 'Description'),
-    new Card(3, Global.cardTypes.CREATURE, 2, 2, 'Bli Monster', 'image.jpg', 1, 'Description', {venom: true}),
+    new Card(2, Global.cardTypes.CREATURE, 1, 2, 'Ble Monster', 'image.jpg', 1, 'Description', {firstStrike: true}),
+    new Card(3, Global.cardTypes.CREATURE, 2, 2, 'Bli Monster', 'image.jpg', 1, 'Description'),
     new Card(4, Global.cardTypes.CREATURE, 4, 4, 'Blo Monster', 'image.jpg', 2, 'Description'),
     new Card(5, Global.cardTypes.CREATURE, 1, 4, 'Blu Monster', 'image.jpg', 2, 'Description', {transfusion: true}),
-    new Card(6, Global.cardTypes.CREATURE, 1, 1, 'Kla Monster', 'image.jpg', 3, 'Description'),
+    new Card(6, Global.cardTypes.CREATURE, 1, 1, 'Kla Monster', 'image.jpg', 3, 'Description', {firstStrike: true}),
     new Card(7, Global.cardTypes.CREATURE, 1, 2, 'Klev Monster', 'image.jpg', 3, 'Description', {venom: true}),
     new Card(8, Global.cardTypes.CREATURE, 2, 2, 'Kli Monster', 'image.jpg', 4, 'Description'),
     new Card(9, Global.cardTypes.CREATURE, 4, 4, 'Klo Monster', 'image.jpg', 4, 'Description'),

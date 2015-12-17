@@ -149,7 +149,6 @@ Match.prototype.playCard = function(playerId, cardId) {
 };
 
 Match.prototype.attack = function(playerId, data) {
-  console.log('Attack requested');
   if (!this.inTurn(playerId)) return this.emit(playerId, 'no-turn');
   if (!this.isPlayer(data.defender.playerId)) return this.emit(playerId, 'no-player');
 
@@ -159,7 +158,9 @@ Match.prototype.attack = function(playerId, data) {
       opponent = this.players[data.defender.playerId],
       spareDamage = 0,
       attackerTransfused = 0,
-      defenderTransfused = 0;
+      defenderTransfused = 0,
+      damageReceivedByAttacker = 0,
+      damageReceivedByDefender = 0;
 
   if (!attacker) {
     console.log('Attacker not found');
@@ -182,15 +183,36 @@ Match.prototype.attack = function(playerId, data) {
 
   attacker.used = true;
 
-  // Execute damage against defender
-  defender.health -= attacker.attack;
-
-  // Execute damage against attacker
-  if (!attacker.firstStrike || (attacker.firstStrike && defender.health > 0) || (attacker.firstStrike && defender.firstStrike)) {
+  // First strike
+  if (attacker.firstStrike && !defender.firstStrike) {
+    defender.health -= attacker.attack;
+    damageReceivedByDefender = attacker.attack;
+    if (defender.health > 0) {
+      attacker.health -= defender.attack;
+      damageReceivedByAttacker = defender.attack;
+    } else {
+      damageReceivedByAttacker = 0;
+      console.log('Attacker did not receive damage because it killed the defender with first strike');
+    }
+  } else if (!attacker.firstStrike && defender.firstStrike) {
     attacker.health -= defender.attack;
+    damageReceivedByAttacker = defender.attack;
+    if (attacker.health > 0) {
+      defender.health -= attacker.attack;
+      damageReceivedByDefender = attacker.attack;
+    } else {
+      damageReceivedByDefender = 0;
+      console.log('Defender did not receive damage because it killed the attacker with first strike');
+    }
   } else {
-    console.log('Attacker did not receive damage because it killed the defender first');
+    attacker.health -= defender.attack;
+    damageReceivedByAttacker = defender.attack;
+
+    defender.health -= attacker.attack;
+    damageReceivedByDefender = attacker.attack;
   }
+  console.log('Attacker: atk =', damageReceivedByDefender, '| health =', attacker.health);
+  console.log('Defender: atk =', damageReceivedByAttacker, '| health =', defender.health);
 
   // Overwhelm
   if (attacker.overwhelm) {
@@ -258,7 +280,7 @@ Match.prototype.attack = function(playerId, data) {
         'id': attacker.id,
         'used': attacker.used,
         'damageDealt': attacker.attack,
-        'damageReceived': defender.attack,
+        'damageReceived': damageReceivedByAttacker,
         'health': attacker.health,
         'invenomed': attacker.invenomed
       }
@@ -274,7 +296,7 @@ Match.prototype.attack = function(playerId, data) {
       'card': {
         'id': defender.id,
         'damageDealt': defender.attack,
-        'damageReceived': attacker.attack,
+        'damageReceived': damageReceivedByDefender,
         'health': defender.health,
         'invenomed': defender.invenomed
       }

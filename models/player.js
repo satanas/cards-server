@@ -60,4 +60,9 @@ Player.prototype.startTurn = function() {
   return this.cardFromDeck();
 };
 
+Player.prototype.heal = function(value) {
+  this.health += value;
+  if (this.health > Global.MAX_HEALTH) this.health = Global.MAX_HEALTH;
+};
+
 module.exports = Player;

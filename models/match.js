@@ -357,7 +357,16 @@ Match.prototype.directAttack = function(playerId, data) {
 
   console.log('Card', attacker.id, '(from player', playerId, ') attacked player', opponent.id, 'with', attacker.attack, 'pt(s) of damage');
   opponent.health -= attacker.attack;
+
   attacker.used = true;
+
+  // Berserker
+  if (attacker.berserker) {
+    if (!attacker.secondAttack) {
+      attacker.used = false;
+      attacker.secondAttack = true;
+    }
+  }
 
   this.broadcast('direct-damage', {
     'attacker': {

@@ -1,4 +1,4 @@
-var Card = function(id, type, attack, health, name, image, mana, description, abilities) {
+var Card = function(id, type, attack, health, name, image, mana, description, flavorText, abilities) {
   this.id = id;
   this.type = type;
   this.attack = attack;
@@ -8,9 +8,10 @@ var Card = function(id, type, attack, health, name, image, mana, description, ab
   this.image = image;
   this.mana = mana;
   this.description = description;
-  abilities = abilities || {};
+  this.flavorText = flavorText;
 
   // Abilities:
+  abilities = abilities || {};
   // Attack first, can survive if the other is killed
   this.firstStrike = abilities.firstStrike || false;
   // Attack when played

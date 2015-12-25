@@ -258,24 +258,24 @@ Match.prototype.attack = function(playerId, data) {
   }
 
   // Transfusion
-  if (defender.health <= 0 && attacker.transfusion) {
+  if (defender.health <= 0 && attacker.transfusion && attacker.health > 0) {
     console.log('Attacking player got 1 health due to transfusion');
     attackerTransfused = 1;
     player.heal(attackerTransfused);
   }
-  if (attacker.health <= 0 && defender.transfusion) {
+  if (attacker.health <= 0 && defender.transfusion && defender.health > 0) {
     console.log('Defending player got 1 health due to transfusion');
     defenderTransfused = 1;
     opponent.heal(defenderTransfused);
   }
 
   // Vampirism
-  if (defender.health <= 0 && attacker.vampirism) {
+  if (defender.health <= 0 && attacker.vampirism && attacker.health > 0) {
     console.log('Attacking card got 1 health due to vampirism');
     attackerBloodFed = 1;
     attacker.heal(attackerBloodFed);
   }
-  if (attacker.health <= 0 && defender.vampirism) {
+  if (attacker.health <= 0 && defender.vampirism && defender.health > 0) {
     console.log('Defending card got 1 health due to vampirism');
     defenderBloodFed = 1;
     defender.heal(defenderBloodFed);

@@ -2,10 +2,11 @@ require('./lib/mixins');
 
 var http = require('http');
 var _ = require('underscore');
+var mongoose = require('mongoose');
+
 var global = require('./global');
 var Match = require('./models/match');
 var Player = require('./models/player');
-
 
 var port = process.argv[2] || 3000;
 var app = http.createServer();
@@ -18,6 +19,8 @@ var matchEnded = false;
 var matches = [];
 
 var server = require('socket.io')(app);
+
+mongoose.connect('mongodb://localhost/magic');
 
 server.on('connection', function(socket) {
   console.log(`Client ${socket.id} connecting`);

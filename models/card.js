@@ -1,3 +1,29 @@
+'use strict';
+var mongoose = require('mongoose');
+
+var cardSchema = mongoose.Schema({
+  type: String,
+  attack: Number,
+  health: Number,
+  maxHealth: Number,
+  name: String,
+  image: String,
+  mana: Number,
+  description: String,
+  flavorText: String,
+  firstStrike: {type: Boolean, default: false},
+  rush: {type: Boolean, default: false},
+  overwhelm: {type: Boolean, default: false},
+  deathtouch: {type: Boolean, default: false},
+  venom: {type: Boolean, default: false},
+  transfusion: {type: Boolean, default: false},
+  vampirism: {type: Boolean, default: false},
+  berserker: {type: Boolean, default: false},
+});
+
+var Card = mongoose.model('Card', cardSchema);
+
+/*
 var Card = function(id, type, attack, health, name, image, mana, description, flavorText, abilities) {
   this.id = id;
   this.type = type;
@@ -44,8 +70,15 @@ var Card = function(id, type, attack, health, name, image, mana, description, fl
   //provoke: enemy can't attack other creatures
   //stealth: can't be targeted until it attacks
 };
+*/
 
-Card.prototype.constructor = Card;
+//Card.prototype.constructor = Card;
+//
+Card.prototype.sick = true;
+Card.prototype.used = false;
+Card.prototype.played = false;
+Card.prototype.invenomed = false;
+Card.prototype.secondAttack = false;
 
 Card.prototype.heal = function(value) {
   this.health += value;

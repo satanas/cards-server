@@ -1,5 +1,6 @@
 var Card = require('./card');
 var Global = require('../global');
+var mongoose = require('mongoose');
 
 var Deck = function(playerId) {
   // Read the cards storage and create a 60 cards deck

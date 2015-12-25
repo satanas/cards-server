@@ -3,7 +3,7 @@ var Global = require('../global');
 var Player = require('./player');
 var Battlefield = require('./battlefield');
 
-function Match(socket) {
+function Match(socket, cardStorage) {
   this.status = Global.MATCH_STATUS.Open;
   this.players = {};
   this.battlefield = new Battlefield();
@@ -15,17 +15,17 @@ function Match(socket) {
   console.log(`Match ${this.id} created`);
   socket.emit('match-created', this.id);
 
-  this.join(socket);
+  this.join(socket, cardStorage);
 }
 
-Match.prototype.join = function(socket) {
+Match.prototype.join = function(socket, cardStorage) {
   // Get players list before adding a new player
   var playersList = [];
   this.iterate(function(key) {
     playersList.push(key);
   });
 
-  this.players[socket.id] = new Player(socket);
+  this.players[socket.id] = new Player(socket, cardStorage);
   this.battlefield.addPlayer(socket.id);
 
   socket.emit('joined', {

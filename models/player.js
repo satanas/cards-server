@@ -2,12 +2,12 @@ var _ = require('underscore');
 var Global = require('../global');
 var Deck = require('./deck');
 
-function Player(socket) {
+function Player(socket, cardStorage) {
   this.id = socket.id;
   this.health = Global.MAX_HEALTH;
   this.totalMana = 0;
   this.usedMana = 0;
-  this.deck = new Deck(this.id);
+  this.deck = new Deck(this.id, cardStorage);
   this.hand = this.deck.getHand();
   this.graveyard = [];
   this.socket = socket;

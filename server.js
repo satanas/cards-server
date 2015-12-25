@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var global = require('./global');
 var Match = require('./models/match');
 var Player = require('./models/player');
+var Card = require('./models/card');
 
 var port = process.argv[2] || 3000;
 var app = http.createServer();
@@ -17,28 +18,42 @@ var turnOrder = [];
 var turnIndex = 0;
 var matchEnded = false;
 var matches = [];
+var cardStorage = null;
 
 var server = require('socket.io')(app);
 
 mongoose.connect('mongodb://localhost/magic');
 
+Card.find().exec(function(err, data) {
+  cardStorage = data;
+  console.log('Card storage read');
+});
+
 server.on('connection', function(socket) {
   console.log(`Client ${socket.id} connecting`);
 
   socket.on('new-match', function() {
+    if (cardStorage === null) {
+      socket.emit('server-not-ready');
+      return;
+    }
     // FIXME: Remove me
     matches = [];
     // ***************
-    var match = new Match(socket);
+    var match = new Match(socket, cardStorage);
     matches.push(match);
   });
 
   socket.on('join-match', function(matchId) {
+    if (cardStorage === null) {
+      socket.emit('server-not-ready');
+      return;
+    }
     // Search for match
     var match = findMatch(socket, matchId);
     if (match) {
       // FIXME: Validate on started matches
-      match.join(socket);
+      match.join(socket, cardStorage);
       if (Object.keys(match.players).length > 1) {
         match.start();
         match.startTurn();

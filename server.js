@@ -1,7 +1,9 @@
+'use strict';
+
 require('./lib/mixins');
+require('./editor');
 
 var http = require('http');
-var _ = require('underscore');
 var mongoose = require('mongoose');
 
 var global = require('./global');

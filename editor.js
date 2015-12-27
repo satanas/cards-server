@@ -5,6 +5,8 @@ var hbs = require('koa-hbs');
 var router = require('koa-route');
 var mongoose = require('mongoose');
 
+var Card = require('./models/card');
+
 var app = koa();
 
 // Request logging
@@ -22,7 +24,10 @@ app.use(hbs.middleware({
 }));
 
 app.use(router.get('/gallery', function* (next) {
-  yield this.render('gallery', {title: 'ble'});
+  var cards = yield Card.find();
+  yield this.render('gallery', {
+    cards: cards
+  });
 }));
 
 app.listen(8001);

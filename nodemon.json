@@ -1,0 +1,9 @@
+{
+  "verbose": false,
+  "ignore": [
+    ".git",
+    "node_modules",
+    "tmp"
+  ],
+  "ext": "js hbs json css"
+}

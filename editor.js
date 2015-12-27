@@ -2,6 +2,7 @@
 
 var koa = require('koa');
 var hbs = require('koa-hbs');
+var serve = require('koa-serve');
 var router = require('koa-route');
 var mongoose = require('mongoose');
 
@@ -17,6 +18,8 @@ app.use(function* (next) {
 
   console.log([start.toISOString(), "::", this.method, this.url, "processed in", String(end-start), "ms"].join(' '));
 });
+
+app.use(serve('public'));
 
 app.use(hbs.middleware({
   viewPath: __dirname + '/views',

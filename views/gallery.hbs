@@ -1,1 +1,44 @@
-<p>Gallery</p>
+<h1>Gallery</h1>
+
+<table>
+  <thead>
+    <tr>
+      <td>Name</td>
+      <td>Mana</td>
+      <td>Attack</td>
+      <td>Health</td>
+      <td>Type</td>
+      <td>Image</td>
+      <td>First Strike</td>
+      <td>Rush</td>
+      <td>Overwhelm</td>
+      <td>Deathtouch</td>
+      <td>Venom</td>
+      <td>Transfusion</td>
+      <td>Vampirism</td>
+      <td>Berserker</td>
+      <td>Flavor Text</td>
+    </tr>
+  </thead>
+  <tbody>
+    {{#cards}}
+    <tr>
+      <td>{{name}}</td>
+      <td>{{mana}}</td>
+      <td>{{attack}}</td>
+      <td>{{health}}</td>
+      <td>{{type}}</td>
+      <td>{{image}}</td>
+      <td>{{firstStrike}}</td>
+      <td>{{rush}}</td>
+      <td>{{overwhelm}}</td>
+      <td>{{deathtouch}}</td>
+      <td>{{venom}}</td>
+      <td>{{transfusion}}</td>
+      <td>{{vampirism}}</td>
+      <td>{{berserker}}</td>
+      <td>{{flavorText}}</td>
+    </tr>
+    {{/cards}}
+  </tbody>
+</table>

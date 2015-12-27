@@ -23,10 +23,17 @@ app.use(hbs.middleware({
   defaultLayout: 'layout'
 }));
 
-app.use(router.get('/gallery', function* (next) {
+app.use(router.get('/cards', function* (next) {
   var cards = yield Card.find();
   yield this.render('gallery', {
     cards: cards
+  });
+}));
+
+app.use(router.get('/cards/:id', function* (cardId) {
+  var card = yield Card.findOne({_id: cardId});
+  yield this.render('editor', {
+    card: card
   });
 }));
 

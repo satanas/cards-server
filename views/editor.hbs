@@ -1,0 +1,11 @@
+<h1>Editor</h1>
+
+{{#card}}
+<form action="cards/{{ _id }}" method="POST">
+  <label for="name">Name</label>
+  <input id="name" type="text" value="{{ name }}" />
+  <br/>
+  <label for="mana">Mana</label>
+  <input id="mana" type="text" value="{{ mana }}" />
+</form>
+{{/card}}

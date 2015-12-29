@@ -1,0 +1,356 @@
+hr {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  cursor: default;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+body .attackable {
+  cursor: 'images/attack.cur';
+}
+
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+#application {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  border: 1px solid #000;
+}
+
+#battlefield {
+  height: 280px;
+}
+
+#battlefield > div {
+  height: 139px;
+}
+
+.util {
+  height: 160px;
+  padding: 0;
+  border: 1px solid #ccc;
+}
+
+.card {
+  cursor: move;
+  background-color: skyblue;
+}
+
+ul.hand, ul.ground {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto;
+  clear: both;
+  height: 100%;
+}
+
+ul.hand > li.card {
+  height: 100px;
+  width: 67px;
+  position: relative;
+  float: left;
+}
+
+#you > .util > ul.hand > .card {
+  border: 1px solid #00f;
+  top: 58px;
+}
+
+#opponent > .util > ul.hand > .card {
+  background-color: #ff6767;
+  background-image: url("../images/card-back-red.png");
+}
+
+ul.ground > li.card {
+  height: 123px;
+  width: 80px;
+  float: left;
+  border: 1px solid #000;
+  background-color: none;
+  top: 8px;
+  position: relative;
+  opacity: 1;
+}
+
+ul.ground > li.card[data-sick="true"] {
+  border-color: #ddd;
+  background-color: #eee;
+}
+
+ul.ground > li.card[data-used="true"] {
+  border-color: #eee;
+  background-color: none;
+}
+
+ul.ground > li.card[data-invenomed="true"] {
+  background-color: #94c314;
+}
+
+ul.ground > li.card[data-invenomed="true"][data-used="true"] {
+  background-color: #bbc3a6;
+}
+
+ul.ground > li.card.dragged {
+  opacity: 0.4;
+}
+
+ul.ground > li.card.dropable, .player.dropable, ul.ground.dropable {
+  border-style: dashed;
+  border-width: 2px;
+  border-color: red;
+}
+
+#you > .util > .face {
+  z-index: 1;
+  width: 120px;
+  height:120px;
+  margin: 0 auto;
+}
+
+.controls.top {
+  height: 24px;
+}
+
+#end-turn, #enemy-turn, #action-turn {
+  display: none;
+  padding: 4px;
+  font-size: 12px;
+  width: 100%;
+  margin: 0;
+}
+
+.card .mana {
+  font-size: 10px;
+  color: white;
+  background-color: #c600ff;
+  width: 14px;
+  border-radius: 20px;
+  padding: 0 4px;
+  pointer-events: none;
+  position: absolute;
+}
+
+.card .image {
+  pointer-events: none;
+}
+
+.card .name {
+  font-size: 10px;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+}
+
+.card .abilities {
+  font-size: 8px;
+  color: red;
+  pointer-events: none;
+}
+
+.card .abilities span {
+  display: block;
+}
+
+.card .stats {
+  font-size: 0.6em;
+  top: 85px;
+  position: absolute;
+  pointer-events: none;
+}
+
+.deck {
+  width: 67px;
+  height: 100px;
+  margin: 10px auto;
+}
+
+#you > .util > .deck {
+  background-color: #6073ff;
+  background-image: url("../images/card-back-blue.png");
+}
+
+#opponent > .util > .deck {
+  background-color: #ff6767;
+  background-image: url("../images/card-back-red.png");
+}
+
+.mana-meter {
+  width: 20px;
+  float: left;
+  pointer-events: none;
+}
+
+.mana-meter > label {
+  font-size: 12px;
+  display: block;
+}
+
+.mana-meter > span {
+  height: 12px;
+  width: 12px;
+  display: block;
+  margin: 2px;
+  border-radius: 20px;
+}
+
+.mana-meter > span.available {
+  background-color: #c600ff;
+}
+
+.mana-meter > span.used {
+  background-color: #ccc;
+}
+
+#opponent > .util > .mana {
+  position: relative;
+}
+
+.player {
+  float: left;
+  width: 80px;
+  height: 100px;
+  pointer-events: none;
+}
+
+.player img {
+  width: 80px;
+  height: 100px;
+}
+
+.player .health {
+  position: absolute;
+  top: 85px;
+  right: 20px;
+  background-color: darkorange;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 20px;
+  padding: 4px 7px;
+}
+
+[data-player-ui=true] > .popup, .card > .popup {
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  padding: 3px 8px;
+  font-weight: bold;
+  font-size: 20px;
+  pointer-events: none;
+}
+
+[data-player-ui=true] > .popup.damaged, .card > .popup.damaged {
+  background-color: yellow;
+  color: red;
+}
+
+[data-player-ui=true] > .popup.healed, .card > .popup.healed {
+  background-color: blue;
+  color: white;
+}
+
+.card > .popup.invenomed {
+  background-color: green;
+  color: yellow;
+}
+
+.card > .popup {
+  top: 32%;
+  left: 24%;
+}
+
+#card-details {
+  font-size: 0.8em;
+  padding: 5px;
+  background-color: skyblue;
+  height: 360px;
+  width: 240px;
+  border: 1px solid #000;
+  top: 80px;
+  left: 100px;
+  position: absolute;
+  z-index: 2;
+}
+
+#card-details.preview {
+  top: 0px;
+  left: 0px;
+}
+
+#card-details .mana {
+  font-size: 1.2em;
+  color: white;
+  background-color: #c600ff;
+  width: 25px;
+  height: 25px;
+  border-radius: 20px;
+  padding: 0 4px;
+  margin: 8px 0 0 8px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#card-details .image, #card-details .image img {
+  height: 182px;
+  width: 228px;
+  background-color: gray;
+}
+
+#card-details .name {
+  text-align: center;
+  font-weight: bold;
+  margin: 1px 0;
+}
+
+#card-details .information {
+  height: 128px;
+  padding: 5px;
+  font-size: 0.9em;
+  background-color: seashell;
+}
+
+#card-details .description {
+  padding-bottom: 5px;
+}
+
+#card-details .flavor-text {
+  font-style: italic;
+  font-size: 0.9em;
+  padding: 10px 0 5px 0;
+  background-color: seashell;
+}
+
+#card-details .footer {
+}
+
+#card-details .stats {
+  font-size: 14px;
+  float: left;
+}
+
+#card-details .type {
+  float: right;
+}

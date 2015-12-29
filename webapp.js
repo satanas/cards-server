@@ -30,9 +30,8 @@ app.use(hbs.middleware({
 }));
 
 app.use(router.get('/cards', function* (next) {
-  console.log('getting cards');
   var cards = yield Card.find();
-  yield this.render('gallery', {
+  yield this.render('cards', {
     cards: cards
   });
 }));
@@ -74,7 +73,7 @@ app.use(router.get('/cards/:id', function* (cardId) {
     }
   ];
   card.new = false;
-  yield this.render('editor', {
+  yield this.render('card', {
     card: card,
   });
 }));

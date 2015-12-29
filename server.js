@@ -1,7 +1,6 @@
 'use strict';
 
 require('./lib/mixins');
-require('./editor');
 
 var http = require('http');
 var mongoose = require('mongoose');
@@ -89,7 +88,7 @@ server.on('connection', function(socket) {
 });
 
 app.listen(port, "0.0.0.0");
-console.log('Listening on port', port);
+console.log('Server listening on port', port);
 
 function findMatch(socket, matchId) {
   var match = null;

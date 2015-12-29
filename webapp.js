@@ -10,6 +10,8 @@ var Card = require('./models/card');
 
 var app = koa();
 
+mongoose.connect('mongodb://localhost/magic');
+
 // Request logging
 app.use(function* (next) {
   const start = new Date();
@@ -28,6 +30,7 @@ app.use(hbs.middleware({
 }));
 
 app.use(router.get('/cards', function* (next) {
+  console.log('getting cards');
   var cards = yield Card.find();
   yield this.render('gallery', {
     cards: cards
@@ -77,3 +80,4 @@ app.use(router.get('/cards/:id', function* (cardId) {
 }));
 
 app.listen(8001);
+console.log('WebApp listening on port 8001');

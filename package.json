@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "A Magic (TG) clone",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "server": "nodemon server.js",
+    "webapp": "nodemon webapp.js"
   },
   "dependencies": {
     "debug": "^2.2.0",

@@ -1,11 +1,106 @@
-<h1>Editor</h1>
-
 {{#card}}
+{{#new}}
+<h1>New card</h1>
+
+<form action="cards" method="POST">
+{{/new}}
+{{^new}}
+<h1>Edit card</h1>
+
 <form action="cards/{{ _id }}" method="POST">
-  <label for="name">Name</label>
-  <input id="name" type="text" value="{{ name }}" />
-  <br/>
-  <label for="mana">Mana</label>
-  <input id="mana" type="text" value="{{ mana }}" />
+{{/new}}
+  <div class="row">
+    <div class="columns small-4">
+      <div class="row">
+        <div class="columns">
+        <label>Name
+          <input id="name" type="text" value="{{ name }}" />
+        </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="columns">
+        <label>Mana
+          <input id="mana" type="text" value="{{ mana }}" />
+        </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="columns">
+        <label>Attack
+          <input id="attack" type="text" value="{{ attack }}" />
+        </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="columns">
+        <label>Health
+          <input id="health" type="text" value="{{ health }}" />
+        </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="columns">
+        <label>Type
+          <select id="type">
+            <option value="1">Creature</option>
+          </select>
+        </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="columns">
+        <label>Flavor Text
+          <textarea id="flavorText">{{ flavorText }}</textarea>
+        </label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="columns small-4">
+      <div id="card-details" class="preview">
+        <div class="mana">{{ mana }}</div>
+        <div class="image"><img src="" /></div>
+        <div class="name">{{ name }}</div>
+        <div class="information">
+          {{#abilities}}
+            {{#value}}<div><strong>{{ name }}</strong></div>{{/value}}
+          {{/abilities}}
+          <div class="flavor-text">{{ flavorText }}</div>
+        </div>
+        <div class="footer">
+          <div class="stats">{{ attack }} / {{ health }}</div>
+          <div class="type">{{ type }}</div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns small-4">
+      {{#abilities}}
+      <div class="row">
+        <div class="columns">
+        <label>{{ name }}
+          <select id="{{ value }}">
+            <option value="false" {{^value}}selected{{/value}}>False</option>
+            <option value="true" {{#value}}selected{{/value}}>True</option>
+          </select>
+        </label>
+        </div>
+      </div>
+      {{/abilities}}
+
+    </div>
+
+  </div>
+  <div class="row">
+    <button type="submit">Save</button>
+  </div>
 </form>
 {{/card}}

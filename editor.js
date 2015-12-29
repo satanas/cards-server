@@ -23,6 +23,7 @@ app.use(serve('public'));
 
 app.use(hbs.middleware({
   viewPath: __dirname + '/views',
+  partialsPath: __dirname + '/views/partials',
   defaultLayout: 'layout'
 }));
 
@@ -35,8 +36,43 @@ app.use(router.get('/cards', function* (next) {
 
 app.use(router.get('/cards/:id', function* (cardId) {
   var card = yield Card.findOne({_id: cardId});
+  card.abilities = [
+    {
+      name: 'rush',
+      value: card.rush
+    },
+    {
+      name: 'overwhelm',
+      value: card.overwhelm
+    },
+    {
+      name: 'firstStrike',
+      value: card.firstStrike
+    },
+    {
+      name: 'deathtouch',
+      value: card.deathtouch
+    },
+    {
+      name: 'venom',
+      value: card.venom
+    },
+    {
+      name: 'transfusion',
+      value: card.transfusion
+    },
+    {
+      name: 'vampirism',
+      value: card.vampirism
+    },
+    {
+      name: 'berserker',
+      value: card.berserker
+    }
+  ];
+  card.new = false;
   yield this.render('editor', {
-    card: card
+    card: card,
   });
 }));
 

@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 var Card = require('./models/card');
 
 var app = koa();
+var CLIENT_HOST = 'http://localhost:8000';
 
 mongoose.connect('mongodb://localhost/magic');
 
@@ -32,7 +33,8 @@ app.use(hbs.middleware({
 app.use(router.get('/cards', function* (next) {
   var cards = yield Card.find();
   yield this.render('cards', {
-    cards: cards
+    cards: cards,
+    host: CLIENT_HOST
   });
 }));
 
@@ -75,6 +77,7 @@ app.use(router.get('/cards/:id', function* (cardId) {
   card.new = false;
   yield this.render('card', {
     card: card,
+    host: CLIENT_HOST
   });
 }));
 

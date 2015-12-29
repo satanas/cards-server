@@ -6,8 +6,14 @@
 npm install
 ```
 
-## Running
+## Running server
 
 ```
-npm start
+npm run server
+```
+
+## Running webapp (for card editor)
+
+```
+npm run webapp
 ```

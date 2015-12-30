@@ -1,20 +1,27 @@
+{{#errors}}
+<div data-alert class="alert-box alert radius">
+  {{ message}}
+  <a href="#" class="close">&times;</a>
+</div>
+{{/errors}}
+
 {{#card}}
-{{#new}}
+{{#isNew}}
 <h1>New card</h1>
 
-<form action="cards" method="POST">
-{{/new}}
-{{^new}}
+<form id="card_form" action="cards" method="POST">
+{{/isNew}}
+{{^isNew}}
 <h1>Edit card</h1>
 
-<form action="cards/{{ _id }}" method="POST">
-{{/new}}
+<form id="card_form" action="/cards/{{ _id }}" method="POST">
+{{/isNew}}
   <div class="row">
     <div class="columns small-4">
       <div class="row">
         <div class="columns">
         <label>Name
-          <input id="name" type="text" value="{{ name }}" />
+          <input name="name" type="text" value="{{ name }}" required />
         </label>
         </div>
       </div>
@@ -22,7 +29,7 @@
       <div class="row">
         <div class="columns">
         <label>Mana
-          <input id="mana" type="text" value="{{ mana }}" />
+          <input name="mana" type="text" value="{{ mana }}" disabled />
         </label>
         </div>
       </div>
@@ -30,7 +37,7 @@
       <div class="row">
         <div class="columns">
         <label>Attack
-          <input id="attack" type="text" value="{{ attack }}" />
+          <input name="attack" type="text" value="{{ attack }}" required />
         </label>
         </div>
       </div>
@@ -38,7 +45,7 @@
       <div class="row">
         <div class="columns">
         <label>Health
-          <input id="health" type="text" value="{{ health }}" />
+          <input name="health" type="text" value="{{ health }}" required />
         </label>
         </div>
       </div>
@@ -46,7 +53,7 @@
       <div class="row">
         <div class="columns">
         <label>Type
-          <select id="type">
+          <select name="type">
             <option value="1">Creature</option>
           </select>
         </label>
@@ -56,7 +63,7 @@
       <div class="row">
         <div class="columns">
         <label>Flavor Text
-          <textarea id="flavorText">{{ flavorText }}</textarea>
+          <textarea name="flavorText">{{ flavorText }}</textarea>
         </label>
         </div>
       </div>
@@ -87,7 +94,7 @@
       <div class="row">
         <div class="columns">
         <label>{{ name }}
-          <select id="{{ value }}">
+          <select name="{{ name }}" required>
             <option value="false" {{^value}}selected{{/value}}>False</option>
             <option value="true" {{#value}}selected{{/value}}>True</option>
           </select>
@@ -100,7 +107,13 @@
 
   </div>
   <div class="row">
-    <button type="submit">Save</button>
+    <button id="save" type="submit">Save</button>
+    <button id="cancel" type="button">Cancel</button>
   </div>
 </form>
+<script>
+$('#cancel').on('click', function() {
+  window.location = '/cards';
+});
+</script>
 {{/card}}

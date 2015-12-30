@@ -53,7 +53,7 @@
       <div class="row">
         <div class="columns">
         <label>Image
-          <input name="image" type="text" value="{{ image }}" required />
+          <input type="file" id="image" name="image" value="{{ image }}" />
         </label>
         </div>
       </div>
@@ -81,7 +81,7 @@
     <div class="columns small-4">
       <div id="card-details" class="preview">
         <div class="mana">{{ mana }}</div>
-        <div class="image"><img src="" /></div>
+        <div class="image"><img id="image_preview" src="http://localhost:8000/images/{{ image }}" /></div>
         <div class="name">{{ name }}</div>
         <div class="information">
           {{#abilities}}
@@ -123,5 +123,19 @@
 $('#cancel').on('click', function() {
   window.location = '/cards';
 });
+
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  $('#image').on('change', function(evt) {
+    var file = evt.originalEvent.target.files[0];
+
+    if (!file.type.match('image.*')) return;
+
+    var reader = new FileReader();
+    reader.onload = function(f) {
+      $('#image_preview').attr('src',event.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+}
 </script>
 {{/card}}

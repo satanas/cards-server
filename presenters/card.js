@@ -1,38 +1,37 @@
-module.exports = function(card, isNew) {
+module.exports = function(card) {
   card.abilities = [
     {
       name: 'rush',
-      value: card.rush
+      value: card.rush || false
     },
     {
       name: 'overwhelm',
-      value: card.overwhelm
+      value: card.overwhelm || false
     },
     {
       name: 'firstStrike',
-      value: card.firstStrike
+      value: card.firstStrike || false
     },
     {
       name: 'deathtouch',
-      value: card.deathtouch
+      value: card.deathtouch || false
     },
     {
       name: 'venom',
-      value: card.venom
+      value: card.venom || false
     },
     {
       name: 'transfusion',
-      value: card.transfusion
+      value: card.transfusion || false
     },
     {
       name: 'vampirism',
-      value: card.vampirism
+      value: card.vampirism || false
     },
     {
       name: 'berserker',
-      value: card.berserker
+      value: card.berserker || false
     }
   ];
-  card.isNew = isNew;
   return card;
 };

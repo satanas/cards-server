@@ -42,15 +42,24 @@ app.use(router.get('/cards', function* (next) {
   });
 }));
 
-app.use(router.get('/cards/:id', function* (cardId) {
-  var card = CardPresenter(yield Card.findOne({_id: cardId}), false);
+app.use(router.get('/cards/new', function* () {
   yield this.render('card', {
-    card: card,
-    host: CLIENT_HOST
+    card: CardPresenter({}),
+    host: CLIENT_HOST,
+    isNew: true
   });
 }));
 
-app.use(router.post('/cards/:id', function* (cardId) {
+app.use(router.get('/cards/:id', function* (cardId) {
+  var card = CardPresenter(yield Card.findOne({_id: cardId}));
+  yield this.render('card', {
+    card: card,
+    host: CLIENT_HOST,
+    isNew: false
+  });
+}));
+
+app.use(router.put('/cards/:id', function* (cardId) {
   var card = yield Card.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
@@ -90,13 +99,59 @@ app.use(router.post('/cards/:id', function* (cardId) {
     yield Card.update({_id: cardId}, newCard);
   }
 
-  var cardPresenter = CardPresenter(newCard, false);
+  var cardPresenter = CardPresenter(newCard);
 
   yield this.render('card', {
     card: cardPresenter,
     host: CLIENT_HOST,
-    errors: errors
+    errors: errors,
+    isNew: false
   });
+}));
+
+app.use(router.post('/cards', function* () {
+  this.checkBody('name').notEmpty();
+  this.checkBody('image').notEmpty();
+  this.checkBody('attack').notEmpty().isInt();
+  this.checkBody('health').notEmpty().isInt();
+  this.checkBody('type').notEmpty().isInt();
+  this.checkBody('rush').notEmpty().toBoolean();
+  this.checkBody('overwhelm').notEmpty().toBoolean();
+  this.checkBody('firstStrike').notEmpty().toBoolean();
+  this.checkBody('deathtouch').notEmpty().toBoolean();
+  this.checkBody('venom').notEmpty().toBoolean();
+  this.checkBody('transfusion').notEmpty().toBoolean();
+  this.checkBody('vampirism').notEmpty().toBoolean();
+  this.checkBody('berserker').notEmpty().toBoolean();
+  this.checkBody('flavorText').optional();
+
+  var errors = _.map(this.errors, function(err) {
+    for(var i in err) return { field: i, message: err[i] }
+  });
+
+  var newCard = new Card(this.request.body);
+
+  if (!this.errors) {
+    var cost = 0;
+    cost += newCard.attack / 2;
+    cost += newCard.health / 2;
+    newCard.mana = Math.ceil(cost);
+
+    yield newCard.save();
+  }
+
+  var cardPresenter = CardPresenter(newCard);
+
+  if (this.errors) {
+    yield this.render('card', {
+      card: cardPresenter,
+      host: CLIENT_HOST,
+      errors: errors,
+      isNew: true
+    });
+  } else {
+    this.redirect('/cards/' + newCard._id);
+  }
 }));
 
 app.listen(8001);

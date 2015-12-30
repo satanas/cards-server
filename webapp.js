@@ -35,7 +35,7 @@ app.use(hbs.middleware({
 }));
 
 app.use(router.get('/cards', function* (next) {
-  var cards = yield Card.find();
+  var cards = yield Card.find().sort({ _id: 1});
   yield this.render('cards', {
     cards: cards,
     host: CLIENT_HOST
@@ -54,7 +54,7 @@ app.use(router.post('/cards/:id', function* (cardId) {
   var card = yield Card.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
-  this.checkBody('image').notEmpty();
+  this.checkBody('image').optional();
   this.checkBody('attack').notEmpty().isInt();
   this.checkBody('health').notEmpty().isInt();
   this.checkBody('type').notEmpty().isInt();
@@ -77,20 +77,20 @@ app.use(router.post('/cards/:id', function* (cardId) {
     for(var i in err) return { field: i, message: err[i] }
   });
 
+  var newCard = new Card(this.request.body);
+  newCard._id = cardId;
+  if (!this.request.body.image) newCard.image = card.image;
+
   if (!this.errors) {
-    var newCard = this.request.body;
     var cost = 0;
     cost += newCard.attack / 2;
     cost += newCard.health / 2;
     newCard.mana = Math.ceil(cost);
 
     yield Card.update({_id: cardId}, newCard);
-    newCard._id = cardId;
-
-    var cardPresenter = CardPresenter(newCard, false);
-  } else {
-    var cardPresenter = CardPresenter(card, false);
   }
+
+  var cardPresenter = CardPresenter(newCard, false);
 
   yield this.render('card', {
     card: cardPresenter,

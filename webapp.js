@@ -54,8 +54,10 @@ app.use(router.post('/cards/:id', function* (cardId) {
   var card = yield Card.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
+  this.checkBody('image').notEmpty();
   this.checkBody('attack').notEmpty().isInt();
   this.checkBody('health').notEmpty().isInt();
+  this.checkBody('type').notEmpty().isInt();
   this.checkBody('rush').notEmpty().toBoolean();
   this.checkBody('overwhelm').notEmpty().toBoolean();
   this.checkBody('firstStrike').notEmpty().toBoolean();
@@ -81,6 +83,7 @@ app.use(router.post('/cards/:id', function* (cardId) {
     cost += newCard.attack / 2;
     cost += newCard.health / 2;
     newCard.mana = Math.ceil(cost);
+
     yield Card.update({_id: cardId}, newCard);
     newCard._id = cardId;
 

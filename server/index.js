@@ -1,14 +1,14 @@
 'use strict';
 
-require('./lib/mixins');
+require('./mixins');
 
 var http = require('http');
 var mongoose = require('mongoose');
 
-var global = require('./global');
-var Match = require('./models/match');
-var Player = require('./models/player');
-var Card = require('./models/card');
+var global = require('../global');
+var Match = require('../models/match');
+var Player = require('../models/player');
+var Card = require('../models/card');
 
 var port = process.argv[2] || 3000;
 var app = http.createServer();

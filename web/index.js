@@ -8,8 +8,8 @@ var validate = require('koa-validate');
 var bodyParser = require('koa-bodyparser');
 var _ = require('underscore');
 
-var Card = require('./models/card');
-var CardPresenter = require('./presenters/card');
+var Card = require('../models/card');
+var CardPresenter = require('../presenters/card');
 
 var app = koa();
 var CLIENT_HOST = 'http://localhost:8000';

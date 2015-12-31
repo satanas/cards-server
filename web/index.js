@@ -13,7 +13,6 @@ var Card = require('../models/card');
 var CardPresenter = require('../presenters/card');
 
 var app = koa();
-var CLIENT_HOST = 'http://localhost:8000';
 
 mongoose.connect('mongodb://localhost/magic');
 
@@ -32,7 +31,8 @@ app.use(serve('public'));
 
 app.use(hbs.middleware({
   viewPath: __dirname + '/views',
-  partialsPath: __dirname + '/views/partials'
+  partialsPath: __dirname + '/views/partials',
+  layoutsPath: __dirname + '/views/layouts'
 }));
 
 router.get('/', function* (next) {
@@ -42,29 +42,28 @@ router.get('/', function* (next) {
 router.get('/cards', function* (next) {
   var cards = yield Card.find().sort({ _id: 1});
   yield this.render('cards', {
-    cards: cards,
-    host: CLIENT_HOST
+    cards: cards
   });
 });
 
-router.get('/cards/new', function* () {
+router.get('/cards/new', function* (next) {
   yield this.render('card', {
     card: CardPresenter({}),
-    host: CLIENT_HOST,
     isNew: true
   });
 });
 
-router.get('/cards/:id', function* (cardId) {
+router.get('/cards/:id', function* (next) {
+  var cardId = this.params.id;
   var card = CardPresenter(yield Card.findOne({_id: cardId}));
   yield this.render('card', {
     card: card,
-    host: CLIENT_HOST,
     isNew: false
   });
 });
 
-router.post('/cards/:id', function* (cardId) {
+router.post('/cards/:id', function* (next) {
+  var cardId = this.params.id;
   var card = yield Card.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
@@ -115,7 +114,7 @@ router.post('/cards/:id', function* (cardId) {
   });
 });
 
-router.post('/cards', function* () {
+router.post('/cards', function* (next) {
   this.checkBody('name').notEmpty();
   this.checkBody('image').notEmpty();
   this.checkBody('attack').notEmpty().isInt();

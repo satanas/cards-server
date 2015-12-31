@@ -36,8 +36,7 @@ app.use(hbs.middleware({
 }));
 
 router.get('/', function* (next) {
-  yield this.render('editor', {
-  });
+  yield this.render('game');
 });
 
 router.get('/cards', function* (next) {

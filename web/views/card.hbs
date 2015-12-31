@@ -10,6 +10,7 @@
 </div>
 {{/if}}
 
+{{#card}}
 {{#isNew}}
 <h1>New card</h1>
 
@@ -20,7 +21,6 @@
 
 <form id="card_form" action="/cards/{{ _id }}" method="POST">
 {{/isNew}}
-{{#card}}
   <div class="row">
     <div class="columns small-4">
       <div class="row">

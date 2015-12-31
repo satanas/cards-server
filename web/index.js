@@ -2,6 +2,7 @@
 
 var koa = require('koa');
 var hbs = require('koa-hbs');
+var serve = require('koa-serve');
 var router = require('koa-route');
 var mongoose = require('mongoose');
 var validate = require('koa-validate');
@@ -27,6 +28,7 @@ app.use(function* (next) {
 
 app.use(bodyParser());
 app.use(validate());
+app.use(serve('public'));
 
 app.use(hbs.middleware({
   viewPath: __dirname + '/views',
@@ -155,5 +157,5 @@ app.use(router.post('/cards', function* () {
   }
 }));
 
-app.listen(8001);
-console.log('WebApp listening on port 8001');
+app.listen(8000);
+console.log('WebApp listening on port 8000');

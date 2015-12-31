@@ -3,7 +3,7 @@
 var koa = require('koa');
 var hbs = require('koa-hbs');
 var serve = require('koa-serve');
-var router = require('koa-route');
+var router = require('koa-router')();
 var mongoose = require('mongoose');
 var validate = require('koa-validate');
 var bodyParser = require('koa-bodyparser');
@@ -32,36 +32,40 @@ app.use(serve('public'));
 
 app.use(hbs.middleware({
   viewPath: __dirname + '/views',
-  partialsPath: __dirname + '/views/partials',
-  defaultLayout: 'layout'
+  partialsPath: __dirname + '/views/partials'
 }));
 
-app.use(router.get('/cards', function* (next) {
+router.get('/', function* (next) {
+  yield this.render('editor', {
+  });
+});
+
+router.get('/cards', function* (next) {
   var cards = yield Card.find().sort({ _id: 1});
   yield this.render('cards', {
     cards: cards,
     host: CLIENT_HOST
   });
-}));
+});
 
-app.use(router.get('/cards/new', function* () {
+router.get('/cards/new', function* () {
   yield this.render('card', {
     card: CardPresenter({}),
     host: CLIENT_HOST,
     isNew: true
   });
-}));
+});
 
-app.use(router.get('/cards/:id', function* (cardId) {
+router.get('/cards/:id', function* (cardId) {
   var card = CardPresenter(yield Card.findOne({_id: cardId}));
   yield this.render('card', {
     card: card,
     host: CLIENT_HOST,
     isNew: false
   });
-}));
+});
 
-app.use(router.post('/cards/:id', function* (cardId) {
+router.post('/cards/:id', function* (cardId) {
   var card = yield Card.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
@@ -110,9 +114,9 @@ app.use(router.post('/cards/:id', function* (cardId) {
     errors: errors,
     isNew: false
   });
-}));
+});
 
-app.use(router.post('/cards', function* () {
+router.post('/cards', function* () {
   this.checkBody('name').notEmpty();
   this.checkBody('image').notEmpty();
   this.checkBody('attack').notEmpty().isInt();
@@ -155,7 +159,10 @@ app.use(router.post('/cards', function* () {
   } else {
     this.redirect('/cards/' + newCard._id);
   }
-}));
+});
+
+
+app.use(router.routes());
 
 app.listen(8000);
 console.log('WebApp listening on port 8000');

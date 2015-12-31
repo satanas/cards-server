@@ -9,7 +9,7 @@ var bodyParser = require('koa-bodyparser');
 var _ = require('underscore');
 
 var Card = require('./models/card');
-var CardPresenter = require('./presenters//card');
+var CardPresenter = require('./presenters/card');
 
 var app = koa();
 var CLIENT_HOST = 'http://localhost:8000';
@@ -59,13 +59,13 @@ app.use(router.get('/cards/:id', function* (cardId) {
   });
 }));
 
-app.use(router.put('/cards/:id', function* (cardId) {
+app.use(router.post('/cards/:id', function* (cardId) {
   var card = yield Card.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
   this.checkBody('image').optional();
   this.checkBody('attack').notEmpty().isInt();
-  this.checkBody('health').notEmpty().isInt();
+  this.checkBody('health').notEmpty().isInt().gt(0);
   this.checkBody('type').notEmpty().isInt();
   this.checkBody('rush').notEmpty().toBoolean();
   this.checkBody('overwhelm').notEmpty().toBoolean();
@@ -77,6 +77,7 @@ app.use(router.put('/cards/:id', function* (cardId) {
   this.checkBody('berserker').notEmpty().toBoolean();
   this.checkBody('flavorText').optional();
 
+  console.log('health', this.request.body.health);
   if (!card) {
     // FIXME: Pass error in cookie?
     this.redirect('/cards');
@@ -113,7 +114,7 @@ app.use(router.post('/cards', function* () {
   this.checkBody('name').notEmpty();
   this.checkBody('image').notEmpty();
   this.checkBody('attack').notEmpty().isInt();
-  this.checkBody('health').notEmpty().isInt();
+  this.checkBody('health').notEmpty().isInt().gt(0);
   this.checkBody('type').notEmpty().isInt();
   this.checkBody('rush').notEmpty().toBoolean();
   this.checkBody('overwhelm').notEmpty().toBoolean();

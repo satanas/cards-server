@@ -42,13 +42,45 @@ cardSchema.virtual('sick').get(function () {
   this.__sick = value;
 });
 
+cardSchema.virtual('used').get(function () {
+  return this.__used;
+}).set(function (value) {
+  this.__used = value;
+});
+
+cardSchema.virtual('played').get(function () {
+  return this.__played;
+}).set(function (value) {
+  this.__played = value;
+});
+
+cardSchema.virtual('invenomed').get(function () {
+  return this.__invenomed;
+}).set(function (value) {
+  this.__invenomed = value;
+});
+
+cardSchema.virtual('secondAttack').get(function () {
+  return this.__secondAttack;
+}).set(function (value) {
+  this.__secondAttack = value;
+});
+
+cardSchema.post('init', function(obj) {
+  obj.set('sick', true);
+  obj.set('used', false);
+  obj.set('played', false);
+  obj.set('invenomed', false);
+  obj.set('secondAttack', false);
+});
+
 var Card = mongoose.model('Card', cardSchema);
 
 //Card.prototype.sick = true;
-Card.prototype.used = false;
-Card.prototype.played = false;
-Card.prototype.invenomed = false;
-Card.prototype.secondAttack = false;
+//Card.prototype.used = false;
+//Card.prototype.played = false;
+//Card.prototype.invenomed = false;
+//Card.prototype.secondAttack = false;
 
 Card.prototype.heal = function(value) {
   this.health += value;

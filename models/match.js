@@ -127,10 +127,8 @@ Match.prototype.playCard = function(playerId, cardId) {
 
   if (canPlayCard > 0) {
     var card = player.playCard(cardId);
-    card.set('sick', true);
     // Rush
     if (card.rush) {
-      //card.sick = false;
       card.set('sick', false);
     }
     this.battlefield.playCard(playerId, card);

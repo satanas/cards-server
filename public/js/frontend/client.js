@@ -129,6 +129,7 @@ socket.on('wait', function (data) {
 });
 
 socket.on('played-card', function (data) {
+  console.log('played card', data);
   console.log('Player', data.player.id, 'played card', data.card.id + ' and has', String(data.player.totalMana - data.player.usedMana), 'mana remaining');
   hands[data.player.id].remove(data.card.id);
   players[data.player.id].set(data.player);

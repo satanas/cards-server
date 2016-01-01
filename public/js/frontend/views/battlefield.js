@@ -74,6 +74,7 @@ var BattlefieldView = Backbone.View.extend({
     this.render();
   },
   prepareForBattle: function(card) {
+    console.log('prepareForBattle', card);
     var model = this.collection.get(card.id);
     this.collection.updateCard(card);
 

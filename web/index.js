@@ -93,6 +93,7 @@ router.post('/cards/:id', function* (next) {
 
   var newCard = new Card(this.request.body);
   newCard._id = cardId;
+  newCard.id = cardId;
   if (!this.request.body.image) newCard.image = card.image;
 
   if (!this.errors) {
@@ -134,6 +135,7 @@ router.post('/cards', function* (next) {
   });
 
   var newCard = new Card(this.request.body);
+  newCard.id = newCard._id.toString();
 
   if (!this.errors) {
     var cost = 0;

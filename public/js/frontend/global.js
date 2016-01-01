@@ -21,3 +21,4 @@ var abilitiesDescription = {
   'faint': "Indicate how many turns this creature will fight until it dies. In each turn, the faint counter is decreased until it gets to zero.",
   'provoke': "If a card has provoke, then the attacking player could not attack other creatures except the ones with provoke."
 }
+var IMAGES_PATH = '/public/images/';

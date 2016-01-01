@@ -29,7 +29,7 @@ var PlayerView = Backbone.View.extend({
     html += "  <label>" + (totalMana - usedMana) + "/" + totalMana + "</label>" +
       "</div>" +
       "<div class='player'>" +
-      "  <img src='images/unknown.png' />" +
+      "  <img src='" + IMAGES_PATH + "unknown.png' />" +
       "  <label class='health'>" + this.model.get('health') + "</label>" +
       "</div>" +
       "<div class='popup'></div>";

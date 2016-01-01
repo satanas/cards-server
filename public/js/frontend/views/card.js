@@ -62,7 +62,7 @@ var CardView = Backbone.View.extend({
       }
 
       html = '<div class="mana">' + this.model.get('mana') + '</div>' +
-        '<div class="image"><img src="images/' + this.model.get('image') + '" /></div>' +
+        '<div class="image"><img src="' + IMAGES_PATH + this.model.get('image') + '" /></div>' +
         '<div class="name">' + this.model.get('name') + '</div>' +
         '<div class="abilities">' + abilities + '</div>' +
         '<div class="stats">' +  this.model.get('attack') + '/' + this.model.get('health') + '</div>' +

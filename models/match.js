@@ -97,7 +97,7 @@ Match.prototype.startTurn = function() {
   });
 
   if (newCard) {
-    console.log('New card with id ' + newCard._id +' for player ' + playerId +', hand length:', this.players[playerId].hand.length);
+    console.log('New card with id ' + newCard.id +' for player ' + playerId +', hand length:', this.players[playerId].hand.length);
   }
 
   this.emit(playerId, 'turn', {
@@ -127,9 +127,11 @@ Match.prototype.playCard = function(playerId, cardId) {
 
   if (canPlayCard > 0) {
     var card = player.playCard(cardId);
+    card.set('sick', true);
     // Rush
     if (card.rush) {
-      card.sick = false;
+      //card.sick = false;
+      card.set('sick', false);
     }
     this.battlefield.playCard(playerId, card);
     console.log('Player', playerId, 'put card', cardId, 'into the battlefield');
@@ -180,12 +182,12 @@ Match.prototype.attack = function(playerId, data) {
     console.log('Attacker was used');
     return this.emit(playerId, 'card-used');
   }
-  if (attacker.playerId === defender.playerId && attacker._id === defender._id) {
+  if (attacker.playerId === defender.playerId && attacker.id === defender.id) {
     console.log('Attack rejected. Card can not attack itself');
     return this.emit(playerId, 'invalid-op', 'Card can not attack itself');
   }
 
-  console.log('Battle between card', attacker._id, '(from player', playerId, ') and card', defender._id, '(from player', data.defender.playerId, ')');
+  console.log('Battle between card', attacker.id, '(from player', playerId, ') and card', defender.id, '(from player', data.defender.playerId, ')');
 
   attacker.used = true;
 
@@ -285,12 +287,12 @@ Match.prototype.attack = function(playerId, data) {
 
   // Remove death cards from battlefield
   if (attacker.health <= 0) {
-    console.log('Attacking card with id '+ attacker._id + ' (from player '+ playerId + ') died');
+    console.log('Attacking card with id '+ attacker.id + ' (from player '+ playerId + ') died');
     attacker.health = 0;
     delete this.battlefield.removeCard(playerId, data.attacker.cardId);
   }
   if (defender.health <= 0) {
-    console.log('Defending card with id '+ defender._id+ ' (from player ' + data.defender.playerId + ') died');
+    console.log('Defending card with id '+ defender.id+ ' (from player ' + data.defender.playerId + ') died');
     defender.health = 0;
     delete this.battlefield.removeCard(data.defender.playerId, data.defender.cardId);
   }
@@ -303,7 +305,7 @@ Match.prototype.attack = function(playerId, data) {
         'transfused': attackerTransfused
       },
       'card': {
-        'id': attacker._id,
+        'id': attacker.id,
         'used': attacker.used,
         'damageDealt': attacker.attack,
         'damageReceived': damageReceivedByAttacker,
@@ -321,7 +323,7 @@ Match.prototype.attack = function(playerId, data) {
         'transfused': defenderTransfused
       },
       'card': {
-        'id': defender._id,
+        'id': defender.id,
         'damageDealt': defender.attack,
         'damageReceived': damageReceivedByDefender,
         'health': defender.health,
@@ -355,7 +357,7 @@ Match.prototype.directAttack = function(playerId, data) {
     return this.emit(playerId, 'card-used');
   }
 
-  console.log('Card', attacker._id, '(from player', playerId, ') attacked player', opponent.id, 'with', attacker.attack, 'pt(s) of damage');
+  console.log('Card', attacker.id, '(from player', playerId, ') attacked player', opponent.id, 'with', attacker.attack, 'pt(s) of damage');
   opponent.health -= attacker.attack;
 
   attacker.used = true;
@@ -374,7 +376,7 @@ Match.prototype.directAttack = function(playerId, data) {
         'id': playerId
       },
       'card': {
-        'id': attacker._id,
+        'id': attacker.id,
         'damageDealt': attacker.attack,
         'damageReceived': 0,
         'health': attacker.health,

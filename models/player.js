@@ -18,8 +18,7 @@ Player.prototype.constructor = Player;
 
 Player.prototype.canPlayCard = function(cardId) {
   var card = _.find(this.hand, function(c) {
-    console.log(cardId, c);
-    return c._id === cardId;
+    return c.id === cardId;
   });
   if (card === undefined) {
     return Global.ERRORS.CARD_NOT_FOUND;
@@ -31,10 +30,10 @@ Player.prototype.canPlayCard = function(cardId) {
 
 Player.prototype.playCard = function(cardId) {
   var card = _.find(this.hand, function(c) {
-    return c._id === cardId;
+    return c.id === cardId;
   });
   this.hand = _.filter(this.hand, function(c) {
-    return c._id !== cardId;
+    return c.id !== cardId;
   });
   card.played = true;
   this.usedMana += card.mana;

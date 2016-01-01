@@ -18,22 +18,21 @@ var CardView = Backbone.View.extend({
   },
   render: function() {
     var html = '';
-    this.$el.attr('data-player-id', this.model.get('playerId'));
-    this.$el.attr('data-card-id', this.model.get('id'));
-    this.$el.attr('data-invenomed', this.model.get('invenomed'));
+    var playerId = this.model.get('playerId');
+    this.$el.attr('data-player-id', playerId);
     if (!this.reversed) {
       var sick = this.model.get('sick');
       var played = this.model.get('played');
       this.$el.attr('draggable', true);
+      this.$el.attr('data-card-id', this.model.get('id'));
       this.$el.attr('data-sick', sick);
       this.$el.attr('data-played', played);
       this.$el.attr('data-attacker', this.model.get('attacker'));
       this.$el.attr('data-defender', this.model.get('defender'));
       this.$el.attr('data-used', this.model.get('used'));
-      var playerId = this.model.get('playerId');
+      this.$el.attr('data-invenomed', this.model.get('invenomed'));
       if (playerId) {
         this.$el.attr('id', playerId + "-" + this.model.get('id'));
-        this.$el.attr('data-player-id', playerId);
       }
       var abilities = ''
       if (this.model.get('rush')) {

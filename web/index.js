@@ -54,8 +54,9 @@ router.get('/cards/new', function* (next) {
 });
 
 router.get('/cards/:id', function* (next) {
-  var cardId = this.params.id;
-  var card = CardPresenter(yield Card.findOne({_id: cardId}));
+  var cardId = this.params.id,
+      card = CardPresenter(yield Card.findOne({_id: cardId}));
+
   yield this.render('card', {
     card: card,
     isNew: false
@@ -81,7 +82,6 @@ router.post('/cards/:id', function* (next) {
   this.checkBody('berserker').notEmpty().toBoolean();
   this.checkBody('flavorText').optional();
 
-  console.log('health', this.request.body.health);
   if (!card) {
     // FIXME: Pass error in cookie?
     this.redirect('/cards');
@@ -108,7 +108,6 @@ router.post('/cards/:id', function* (next) {
 
   yield this.render('card', {
     card: cardPresenter,
-    host: CLIENT_HOST,
     errors: errors,
     isNew: false
   });
@@ -150,7 +149,6 @@ router.post('/cards', function* (next) {
   if (this.errors) {
     yield this.render('card', {
       card: cardPresenter,
-      host: CLIENT_HOST,
       errors: errors,
       isNew: true
     });

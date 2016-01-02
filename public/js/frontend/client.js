@@ -196,6 +196,7 @@ socket.on('defeat', function (data) {
 
 socket.on('match-not-found', function (data) {
   console.log('Match not found');
+  showMessage('Match not found', "Something terrible happened and you can't access the match. Please, create a new one and start again");
 });
 
 socket.on('match-ended', function (data) {

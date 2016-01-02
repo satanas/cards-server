@@ -95,7 +95,7 @@ ul.ground > li.card[data-sick="true"] {
 
 ul.ground > li.card[data-used="true"] {
   border-color: #eee;
-  background-color: none;
+  background-color: lightsteelblue;
 }
 
 ul.ground > li.card[data-invenomed="true"] {

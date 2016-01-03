@@ -248,11 +248,11 @@ Match.prototype.attack = function(playerId, data) {
   }
 
   // Invenom
-  if (attacker.venom) {
+  if (attacker.venom && damageReceivedByDefender > 0) {
     console.log('Defender invenomed');
     defender.invenomed = true;
   }
-  if (defender.venom) {
+  if (defender.venom && damageReceivedByAttacker > 0) {
     console.log('Attacker invenomed');
     attacker.invenomed = true;
   }

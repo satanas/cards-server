@@ -54,7 +54,7 @@ var CardPopupView = Backbone.View.extend({
     }
 
     html = '<div class="mana">' + model.get('mana') + '</div>' +
-      '<div class="image"><img src="images/' + model.get('image') + '" /></div>' +
+      '<div class="image"><img src="/public/images/' + model.get('image') + '" /></div>' +
       '<div class="name">' + model.get('name') + '</div>' +
       '<div class="information">' +
       abilities +

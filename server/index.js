@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 var global = require('../global');
 var Match = require('../models/match');
 var Player = require('../models/player');
-var Card = require('../models/card');
+var Storage = require('../models/card_storage');
 
 var port = process.argv[2] || 3000;
 var app = http.createServer();
@@ -25,7 +25,7 @@ var server = require('socket.io')(app);
 
 mongoose.connect('mongodb://localhost/magic');
 
-Card.find().exec(function(err, data) {
+Storage.find().exec(function(err, data) {
   cardStorage = data;
   console.log('Card storage read');
 });

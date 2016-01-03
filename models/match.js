@@ -90,7 +90,7 @@ Match.prototype.startTurn = function() {
   var players = {};
   players[playerId] = {
     cards: this.battlefield.untap(playerId)
-  }
+  };
 
   this.broadcast('battlefield', {
     players: players
@@ -129,7 +129,7 @@ Match.prototype.playCard = function(playerId, cardId) {
     var card = player.playCard(cardId);
     // Rush
     if (card.rush) {
-      card.set('sick', false);
+      card.sick = false;
     }
     this.battlefield.playCard(playerId, card);
     console.log('Player', playerId, 'put card', cardId, 'into the battlefield');

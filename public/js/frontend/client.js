@@ -56,6 +56,7 @@ socket.on('player', function (data) {
   battlefield[ownId] = new Battlefield();
   players[ownId] = new Player(data.player);
   views.players[ownId] = new PlayerView({el: '#you > .util[data-player-ui="true"]', model: players[ownId]});
+  $('#you > [data-player-ui=true]').attr('id', 'player-ui-' + ownId);
 
   $('#battlefield').prepend('<div class="' + ownId + '"><ul class="ground"></ul></div>');
 
@@ -71,6 +72,7 @@ socket.on('opponents', function (data) {
   battlefield[opponentId] = new Battlefield();
   players[opponentId] = new Player(opponent);
   views.players[opponentId] = new PlayerView({el: '#opponent > .util[data-player-ui="true"]', model: players[opponentId]});
+  $('#opponent > [data-player-ui=true]').attr('id', 'player-ui-' + opponentId);
 
   $('#battlefield').prepend('<div class="' + opponentId + '"><ul class="ground"></ul></div>');
 
@@ -162,8 +164,7 @@ socket.on('battle', function (data) {
     players[defPlayer.id].receiveDamage(defPlayer.overwhelmed, defPlayer.health);
   }
 
-  views.battlefield[atkPlayer.id].battleResults(atkCard, 'Attacking');
-  views.battlefield[defPlayer.id].battleResults(defCard, 'Defending');
+  doAttack(atkPlayer, atkCard, defPlayer, defCard);
 });
 
 socket.on('direct-damage', function (data) {
@@ -172,7 +173,8 @@ socket.on('direct-damage', function (data) {
       player = data.defender.player;
 
   battlefield[data.attacker.player.id].updateCard(card);
-  players[player.id].receiveDamage(player.damageReceived, player.health);
+  doAttack(data.attacker.player, card, player);
+  //players[player.id].receiveDamage(player.damageReceived, player.health);
   console.log('Player ' + player.id + ' has received' + player.damageReceived, 'points of direct damage');
 });
 
@@ -257,7 +259,40 @@ function getPosition (element) {
   return { x: xPosition, y: yPosition };
 }
 
+function doAttack(atkPlayer, atkCard, defPlayer, defCard) {
+  var $attack = $('#attack-icon'),
+      $atkCard = $('#' + atkPlayer.id + '-' + atkCard.id)[0];
+
+  if (defCard){
+    $destObj = $('#' + defPlayer.id + '-' + defCard.id)[0];
+  } else {
+    $destObj = $('#player-ui-' + defPlayer.id)[0];
+  }
+
+  $attack.css('top', getPosition($atkCard).y + 'px');
+  $attack.css('left', getPosition($atkCard).x + 'px');
+  $attack.show();
+
+  $attack.animate({
+    top: getPosition($destObj).y + 'px',
+    left: getPosition($destObj).x + 'px'
+  },
+  {
+    duration: 300,
+    complete: function() {
+      if (defCard) {
+        views.battlefield[atkPlayer.id].battleResults(atkCard, 'Attacking');
+        views.battlefield[defPlayer.id].battleResults(defCard, 'Defending');
+      } else {
+        players[defPlayer.id].receiveDamage(defPlayer.damageReceived, defPlayer.health);
+      }
+      $(this).hide();
+    }
+  });
+}
+
 $(document).ready(function() {
   turnView = new TurnView({el: '#end-turn'});
   views.cardDetails = new CardPopupView();
+  $('#attack-icon').hide();
 });

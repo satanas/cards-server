@@ -354,3 +354,8 @@ ul.ground > li.card.dropable, .player.dropable, ul.ground.dropable {
 #card-details .type {
   float: right;
 }
+
+#attack-icon {
+  position: absolute;
+  z-index: 2;
+}

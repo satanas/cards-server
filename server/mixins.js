@@ -9,6 +9,10 @@ Array.prototype.shuffle = function() {
   }
 };
 
+Array.prototype.clone = function() {
+  return this.slice(0);
+}
+
 // Returns a random number between min and max (inclusive)
 Math.randomint = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;

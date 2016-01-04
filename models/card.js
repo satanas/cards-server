@@ -7,6 +7,7 @@ var Card = function(model) {
   this.used = false;
   this.played = false;
   this.invenomed = false;
+  this.hidden = false;
 
   this.spells = [];
   //this.flying = flying || false; // Can only be blocked by flying

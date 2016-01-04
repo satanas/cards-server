@@ -98,6 +98,7 @@ Match.prototype.startTurn = function() {
 
   if (newCard) {
     console.log('New card with id ' + newCard.id +' for player ' + playerId +', hand length:', this.players[playerId].hand.length);
+    console.log('newcard', newCard);
   }
 
   this.emit(playerId, 'turn', {
@@ -131,8 +132,13 @@ Match.prototype.playCard = function(playerId, cardId) {
     if (card.rush) {
       card.sick = false;
     }
+    // Stealth
+    if (card.stealth) {
+      card.hidden = true;
+    }
     this.battlefield.playCard(playerId, card);
     console.log('Player', playerId, 'put card', cardId, 'into the battlefield');
+    console.log(card);
     this.broadcast('played-card', {
       'player': {
         'id': playerId,
@@ -184,10 +190,15 @@ Match.prototype.attack = function(playerId, data) {
     console.log('Attack rejected. Card can not attack itself');
     return this.emit(playerId, 'invalid-op', 'Card can not attack itself');
   }
+  if (defender.hidden) {
+    console.log('Attack rejected. Defender is hidden');
+    return this.emit(playerId, 'card-hidden');
+  }
 
   console.log('Battle between card', attacker.id, '(from player', playerId, ') and card', defender.id, '(from player', data.defender.playerId, ')');
 
   attacker.used = true;
+  attacker.hidden = false;
 
   // Berserker
   if (attacker.berserker) {
@@ -359,6 +370,7 @@ Match.prototype.directAttack = function(playerId, data) {
   opponent.health -= attacker.attack;
 
   attacker.used = true;
+  attacker.hidden = false;
 
   // Berserker
   if (attacker.berserker) {
@@ -378,7 +390,8 @@ Match.prototype.directAttack = function(playerId, data) {
         'damageDealt': attacker.attack,
         'damageReceived': 0,
         'health': attacker.health,
-        'used': attacker.used
+        'used': attacker.used,
+        'hidden': attacker.hidden
       }
     },
     'defender': {

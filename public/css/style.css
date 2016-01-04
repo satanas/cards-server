@@ -106,6 +106,14 @@ ul.ground > li.card[data-invenomed="true"][data-used="true"] {
   background-color: #bbc3a6;
 }
 
+ul.ground > li.card[data-hidden="true"] {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+}
+
 ul.ground > li.card.dragged {
   opacity: 0.4;
 }

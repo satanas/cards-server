@@ -233,6 +233,11 @@ socket.on('card-used', function (data) {
   console.log('That card was already used');
 });
 
+socket.on('card-hidden', function (data) {
+  showMessage('Card hidden', "That card is hidden. You can not attack it until it attacks for the first time");
+  console.log('You can not attack that card because it\'s hidden');
+});
+
 socket.on('invalid-op', function (data) {
   showMessage('Invalid operation', data);
   console.log('Invalid operation. You can not do that');

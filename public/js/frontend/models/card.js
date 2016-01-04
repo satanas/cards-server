@@ -14,6 +14,7 @@ var Card = Backbone.Model.extend({
     reversed: false,
     used: false,
     invenomed: false,
+    hidden: false,
     transfusion: false,
     vampirism: false,
     berserker: false
@@ -42,6 +43,9 @@ var Card = Backbone.Model.extend({
     }
     if (card.hasOwnProperty('health')) {
       this.set({'health': card.health});
+    }
+    if (card.hasOwnProperty('hidden')) {
+      this.set({'hidden': card.hidden});
     }
   }
 });

@@ -31,6 +31,7 @@ var CardView = Backbone.View.extend({
       this.$el.attr('data-defender', this.model.get('defender'));
       this.$el.attr('data-used', this.model.get('used'));
       this.$el.attr('data-invenomed', this.model.get('invenomed'));
+      this.$el.attr('data-hidden', this.model.get('hidden'));
       if (playerId) {
         this.$el.attr('id', playerId + "-" + this.model.get('id'));
       }
@@ -58,6 +59,9 @@ var CardView = Backbone.View.extend({
       }
       if (this.model.get('berserker')) {
         abilities += '<span>Berserker</span>';
+      }
+      if (this.model.get('stealth')) {
+        abilities += '<span>Stealth</span>';
       }
 
       html = '<div class="mana">' + this.model.get('mana') + '</div>' +

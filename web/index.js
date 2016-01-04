@@ -9,7 +9,7 @@ var validate = require('koa-validate');
 var bodyParser = require('koa-bodyparser');
 var _ = require('underscore');
 
-var Card = require('../models/card');
+var CardStorage = require('../models/card_storage');
 var CardPresenter = require('../presenters/card');
 
 var app = koa();
@@ -40,7 +40,7 @@ router.get('/', function* (next) {
 });
 
 router.get('/cards', function* (next) {
-  var cards = yield Card.find().sort({ _id: 1});
+  var cards = yield CardStorage.find().sort({ _id: 1});
   yield this.render('cards', {
     cards: cards
   });
@@ -55,7 +55,7 @@ router.get('/cards/new', function* (next) {
 
 router.get('/cards/:id', function* (next) {
   var cardId = this.params.id,
-      card = CardPresenter(yield Card.findOne({_id: cardId}));
+      card = CardPresenter(yield CardStorage.findOne({_id: cardId}));
 
   yield this.render('card', {
     card: card,
@@ -65,7 +65,7 @@ router.get('/cards/:id', function* (next) {
 
 router.post('/cards/:id', function* (next) {
   var cardId = this.params.id;
-  var card = yield Card.findOne({_id: cardId});
+  var card = yield CardStorage.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
   this.checkBody('image').optional();
@@ -91,7 +91,7 @@ router.post('/cards/:id', function* (next) {
     for(var i in err) return { field: i, message: err[i] }
   });
 
-  var newCard = new Card(this.request.body);
+  var newCard = new CardStorage(this.request.body);
   newCard._id = cardId;
   newCard.id = cardId;
   if (!this.request.body.image) newCard.image = card.image;
@@ -102,7 +102,7 @@ router.post('/cards/:id', function* (next) {
     cost += newCard.health / 2;
     newCard.mana = Math.ceil(cost);
 
-    yield Card.update({_id: cardId}, newCard);
+    yield CardStorage.update({_id: cardId}, newCard);
   }
 
   var cardPresenter = CardPresenter(newCard);
@@ -134,7 +134,7 @@ router.post('/cards', function* (next) {
     for(var i in err) return { field: i, message: err[i] }
   });
 
-  var newCard = new Card(this.request.body);
+  var newCard = new CardStorage(this.request.body);
   newCard.id = newCard._id.toString();
 
   if (!this.errors) {

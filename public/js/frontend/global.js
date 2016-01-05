@@ -7,6 +7,22 @@ window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToP
   } : vCallback, nDelay);
 };
 
+$.fn.serializeObject = function() {
+  var o = {};
+  var a = this.serializeArray();
+  $.each(a, function() {
+    if (o[this.name]) {
+      if (!o[this.name].push) {
+        o[this.name] = [o[this.name]];
+      }
+      o[this.name].push(this.value || '');
+    } else {
+      o[this.name] = this.value || '';
+    }
+  });
+  return o;
+};
+
 var CARD_DETAILS_TIMEOUT = 600;
 var abilitiesDescription = {
   'firstStrike': "Card with first strike will attack first, if the other card is killed then it won't receive any damage.",

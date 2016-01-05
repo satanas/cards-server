@@ -127,7 +127,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 
     var reader = new FileReader();
     reader.onload = function(f) {
-      $('#image_preview').attr('src',event.target.result);
+      $('#card-details > .image > img').attr('src', event.target.result);
     };
     reader.readAsDataURL(file);
   });

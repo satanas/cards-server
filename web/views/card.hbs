@@ -138,28 +138,8 @@ $(document).ready(function() {
   cardView = new CardPopupView({model: model, popup: false});
   cardView.render(model);
 
-  $('input').on('keyup', function(value) {
-    model.set($('form').serializeObject());
-  });
-
-  $('textarea').on('keyup', function(value) {
+  $('form').on('keyup', function(value) {
     model.set($('form').serializeObject());
   });
 });
-
-$.fn.serializeObject = function() {
-  var o = {};
-  var a = this.serializeArray();
-  $.each(a, function() {
-    if (o[this.name]) {
-      if (!o[this.name].push) {
-        o[this.name] = [o[this.name]];
-      }
-      o[this.name].push(this.value || '');
-    } else {
-      o[this.name] = this.value || '';
-    }
-  });
-  return o;
-};
 </script>

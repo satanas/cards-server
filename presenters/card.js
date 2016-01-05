@@ -1,4 +1,5 @@
 module.exports = function(card) {
+  card._id = null;
   card.abilities = [
     {
       name: 'rush',

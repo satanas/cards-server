@@ -10,7 +10,7 @@
 </div>
 {{/if}}
 
-{{#card}}
+{{#if card}}
 {{#isNew}}
 <h1>New card</h1>
 
@@ -19,14 +19,15 @@
 {{^isNew}}
 <h1>Edit card</h1>
 
-<form id="card_form" action="/cards/{{ _id }}" method="POST">
+<form id="card_form" action="/cards/{{ card.id }}" method="POST">
 {{/isNew}}
+{{/if}}
   <div class="row">
     <div class="columns small-4">
       <div class="row">
         <div class="columns">
         <label>Name
-          <input name="name" type="text" value="{{ name }}" {{#if isNew}}required{{/if}} />
+          <input name="name" type="text" value="{{ card.name }}" {{#if isNew}}required{{/if}} />
         </label>
         </div>
       </div>
@@ -34,7 +35,7 @@
       <div class="row">
         <div class="columns">
         <label>Mana
-          <input name="mana" type="text" value="{{ mana }}" disabled />
+          <input name="mana" type="text" value="{{ card.mana }}" {{#if isNew}}required{{/if}} />
         </label>
         </div>
       </div>
@@ -42,7 +43,7 @@
       <div class="row">
         <div class="columns">
         <label>Attack
-          <input name="attack" type="text" value="{{ attack }}" {{#if isNew}}required{{/if}} />
+          <input name="attack" type="text" value="{{ card.attack }}" {{#if isNew}}required{{/if}} />
         </label>
         </div>
       </div>
@@ -50,7 +51,7 @@
       <div class="row">
         <div class="columns">
         <label>Health
-          <input name="health" type="text" value="{{ health }}" {{#if isNew}}required{{/if}} />
+          <input name="health" type="text" value="{{ card.health }}" {{#if isNew}}required{{/if}} />
         </label>
         </div>
       </div>
@@ -58,7 +59,7 @@
       <div class="row">
         <div class="columns">
         <label>Image
-          <input type="file" id="image" name="image" value="{{ image }}" {{#if isNew}}required{{/if}} />
+          <input type="file" id="image" name="image" value="{{ card.image }}" {{#if isNew}}required{{/if}} />
         </label>
         </div>
       </div>
@@ -76,7 +77,7 @@
       <div class="row">
         <div class="columns">
         <label>Flavor Text
-          <textarea name="flavorText">{{ flavorText }}</textarea>
+          <textarea name="flavorText">{{ card.flavorText }}</textarea>
         </label>
         </div>
       </div>
@@ -84,22 +85,7 @@
     </div>
 
     <div class="columns small-4">
-      <div id="card-details" class="preview">
-        <div class="mana">{{ mana }}</div>
-        <div class="image"><img id="image_preview" src="http://localhost:8000/images/{{ image }}" /></div>
-        <div class="name">{{ name }}</div>
-        <div class="information">
-          {{#abilities}}
-            {{#value}}<div><strong>{{ name }}</strong></div>{{/value}}
-          {{/abilities}}
-          <div class="flavor-text">{{ flavorText }}</div>
-        </div>
-        <div class="footer">
-          <div class="stats">{{ attack }} / {{ health }}</div>
-          <div class="type">{{ type }}</div>
-          <div class="clearfix"></div>
-        </div>
-      </div>
+      <div id="card-details" class="preview"></div>
     </div>
 
     <div class="columns small-4">
@@ -123,9 +109,12 @@
     <button id="save" type="submit">Save</button>
     <button id="cancel" type="button">Back</button>
   </div>
-{{/card}}
 </form>
 <script>
+
+var model = null,
+    cardView = null;
+
 $('#cancel').on('click', function() {
   window.location = '/cards';
 });
@@ -143,4 +132,35 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
     reader.readAsDataURL(file);
   });
 }
+
+$(document).ready(function() {
+  model = new Card({{{ card }}});
+  cardView = new CardPopupView({model: model});
+  //cardView._show(0, 360, model);
+  cardView.render(model);
+
+  $('input').on('keyup', function(value) {
+    model.set($('form').serializeObject());
+  });
+
+  $('textarea').on('keyup', function(value) {
+    model.set($('form').serializeObject());
+  });
+});
+
+$.fn.serializeObject = function() {
+  var o = {};
+  var a = this.serializeArray();
+  $.each(a, function() {
+    if (o[this.name]) {
+      if (!o[this.name].push) {
+        o[this.name] = [o[this.name]];
+      }
+      o[this.name].push(this.value || '');
+    } else {
+      o[this.name] = this.value || '';
+    }
+  });
+  return o;
+};
 </script>

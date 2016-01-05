@@ -113,6 +113,7 @@
 <script>
 
 var model = null,
+    newImage = null,
     cardView = null;
 
 $('#cancel').on('click', function() {
@@ -127,7 +128,8 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 
     var reader = new FileReader();
     reader.onload = function(f) {
-      $('#card-details > .image > img').attr('src', event.target.result);
+      newImage = event.target.result;
+      $('#card-details > .image > img').attr('src', newImage);
     };
     reader.readAsDataURL(file);
   });
@@ -155,5 +157,8 @@ function updateModel() {
   _.extend(data, $('input').serializeObject());
   _.extend(data, $('textarea').serializeObject());
   model.set(data);
+  if (newImage) {
+    $('#card-details > .image > img').attr('src', newImage);
+  }
 }
 </script>

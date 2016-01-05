@@ -24,11 +24,12 @@
 {{/if}}
   <div class="row">
     <div class="columns small-4">
-      <div class="row">
-        <div class="columns">
-        <label>Name
-          <input name="name" type="text" value="{{ card.name }}" {{#if isNew}}required{{/if}} />
-        </label>
+      <div class="row collapse prefix-radius">
+        <div class="small-3 columns">
+          <span class="prefix">Name</span>
+        </div>
+        <div class="small-9 columns">
+          <input name="name" type="text" value="{{ card.name }}" {{#if isNew}}required{{/if}} placeholder="Card name"/>
         </div>
       </div>
 
@@ -92,12 +93,17 @@
       {{#card.abilities}}
       <div class="row">
         <div class="columns">
-        <label>{{ name }}
-          <select name="{{ name }}">
-            <option value="false" {{^value}}selected{{/value}}>False</option>
-            <option value="true" {{#value}}selected{{/value}}>True</option>
-          </select>
-        </label>
+          <div class="row">
+            <div class="small-3 columns">
+                <label for="{{name}}" class="inline">{{ name }}</label>
+            </div>
+            <div class="small-9 columns">
+              <select name="{{ name }}">
+                <option value="false" {{^value}}selected{{/value}}>False</option>
+                <option value="true" {{#value}}selected{{/value}}>True</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
       {{/card.abilities}}
@@ -105,7 +111,7 @@
     </div>
 
   </div>
-  <div class="row">
+  <div class="row buttons">
     <button id="save" type="submit">Save</button>
     <button id="cancel" type="button">Back</button>
   </div>

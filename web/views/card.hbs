@@ -135,8 +135,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 
 $(document).ready(function() {
   model = new Card({{{ card }}});
-  cardView = new CardPopupView({model: model});
-  //cardView._show(0, 360, model);
+  cardView = new CardPopupView({model: model, popup: false});
   cardView.render(model);
 
   $('input').on('keyup', function(value) {

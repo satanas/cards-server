@@ -298,6 +298,6 @@ function doAttack(atkPlayer, atkCard, defPlayer, defCard) {
 
 $(document).ready(function() {
   turnView = new TurnView({el: '#end-turn'});
-  views.cardDetails = new CardPopupView();
+  views.cardDetails = new CardPopupView({popup: true});
   $('#attack-icon').hide();
 });

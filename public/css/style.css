@@ -303,6 +303,8 @@ ul.ground > li.card.dropable, .player.dropable, ul.ground.dropable {
 #card-details.preview {
   top: 0px;
   left: 0px;
+  position: relative;
+  margin: 0 auto;
 }
 
 #card-details .mana {

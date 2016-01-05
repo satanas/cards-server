@@ -369,3 +369,7 @@ ul.ground > li.card.dropable, .player.dropable, ul.ground.dropable {
   position: absolute;
   z-index: 2;
 }
+
+#card_form > .buttons {
+  padding: 30px 15px;
+}

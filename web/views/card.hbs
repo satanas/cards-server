@@ -89,18 +89,18 @@
     </div>
 
     <div class="columns small-4">
-      {{#abilities}}
+      {{#card.abilities}}
       <div class="row">
         <div class="columns">
         <label>{{ name }}
-          <select name="{{ name }}" required>
+          <select name="{{ name }}">
             <option value="false" {{^value}}selected{{/value}}>False</option>
             <option value="true" {{#value}}selected{{/value}}>True</option>
           </select>
         </label>
         </div>
       </div>
-      {{/abilities}}
+      {{/card.abilities}}
 
     </div>
 
@@ -139,7 +139,21 @@ $(document).ready(function() {
   cardView.render(model);
 
   $('form').on('keyup', function(value) {
-    model.set($('form').serializeObject());
+    updateModel();
+  });
+
+  $('select').on('change', function(value) {
+    updateModel();
   });
 });
+
+function updateModel() {
+  var data = $('select').serializeObject();
+  for (var attr in data) {
+    data[attr] = (data[attr] === 'true') ? true : false;
+  }
+  _.extend(data, $('input').serializeObject());
+  _.extend(data, $('textarea').serializeObject());
+  model.set(data);
+}
 </script>

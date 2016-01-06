@@ -21,56 +21,20 @@
 
 <form id="card_form" action="/cards/{{ card.id }}" method="POST">
 {{/isNew}}
+
 {{/if}}
   <div class="row">
     <div class="columns small-4">
-      <div class="row collapse prefix-radius">
-        <div class="small-3 columns">
-          <span class="prefix">Name</span>
-        </div>
-        <div class="small-9 columns">
-          <input name="name" type="text" value="{{ card.name }}" {{#if isNew}}required{{/if}} placeholder="Card name"/>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="columns">
-        <label>Mana
-          <input name="mana" type="text" value="{{ card.mana }}" {{#if isNew}}required{{/if}} />
-        </label>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="columns">
-        <label>Attack
-          <input name="attack" type="text" value="{{ card.attack }}" {{#if isNew}}required{{/if}} />
-        </label>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="columns">
-        <label>Health
-          <input name="health" type="text" value="{{ card.health }}" {{#if isNew}}required{{/if}} />
-        </label>
-        </div>
-      </div>
+      {{> input_field name="name" value=card.name isNew=isNew }}
+      {{> input_field name="mana" value=card.mana isNew=isNew }}
+      {{> input_field name="attack" value=card.attack isNew=isNew }}
+      {{> input_field name="health" value=card.health isNew=isNew }}
+      {{> select_field name="type" isNew=isNew values=card.types }}
 
       <div class="row">
         <div class="columns">
         <label>Image
           <input type="file" id="image" name="image" value="{{ card.image }}" {{#if isNew}}required{{/if}} />
-        </label>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="columns">
-        <label>Type
-          <select name="type">
-            <option value="1">Creature</option>
-          </select>
         </label>
         </div>
       </div>
@@ -91,21 +55,7 @@
 
     <div class="columns small-4">
       {{#card.abilities}}
-      <div class="row">
-        <div class="columns">
-          <div class="row">
-            <div class="small-3 columns">
-                <label for="{{name}}" class="inline">{{ name }}</label>
-            </div>
-            <div class="small-9 columns">
-              <select name="{{ name }}">
-                <option value="false" {{^value}}selected{{/value}}>False</option>
-                <option value="true" {{#value}}selected{{/value}}>True</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
+        {{> select_field name=name isNew=isNew values=values placeholder=" "}}
       {{/card.abilities}}
 
     </div>

@@ -1,38 +1,35 @@
+var _ = require('underscore');
+
 module.exports = function(card) {
   card._id = null;
-  card.abilities = [
+  card.types = [
     {
-      name: 'rush',
-      value: card.rush || false
+      name: "Creature",
+      value: 2,
+      selected: true
     },
     {
-      name: 'overwhelm',
-      value: card.overwhelm || false
-    },
-    {
-      name: 'firstStrike',
-      value: card.firstStrike || false
-    },
-    {
-      name: 'deathtouch',
-      value: card.deathtouch || false
-    },
-    {
-      name: 'venom',
-      value: card.venom || false
-    },
-    {
-      name: 'transfusion',
-      value: card.transfusion || false
-    },
-    {
-      name: 'vampirism',
-      value: card.vampirism || false
-    },
-    {
-      name: 'berserker',
-      value: card.berserker || false
+      name: "Spell",
+      value: 1
     }
   ];
+  var abilities = ['rush', 'overwhelm', 'firstStrike', 'deathtouch', 'venom', 'transfusion', 'vampirism', 'berserker'];
+  card.abilities = [];
+
+  abilities.forEach(function(key) {
+    values = _.map([true, false], function(v) {
+      return {
+        name: v.toString(),
+        value: v,
+        selected: (card[key] && v) || false
+      };
+    });
+
+    card.abilities.push({
+      name: key,
+      values: values
+    });
+  });
+
   return card;
 };

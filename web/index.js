@@ -91,6 +91,8 @@ router.post('/cards/:id', function* (next) {
 
   if (!this.errors) {
     yield CardStorage.update({_id: cardId}, newCard);
+  } else {
+    this.status = 400;
   }
 
   var cardPresenter = CardPresenter(newCard);

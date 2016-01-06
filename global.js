@@ -17,5 +17,7 @@ module.exports = {
     'Starting': 1,
     'Started': 2,
     'Ended': 3
-  }
+  },
+  ABILITIES: ['rush', 'overwhelm', 'firstStrike', 'deathtouch', 'venom', 'transfusion', 'vampirism', 'berserker']
 }
+

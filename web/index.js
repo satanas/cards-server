@@ -9,6 +9,7 @@ var validate = require('koa-validate');
 var bodyParser = require('koa-bodyparser');
 var _ = require('underscore');
 
+var Global = require('../global');
 var CardStorage = require('../models/card_storage');
 var CardPresenter = require('../presenters/card');
 
@@ -68,19 +69,11 @@ router.post('/cards/:id', function* (next) {
   var card = yield CardStorage.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
-  this.checkBody('image').optional();
+  this.checkBody('mana').notEmpty().isInt();
   this.checkBody('attack').notEmpty().isInt();
   this.checkBody('health').notEmpty().isInt().gt(0);
   this.checkBody('type').notEmpty().isInt();
-  this.checkBody('rush').notEmpty().toBoolean();
-  this.checkBody('overwhelm').notEmpty().toBoolean();
-  this.checkBody('firstStrike').notEmpty().toBoolean();
-  this.checkBody('deathtouch').notEmpty().toBoolean();
-  this.checkBody('venom').notEmpty().toBoolean();
-  this.checkBody('transfusion').notEmpty().toBoolean();
-  this.checkBody('vampirism').notEmpty().toBoolean();
-  this.checkBody('berserker').notEmpty().toBoolean();
-  this.checkBody('flavorText').optional();
+  this.checkBody('').clearAttributes();
 
   if (!card) {
     // FIXME: Pass error in cookie?
@@ -97,21 +90,15 @@ router.post('/cards/:id', function* (next) {
   if (!this.request.body.image) newCard.image = card.image;
 
   if (!this.errors) {
-    var cost = 0;
-    cost += newCard.attack / 2;
-    cost += newCard.health / 2;
-    newCard.mana = Math.ceil(cost);
-
     yield CardStorage.update({_id: cardId}, newCard);
   }
 
   var cardPresenter = CardPresenter(newCard);
 
-  yield this.render('card', {
+  this.body = {
     card: cardPresenter,
-    errors: errors,
-    isNew: false
-  });
+    errors: errors
+  };
 });
 
 router.post('/cards', function* (next) {
@@ -120,14 +107,7 @@ router.post('/cards', function* (next) {
   this.checkBody('attack').notEmpty().isInt();
   this.checkBody('health').notEmpty().isInt().gt(0);
   this.checkBody('type').notEmpty().isInt();
-  this.checkBody('rush').notEmpty().toBoolean();
-  this.checkBody('overwhelm').notEmpty().toBoolean();
-  this.checkBody('firstStrike').notEmpty().toBoolean();
-  this.checkBody('deathtouch').notEmpty().toBoolean();
-  this.checkBody('venom').notEmpty().toBoolean();
-  this.checkBody('transfusion').notEmpty().toBoolean();
-  this.checkBody('vampirism').notEmpty().toBoolean();
-  this.checkBody('berserker').notEmpty().toBoolean();
+  this.checkBody('').clearAttributes();
   this.checkBody('flavorText').optional();
 
   var errors = _.map(this.errors, function(err) {
@@ -164,3 +144,11 @@ app.use(router.routes());
 
 app.listen(8000);
 console.log('WebApp listening on port 8000');
+
+validate.Validator.prototype.clearAttributes = function() {
+  Global.ABILITIES.forEach(function(key) {
+    if (this.params[key] === 'null' || this.params[key] === null) delete this.params[key];
+    if (this.params[key] === 'false') this.params[key] = false;
+    if (this.params[key] === 'true') this.params[key] = true;
+  }, this)
+};

@@ -107,7 +107,7 @@ $(document).ready(function() {
       data: $(this).serialize(),
       method: $(this).attr('method'),
       success: function(data) {
-        console.log('success', data);
+        model.set(data.card);
       },
       error: function(data) {
         console.log('error', data);

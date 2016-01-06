@@ -46,7 +46,6 @@
         </label>
         </div>
       </div>
-
     </div>
 
     <div class="columns small-4">
@@ -57,7 +56,6 @@
       {{#card.abilities}}
         {{> select_field name=name isNew=isNew values=values placeholder=" "}}
       {{/card.abilities}}
-
     </div>
 
   </div>
@@ -102,6 +100,20 @@ $(document).ready(function() {
 
   $('select').on('change', function(value) {
     updateModel();
+  });
+
+  $('form').on('submit', function(ev) {
+    $.ajax($(this).attr('action'), {
+      data: $(this).serialize(),
+      method: $(this).attr('method'),
+      success: function(data) {
+        console.log('success', data);
+      },
+      error: function(data) {
+        console.log('error', data);
+      }
+    });
+    ev.preventDefault();
   });
 });
 

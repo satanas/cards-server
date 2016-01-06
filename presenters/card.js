@@ -21,7 +21,7 @@ module.exports = function(card) {
       return {
         name: v.toString(),
         value: v,
-        selected: (card[key] && v) || false
+        selected: (card[key] === v) || false
       };
     });
 

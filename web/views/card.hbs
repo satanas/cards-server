@@ -149,4 +149,16 @@ function updateModel() {
     $('#card-details > .image > img').attr('src', newImage);
   }
 }
+
+function showMessage(type, message) {
+  $('body').prepend('<div data-alert class="alert-box ' + type + ' radius">' + message + '</div>');
+  setTimeout(function() {
+    $('.alert-box').fadeOut({
+      duration: 400,
+      complete: function() {
+        $('.alert-box').remove();
+      }
+    });
+  }, 2000)
+}
 </script>

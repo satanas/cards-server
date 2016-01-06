@@ -54,7 +54,7 @@
 
     <div class="columns small-4">
       {{#card.abilities}}
-        {{> select_field name=name isNew=isNew values=values placeholder=" "}}
+        {{> select_field name=name isNew=isNew values=values}}
       {{/card.abilities}}
     </div>
 
@@ -98,8 +98,23 @@ $(document).ready(function() {
     updateModel();
   });
 
+  /* Set select color on load */
+  $('select').each(function() {
+    if ($(this).val() === 'true') {
+      $(this).addClass('active');
+    } else {
+      $(this).removeClass('active');
+    }
+  });
+
+  /* Set select color on change */
   $('select').on('change', function(value) {
     updateModel();
+    if ($(this).val() === 'true') {
+      $(this).addClass('active');
+    } else {
+      $(this).removeClass('active');
+    }
   });
 
   $('form').on('submit', function(ev) {

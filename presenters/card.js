@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var Global = require('../global');
 
 module.exports = function(card) {
   card._id = null;
@@ -13,10 +14,9 @@ module.exports = function(card) {
       value: 1
     }
   ];
-  var abilities = ['rush', 'overwhelm', 'firstStrike', 'deathtouch', 'venom', 'transfusion', 'vampirism', 'berserker'];
   card.abilities = [];
 
-  abilities.forEach(function(key) {
+  Global.ABILITIES.forEach(function(key) {
     values = _.map([true, false], function(v) {
       return {
         name: v.toString(),

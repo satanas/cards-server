@@ -2,6 +2,7 @@
 
 var koa = require('koa');
 var hbs = require('koa-hbs');
+var parse = require('co-busboy');
 var serve = require('koa-serve');
 var router = require('koa-router')();
 var mongoose = require('mongoose');
@@ -65,8 +66,9 @@ router.get('/cards/:id', function* (next) {
 });
 
 router.post('/cards/:id', function* (next) {
-  var cardId = this.params.id;
-  var card = yield CardStorage.findOne({_id: cardId});
+  var errors = [],
+      cardId = this.params.id,
+      card = yield CardStorage.findOne({_id: cardId});
 
   this.checkBody('name').notEmpty();
   this.checkBody('mana').notEmpty().isInt();
@@ -75,21 +77,24 @@ router.post('/cards/:id', function* (next) {
   this.checkBody('type').notEmpty().isInt();
   this.checkBody('').clearAttributes();
 
-  if (!card) {
-    // FIXME: Pass error in cookie?
-    this.redirect('/cards');
+  if (this.request.is('multipart/*')) {
+    console.log('multipart *********');
   }
 
-  var errors = _.map(this.errors, function(err) {
+  if (!card) {
+    errors.push({field: null, message: 'That card doesn\'t exist'});
+  }
+
+  errors.concat(_.map(this.errors, function(err) {
     for(var i in err) return { field: i, message: err[i] }
-  });
+  }));
 
   var newCard = new CardStorage(this.request.body);
   newCard._id = cardId;
   newCard.id = cardId;
   if (!this.request.body.image) newCard.image = card.image;
 
-  if (!this.errors) {
+  if (errors.length === 0) {
     yield CardStorage.update({_id: cardId}, newCard);
   } else {
     this.status = 400;

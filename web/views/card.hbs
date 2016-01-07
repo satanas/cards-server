@@ -14,12 +14,12 @@
 {{#isNew}}
 <h1>New card</h1>
 
-<form id="card_form" action="/cards" method="POST">
+<form id="card_form" action="/cards" method="POST" enctype="multipart/form-data">
 {{/isNew}}
 {{^isNew}}
 <h1>Edit card</h1>
 
-<form id="card_form" action="/cards/{{ card.id }}" method="POST">
+<form id="card_form" action="/cards/{{ card.id }}" method="POST" enctype="multipart/form-data">
 {{/isNew}}
 
 {{/if}}
@@ -126,12 +126,17 @@ $(document).ready(function() {
       method: $(this).attr('method'),
       success: function(data) {
         model.set(data.card);
+        showMessage('success', 'Card saved successfully');
       },
       error: function(data) {
         data.responseJSON.errors.forEach(function(err) {
-          var field = $('#form-field-' + err.field);
-          field.append('<small class="field-error error">' + err.message + '</small>');
-          $('#form-field-' + err.field + ' > input').addClass('field-error');
+          if (err.field !== null) {
+            var field = $('#form-field-' + err.field);
+            field.append('<small class="field-error error">' + err.message + '</small>');
+            $('#form-field-' + err.field + ' > input').addClass('field-error');
+          } else {
+            showMessage('alert', err.message);
+          }
         });
       }
     });

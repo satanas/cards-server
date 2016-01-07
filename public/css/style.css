@@ -387,3 +387,7 @@ small.field-error {
 input.field-error {
   border: 1px solid red;
 }
+
+textarea {
+  border-radius: 3px;
+}

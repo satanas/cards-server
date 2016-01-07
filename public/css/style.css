@@ -18,7 +18,7 @@ body .attackable {
 }
 
 select.active {
-  background-color: lightgreen;
+  background-color: #D0FFD0;
 }
 
 [draggable] {
@@ -376,4 +376,14 @@ ul.ground > li.card.dropable, .player.dropable, ul.ground.dropable {
 
 #card_form > .buttons {
   padding: 30px 15px;
+}
+
+small.field-error {
+  margin-top: -1rem;
+  background: none;
+  color: red;
+}
+
+input.field-error {
+  border: 1px solid red;
 }

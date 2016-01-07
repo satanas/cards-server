@@ -1,8 +1,8 @@
-<div id="form-field-{{ name }}" class="row collapse prefix-radius">
+<div class="row collapse prefix-radius">
   <div class="small-3 columns">
     <span class="prefix">{{ name }}</span>
   </div>
-  <div class="small-9 columns">
+  <div id="form-field-{{ name }}" class="small-9 columns">
     <input name="{{ name }}" type="text" value="{{ value }}" {{#if isNew}}required{{/if}} {{#if placeholder}}placeholder="{{ placeholder }}"{{/if}} autocomplete="off"/>
   </div>
 </div>

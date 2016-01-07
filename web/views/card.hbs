@@ -118,7 +118,8 @@ $(document).ready(function() {
   });
 
   $('form').on('submit', function(ev) {
-    $('.field-error').remove();
+    $('small.field-error').remove();
+    $('input.field-error').removeClass('field-error');
 
     $.ajax($(this).attr('action'), {
       data: $(this).serialize(),
@@ -130,6 +131,7 @@ $(document).ready(function() {
         data.responseJSON.errors.forEach(function(err) {
           var field = $('#form-field-' + err.field);
           field.append('<small class="field-error error">' + err.message + '</small>');
+          $('#form-field-' + err.field + ' > input').addClass('field-error');
         });
       }
     });

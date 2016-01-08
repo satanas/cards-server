@@ -41,8 +41,49 @@
       <td>{{vampirism}}</td>
       <td>{{berserker}}</td>
       <td>{{flavorText}}</td>
-      <td><a href="/cards/{{_id}}">Edit</a></td>
+      <td><a class="edit-link" href="/cards/{{_id}}">Edit</a> | <a class="delete-link" data-card-name="{{name}}" href="/cards/{{_id}}">Delete</a></td>
     </tr>
     {{/cards}}
   </tbody>
 </table>
+
+<script>
+$(document).ready(function() {
+  var op = $.QueryString['op'];
+
+  if (op === 's') {
+    showMessage('success', 'Card deleted successfully');
+  }
+
+  $('.delete-link').on('click', function(ev) {
+    ev.preventDefault();
+    if (window.confirm("Do you really want to delete '" + $(this).attr('data-card-name') + "' card?")) {
+      $.ajax($(this).attr('href'), {
+        method: 'delete',
+        success: function(data) {
+          if (data.redirect) {
+            window.location = data.url;
+          }
+        },
+        error: function(data) {
+          showMessage('alert', 'Error deleting card');
+        }
+      });
+    }
+  });
+});
+
+function showMessage(type, message) {
+  $('body').prepend('<div data-alert class="alert-box ' + type + ' radius">' + message + '</div>');
+  setTimeout(function() {
+    $('.alert-box').fadeOut({
+      duration: 400,
+      complete: function() {
+        $('.alert-box').remove();
+      }
+    });
+  }, 2000)
+}
+
+
+</script>

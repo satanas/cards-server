@@ -163,11 +163,17 @@ router.post('/cards', bodyParse({multipart: true, formidable: { uploadDir: UPLOA
 });
 
 router.delete('/cards/:id', function* (next) {
-  var cardId = this.params.id;
+  var cardId = this.params.id,
+      card = yield CardStorage.findOne({_id: cardId});
 
-  console.log('deleting card', cardId);
+  try {
+    var name = card.name;
+    yield card.remove();
 
-  addFlashMessage(this, 'success', 'Card delete successfully');
+    addFlashMessage(this, 'success', "Card '" + name + "' deleted successfully");
+  } catch (e) {
+    return errorResponse(this, [{field: null, message: 'Card not found'}]);
+  }
 
   this.body = {
     redirect: true,

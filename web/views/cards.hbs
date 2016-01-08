@@ -59,8 +59,9 @@ $(document).ready(function() {
             window.location = data.url;
           }
         },
-        error: function(data) {
-          showMessage('alert', 'Error deleting card');
+        error: function(err) {
+          var message = (err.hasOwnProperty('message')) ? err.message : 'Error deleting card';
+          showMessage('alert', message);
         }
       });
     }

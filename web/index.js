@@ -153,6 +153,16 @@ router.post('/cards', bodyParse({multipart: true, formidable: { uploadDir: UPLOA
   }
 });
 
+router.delete('/cards/:id', function* (next) {
+  var cardId = this.params.id;
+
+  console.log('deleting card', cardId);
+  this.body = {
+    redirect: true,
+    url: '/cards?op=s' // Indicates that the operation was successful
+  }
+});
+
 
 app.use(router.routes());
 

@@ -85,5 +85,7 @@ function showMessage(type, message) {
   }, 2000)
 }
 
-
+{{#if flash}}
+showMessage('{{ flash.type }}', '{{ flash.message }}');
+{{/if}}
 </script>

@@ -5,11 +5,12 @@ var koa = require('koa');
 var path = require('path');
 var hbs = require('koa-hbs');
 var serve = require('koa-serve');
-var router = require('koa-router')();
-var mongoose = require('mongoose');
-var validate = require('koa-validate');
 var bodyParse = require('koa-body');
+var router = require('koa-router')();
+var session = require('koa-session');
+var validate = require('koa-validate');
 var _ = require('underscore');
+var mongoose = require('mongoose');
 
 var Global = require('../global');
 var CardStorage = require('../models/card_storage');
@@ -20,6 +21,10 @@ var app = koa();
 const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'images');
 
 mongoose.connect('mongodb://localhost/magic');
+
+// Init session
+app.keys = ['123456', 'foobar'];
+app.use(session(app));
 
 // Request logging
 app.use(function* (next) {
@@ -39,14 +44,17 @@ app.use(hbs.middleware({
   layoutsPath: __dirname + '/views/layouts'
 }));
 
+// Routes
 router.get('/', function* (next) {
   yield this.render('game');
 });
 
 router.get('/cards', function* (next) {
   var cards = yield CardStorage.find().sort({ _id: 1});
+
   yield this.render('cards', {
-    cards: cards
+    cards: cards,
+    flash: getFlashMessage(this)
   });
 });
 
@@ -157,9 +165,12 @@ router.delete('/cards/:id', function* (next) {
   var cardId = this.params.id;
 
   console.log('deleting card', cardId);
+
+  addFlashMessage(this, 'success', 'Card delete successfully');
+
   this.body = {
     redirect: true,
-    url: '/cards?op=s' // Indicates that the operation was successful
+    url: '/cards'
   }
 });
 
@@ -182,4 +193,17 @@ function errorResponse(ctx, errors, status) {
   ctx.body = {
     errors: errors
   };
+}
+
+function addFlashMessage(ctx, type, message) {
+  ctx.session.flash = {
+    type: type,
+    message: message
+  };
+}
+
+function getFlashMessage(ctx) {
+  var flash = ctx.session.flash;
+  if (flash) delete ctx.session.flash;
+  return flash;
 }

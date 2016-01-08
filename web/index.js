@@ -154,7 +154,8 @@ router.post('/cards', bodyParse({multipart: true, formidable: { uploadDir: UPLOA
     this.body = {
       card: cardPresenter,
       redirect: true,
-      url: '/cards/' + newCard.id + '?op=s' // Indicates that the operation was successful
+      flash: addFlashMessage(this, 'success', 'Card saved successfully'),
+      url: '/cards/' + newCard.id
     };
   } catch (e) {
     return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);

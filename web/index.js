@@ -1,13 +1,14 @@
 'use strict';
 
+var fs = require('fs');
 var koa = require('koa');
+var path = require('path');
 var hbs = require('koa-hbs');
-var parse = require('co-busboy');
 var serve = require('koa-serve');
 var router = require('koa-router')();
 var mongoose = require('mongoose');
 var validate = require('koa-validate');
-var bodyParser = require('koa-bodyparser');
+var bodyParse = require('koa-body');
 var _ = require('underscore');
 
 var Global = require('../global');
@@ -15,6 +16,8 @@ var CardStorage = require('../models/card_storage');
 var CardPresenter = require('../presenters/card');
 
 var app = koa();
+
+const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'images');
 
 mongoose.connect('mongodb://localhost/magic');
 
@@ -27,7 +30,6 @@ app.use(function* (next) {
   console.log([start.toISOString(), "::", this.method, this.url, "processed in", String(end-start), "ms"].join(' '));
 });
 
-app.use(bodyParser());
 app.use(validate());
 app.use(serve('public'));
 
@@ -50,7 +52,7 @@ router.get('/cards', function* (next) {
 
 router.get('/cards/new', function* (next) {
   yield this.render('card', {
-    card: CardPresenter({}),
+    card: CardPresenter(new CardStorage()),
     isNew: true
   });
 });
@@ -65,8 +67,9 @@ router.get('/cards/:id', function* (next) {
   });
 });
 
-router.post('/cards/:id', function* (next) {
+router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: UPLOAD_DIR}}), function* (next) {
   var errors = [],
+      files = this.request.body.files,
       cardId = this.params.id,
       card = yield CardStorage.findOne({_id: cardId});
 
@@ -77,35 +80,35 @@ router.post('/cards/:id', function* (next) {
   this.checkBody('type').notEmpty().isInt();
   this.checkBody('').clearAttributes();
 
-  if (this.request.is('multipart/*')) {
-    console.log('multipart *********');
-  }
+  if (!card)
+    return errorResponse(this, [{field: null, message: 'That card doesn\'t exist'}]);
 
-  if (!card) {
-    errors.push({field: null, message: 'That card doesn\'t exist'});
-  }
-
-  errors.concat(_.map(this.errors, function(err) {
+  errors = errors.concat(_.map(this.errors, function(err) {
     for(var i in err) return { field: i, message: err[i] }
   }));
 
-  var newCard = new CardStorage(this.request.body);
+  if (errors.length > 0)
+    return errorResponse(this, errors);
+
+  var newCard = new CardStorage(this.request.body.fields);
   newCard._id = cardId;
   newCard.id = cardId;
-  if (!this.request.body.image) newCard.image = card.image;
 
-  if (errors.length === 0) {
-    yield CardStorage.update({_id: cardId}, newCard);
-  } else {
-    this.status = 400;
+  if (files.image.name !== '' && files.image.size > 0) {
+    newCard.image = files.image.name;
+    fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
   }
 
-  var cardPresenter = CardPresenter(newCard);
+  try {
+    yield CardStorage.update({_id: cardId}, newCard);
+    var cardPresenter = CardPresenter(newCard);
 
-  this.body = {
-    card: cardPresenter,
-    errors: errors
-  };
+    this.body = {
+      card: cardPresenter
+    };
+  } catch (e) {
+    return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);
+  }
 });
 
 router.post('/cards', function* (next) {
@@ -159,3 +162,10 @@ validate.Validator.prototype.clearAttributes = function() {
     if (this.params[key] === 'true') this.params[key] = true;
   }, this)
 };
+
+function errorResponse(ctx, errors, status) {
+  ctx.status = status || 400;
+  ctx.body = {
+    errors: errors
+  };
+}

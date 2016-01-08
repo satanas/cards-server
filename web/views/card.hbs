@@ -13,7 +13,6 @@
 {{#if card}}
 {{#isNew}}
 <h1>New card</h1>
-
 <form id="card_form" action="/cards" method="POST" enctype="multipart/form-data">
 {{/isNew}}
 {{^isNew}}
@@ -118,12 +117,16 @@ $(document).ready(function() {
   });
 
   $('form').on('submit', function(ev) {
+    ev.preventDefault();
+
     $('small.field-error').remove();
     $('input.field-error').removeClass('field-error');
 
     $.ajax($(this).attr('action'), {
-      data: $(this).serialize(),
+      data: new FormData($('form')[0]),
       method: $(this).attr('method'),
+      processData: false,
+      contentType: false,
       success: function(data) {
         model.set(data.card);
         showMessage('success', 'Card saved successfully');
@@ -140,7 +143,6 @@ $(document).ready(function() {
         });
       }
     });
-    ev.preventDefault();
   });
 });
 

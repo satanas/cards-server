@@ -111,41 +111,45 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
   }
 });
 
-router.post('/cards', function* (next) {
+router.post('/cards', bodyParse({multipart: true, formidable: { uploadDir: UPLOAD_DIR}}), function* (next) {
+  var errors = [],
+      files = this.request.body.files;
+
   this.checkBody('name').notEmpty();
-  this.checkBody('image').notEmpty();
+  this.checkBody('mana').notEmpty().isInt();
   this.checkBody('attack').notEmpty().isInt();
   this.checkBody('health').notEmpty().isInt().gt(0);
   this.checkBody('type').notEmpty().isInt();
   this.checkBody('').clearAttributes();
-  this.checkBody('flavorText').optional();
 
-  var errors = _.map(this.errors, function(err) {
+  errors = errors.concat(_.map(this.errors, function(err) {
     for(var i in err) return { field: i, message: err[i] }
-  });
+  }));
 
-  var newCard = new CardStorage(this.request.body);
-  newCard.id = newCard._id.toString();
-
-  if (!this.errors) {
-    var cost = 0;
-    cost += newCard.attack / 2;
-    cost += newCard.health / 2;
-    newCard.mana = Math.ceil(cost);
-
-    yield newCard.save();
+  if (files.image.name === '' || files.image.size === 0) {
+    errors.push({field: 'image', message: 'image can not be empty'});
   }
 
-  var cardPresenter = CardPresenter(newCard);
+  if (errors.length > 0)
+    return errorResponse(this, errors);
 
-  if (this.errors) {
-    yield this.render('card', {
+  var newCard = new CardStorage(this.request.body.fields);
+  newCard.id = newCard._id.toString();
+
+  try {
+    newCard.image = files.image.name;
+    fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
+
+    yield newCard.save();
+    var cardPresenter = CardPresenter(newCard);
+
+    this.body = {
       card: cardPresenter,
-      errors: errors,
-      isNew: true
-    });
-  } else {
-    this.redirect('/cards/' + newCard._id);
+      redirect: true,
+      url: '/cards/' + newCard.id + '?op=s' // Indicates that the operation was successful
+    };
+  } catch (e) {
+    return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);
   }
 });
 

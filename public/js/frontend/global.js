@@ -23,6 +23,20 @@ $.fn.serializeObject = function() {
   return o;
 };
 
+(function($) {
+    $.QueryString = (function(a) {
+        if (a == "") return {};
+        var b = {};
+        for (var i = 0; i < a.length; ++i)
+        {
+            var p=a[i].split('=');
+            if (p.length != 2) continue;
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+        }
+        return b;
+    })(window.location.search.substr(1).split('&'))
+})(jQuery);
+
 var CARD_DETAILS_TIMEOUT = 600;
 var abilitiesDescription = {
   'firstStrike': "Card with first strike will attack first, if the other card is killed then it won't receive any damage.",

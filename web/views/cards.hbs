@@ -49,12 +49,6 @@
 
 <script>
 $(document).ready(function() {
-  var op = $.QueryString['op'];
-
-  if (op === 's') {
-    showMessage('success', 'Card deleted successfully');
-  }
-
   $('.delete-link').on('click', function(ev) {
     ev.preventDefault();
     if (window.confirm("Do you really want to delete '" + $(this).attr('data-card-name') + "' card?")) {
@@ -72,18 +66,6 @@ $(document).ready(function() {
     }
   });
 });
-
-function showMessage(type, message) {
-  $('body').prepend('<div data-alert class="alert-box ' + type + ' radius">' + message + '</div>');
-  setTimeout(function() {
-    $('.alert-box').fadeOut({
-      duration: 400,
-      complete: function() {
-        $('.alert-box').remove();
-      }
-    });
-  }, 2000)
-}
 
 {{#if flash}}
 showMessage('{{ flash.type }}', '{{ flash.message }}');

@@ -52,3 +52,15 @@ var abilitiesDescription = {
   'provoke': "If a card has provoke, then the attacking player could not attack other creatures except the ones with provoke."
 }
 var IMAGES_PATH = '/public/images/';
+
+function showMessage(type, message) {
+  $('body').prepend('<div data-alert class="alert-box ' + type + ' radius">' + message + '</div>');
+  setTimeout(function() {
+    $('.alert-box').fadeOut({
+      duration: 400,
+      complete: function() {
+        $('.alert-box').remove();
+      }
+    });
+  }, 2000)
+}

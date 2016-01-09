@@ -19,6 +19,9 @@ var CardPresenter = require('../presenters/card');
 var app = koa();
 
 var cardPresenter = new CardPresenter();
+var inputFieldTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'input_field.hbs'));
+var selectFieldTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'select_field.hbs'));
+var enchantmentFormTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'enchantment_form.hbs'));
 
 const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'images');
 
@@ -69,14 +72,15 @@ router.get('/cards/new', function* (next) {
 
 router.get('/cards/:id', function* (next) {
   var cardId = this.params.id,
-      card = cardPresenter.render(yield CardStorage.findOne({_id: cardId})),
-      input_field_template = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'input_field.hbs')),
-      select_field_template = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'select_field.hbs'));
+      card = cardPresenter.render(yield CardStorage.findOne({_id: cardId}));
 
   yield this.render('card', {
     card: card,
-    input_field_template: input_field_template,
-    select_field_template: select_field_template,
+    templates: {
+      input_field: inputFieldTemplate,
+      select_field: selectFieldTemplate,
+      enchantment_form: enchantmentFormTemplate
+    },
     isNew: false
   });
 });

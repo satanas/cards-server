@@ -8,10 +8,10 @@ var schema = mongoose.Schema({
 });
 
 var Target = {
-  Selects: mongoose.model('target_selects', schema),
-  Conditions: mongoose.model('target_conditions', schema),
-  Types: mongoose.model('target_type', schema),
-  Bands: mongoose.model('target_bands', schema),
+  Select: mongoose.model('target_selects', schema),
+  Condition: mongoose.model('target_conditions', schema),
+  Type: mongoose.model('target_type', schema),
+  Band: mongoose.model('target_bands', schema),
 };
 
 module.exports = Target;

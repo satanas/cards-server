@@ -58,6 +58,7 @@
     </div>
 
   <div class="columns small-12">
+    <form id="enchantment_form" action="" method="POST">
     <fieldset>
       <legend>Enchantments</legend>
 
@@ -67,34 +68,44 @@
           {{> input_field name="description" value="" }}
         </div>
         <div class="columns small-6">
-          {{> select_field name="event" values=card.events}}
+          {{> select_field name="event" values=card.events placeholder="n/a"}}
         </div>
       </div>
 
       <label>Target</label>
       <div class="row">
-        <div class="columns small-4">{{> select_field name="target[select]" values=card.target.selects}}</div>
-        <div class="columns small-4">{{> select_field name="target[type]" values=card.target.types}}</div>
-        <div class="columns small-4">{{> select_field name="target[condition]" values=card.target.conditions}}</div>
+        <div class="columns small-4">{{> select_field name="target[select]" values=card.target.selects placeholder="n/a"}}</div>
+        <div class="columns small-4">{{> select_field name="target[type]" values=card.target.types placeholder="n/a"}}</div>
+        <div class="columns small-4">{{> select_field name="target[condition]" values=card.target.conditions placeholder="n/a"}}</div>
       </div>
       <div class="row">
-        <div class="columns small-4">{{> select_field name="target[band]" values=card.target.bands}}</div>
+        <div class="columns small-4">{{> select_field name="target[band]" values=card.target.bands placeholder="n/a"}}</div>
         <div class="columns small-4">{{> input_field name="target[class]" value="" labelWidth=5 inputWidth=7}}</div>
         <div class="columns small-4">{{> input_field name="target[quantity]" value="" labelWidth=5 inputWidth=7}}</div>
       </div>
 
       <label>Modifications</label>
+
       <div class="row">
-        <div class="columns small-4">{{> select_field name="mod[spell]" values=card.mod.spells}}</div>
-        <div class="columns small-4">{{> select_field name="mod[attribute]" values=card.mod.attributes}}</div>
-        <div class="columns small-4">{{> select_field name="mod[operation]" values=card.mod.operations}}</div>
+        <table id="mods_table"></table>
+      </div>
+
+      <div class="row">
+        <div class="columns small-4">{{> select_field name="mod[spell]" values=card.mod.spells placeholder="n/a"}}</div>
+        <div class="columns small-4">{{> select_field name="mod[attribute]" values=card.mod.attributes placeholder="n/a"}}</div>
+        <div class="columns small-4">{{> select_field name="mod[operation]" values=card.mod.operations placeholder="n/a"}}</div>
       </div>
       <div class="row">
-        <div class="columns small-4">{{> select_field name="mod[ability]" values=card.mod.abilities}}</div>
-        <div class="columns small-4">{{> select_field name="mod[multiplier]" values=card.mod.multipliers}}</div>
+        <div class="columns small-4">{{> select_field name="mod[ability]" values=card.mod.abilities placeholder="n/a"}}</div>
+        <div class="columns small-4">{{> select_field name="mod[multiplier]" values=card.mod.multipliers placeholder="n/a"}}</div>
         <div class="columns small-4"> {{> input_field name="mod[value]" value="" labelWidth=5 inputWidth=7}} </div>
       </div>
+      <div class="row">
+        <button id="add_enchantment" type="submit">Add enchantment</button>
+        <button id="cancel_enchantment" type="submit">Cancel</button>
+      </div>
     </fieldset>
+    </form>
   </div>
 
   </div>
@@ -108,7 +119,17 @@
 
 var model = null,
     newImage = null,
-    cardView = null;
+    cardView = null,
+    mods = [
+      {
+        spell: 'attribute',
+        attribute: 'attack',
+        operation: 'add',
+        ability: null,
+        multiplier: null,
+        value: 1
+      }
+    ];
 
 $('#cancel').on('click', function() {
   window.location = '/cards';
@@ -133,6 +154,19 @@ $(document).ready(function() {
   model = new Card({{{ card }}});
   cardView = new CardPopupView({model: model, popup: false});
   cardView.render(model);
+
+  mods.forEach(function(m) {
+    var record = '<tr>';
+    record += '<td>' + m.spell + '</td>';
+    record += '<td>' + m.attribute + '</td>';
+    record += '<td>' + m.operation + '</td>';
+    record += '<td>' + m.ability + '</td>';
+    record += '<td>' + m.multiplier + '</td>';
+    record += '<td>' + m.value + '</td>';
+    record += '<td> Actions </td>';
+    record += '</tr>';
+    $('#mods_table').append(record);
+  });
 
   $('form').on('keyup', function(value) {
     updateModel();

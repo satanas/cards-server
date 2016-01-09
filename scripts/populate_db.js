@@ -5,28 +5,28 @@ MongoClient.connect('mongodb://127.0.0.1:27017/magic', function(err, db) {
 
   console.log("Connected to DB");
 
-  populateSingleValues(db, ["n/a", "player", "card", "self", "hand", "any"],
+  populateSingleValues(db, ["player", "card", "self", "hand", "any"],
                        'target_types');
-  populateSingleValues(db, ["n/a", "undamaged", "damaged", "class", "any"],
+  populateSingleValues(db, ["undamaged", "damaged", "class", "any"],
                        'target_conditions');
-  populateSingleValues(db, ["n/a", "friend", "foe", "any"],
+  populateSingleValues(db, ["friend", "foe", "any"],
                        'target_bands');
   populateSingleValues(db, ["no", "yes", "random"],
                        'target_selects');
-  populateSingleValues(db, ["on_play", "on_turn", "on_damage_received", "on_damage_dealt", "on_dead"],
+  populateSingleValues(db, ["play", "turn", "damage_received", "damage_dealt", "dead"],
                        'events');
-  populateSingleValues(db, ["n/a", "health", "attack"],
+  populateSingleValues(db, ["health", "attack"],
                        'mod_attributes');
-  populateSingleValues(db, ["n/a", "add", "replace", "mult"],
+  populateSingleValues(db, ["add", "replace", "mult"],
                        'mod_operations');
   populateSingleValues(db, ["attribute", "ability", "draw", "damage", "summon", "transform", "protect_card",
                             "disenchant", "return", "necromancy", "kill_target", "player_health", "freeze",
                             "protect_player", "mana_cost"],
                        'mod_spells');
-  populateSingleValues(db, ["n/a", "firststrike", "rush", "overwhelm", "deathtouch", "venom", "transfusion",
+  populateSingleValues(db, ["firststrike", "rush", "overwhelm", "deathtouch", "venom", "transfusion",
                             "vampirism", "berserker", "stealth", "faint", "provoke"],
                        'mod_abilities');
-  populateSingleValues(db, ["n/a", "controlled_creatures", "enemy_creatures"],
+  populateSingleValues(db, ["controlled_creatures", "enemy_creatures"],
                        'mod_multipliers');
 
   db.close();

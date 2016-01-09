@@ -67,7 +67,7 @@
           {{> input_field name="description" value="" }}
         </div>
         <div class="columns small-6">
-          {{> select_field name="event" values=""}}
+          {{> select_field name="event" values=card.events}}
         </div>
       </div>
 
@@ -85,13 +85,13 @@
 
       <label>Modifications</label>
       <div class="row">
-        <div class="columns small-4">{{> select_field name="mod[spell]" values=""}}</div>
-        <div class="columns small-4">{{> select_field name="mod[attribute]" values=""}}</div>
-        <div class="columns small-4">{{> select_field name="mod[operation]" values=""}}</div>
+        <div class="columns small-4">{{> select_field name="mod[spell]" values=card.mod.spells}}</div>
+        <div class="columns small-4">{{> select_field name="mod[attribute]" values=card.mod.attributes}}</div>
+        <div class="columns small-4">{{> select_field name="mod[operation]" values=card.mod.operations}}</div>
       </div>
       <div class="row">
-        <div class="columns small-4">{{> select_field name="mod[ability]" values=""}}</div>
-        <div class="columns small-4">{{> select_field name="mod[multiplier]" values=""}}</div>
+        <div class="columns small-4">{{> select_field name="mod[ability]" values=card.mod.abilities}}</div>
+        <div class="columns small-4">{{> select_field name="mod[multiplier]" values=card.mod.multipliers}}</div>
         <div class="columns small-4"> {{> input_field name="mod[value]" value="" labelWidth=5 inputWidth=7}} </div>
       </div>
     </fieldset>

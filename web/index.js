@@ -18,6 +18,8 @@ var CardPresenter = require('../presenters/card');
 
 var app = koa();
 
+var cardPresenter = new CardPresenter();
+
 const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'images');
 
 mongoose.connect('mongodb://localhost/magic');
@@ -60,7 +62,7 @@ router.get('/cards', function* (next) {
 
 router.get('/cards/new', function* (next) {
   yield this.render('card', {
-    card: CardPresenter(new CardStorage()),
+    card: cardPresenter.render(new CardStorage()),
     isNew: true
   });
 });

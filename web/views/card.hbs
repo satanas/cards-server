@@ -73,14 +73,14 @@
 
       <label>Target</label>
       <div class="row">
-        <div class="columns small-4">{{> select_field name="target[select]" values=card.target.select}}</div>
+        <div class="columns small-4">{{> select_field name="target[select]" values=card.target.selects}}</div>
         <div class="columns small-4">{{> select_field name="target[type]" values=card.target.types}}</div>
-        <div class="columns small-4">{{> select_field name="target[condition]" values=""}}</div>
+        <div class="columns small-4">{{> select_field name="target[condition]" values=card.target.conditions}}</div>
       </div>
       <div class="row">
-        <div class="columns small-4">{{> select_field name="target[band]" values=""}}</div>
-        <div class="columns small-4">{{> select_field name="target[class]" values=""}}</div>
-        <div class="columns small-4"> {{> input_field name="target[quantity]" value="" labelWidth=5 inputWidth=7}} </div>
+        <div class="columns small-4">{{> select_field name="target[band]" values=card.target.bands}}</div>
+        <div class="columns small-4">{{> input_field name="target[class]" value="" labelWidth=5 inputWidth=7}}</div>
+        <div class="columns small-4">{{> input_field name="target[quantity]" value="" labelWidth=5 inputWidth=7}}</div>
       </div>
 
       <label>Modifications</label>

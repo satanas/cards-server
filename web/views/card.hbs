@@ -57,7 +57,48 @@
       {{/card.abilities}}
     </div>
 
+  <div class="columns small-12">
+    <fieldset>
+      <legend>Enchantments</legend>
+
+      <label>Info</label>
+      <div class="row">
+        <div class="columns small-6">
+          {{> input_field name="description" value="" }}
+        </div>
+        <div class="columns small-6">
+          {{> select_field name="event" values=""}}
+        </div>
+      </div>
+
+      <label>Target</label>
+      <div class="row">
+        <div class="columns small-4">{{> select_field name="target[select]" values=card.target.select}}</div>
+        <div class="columns small-4">{{> select_field name="target[type]" values=card.target.types}}</div>
+        <div class="columns small-4">{{> select_field name="target[condition]" values=""}}</div>
+      </div>
+      <div class="row">
+        <div class="columns small-4">{{> select_field name="target[band]" values=""}}</div>
+        <div class="columns small-4">{{> select_field name="target[class]" values=""}}</div>
+        <div class="columns small-4"> {{> input_field name="target[quantity]" value="" labelWidth=5 inputWidth=7}} </div>
+      </div>
+
+      <label>Modifications</label>
+      <div class="row">
+        <div class="columns small-4">{{> select_field name="mod[spell]" values=""}}</div>
+        <div class="columns small-4">{{> select_field name="mod[attribute]" values=""}}</div>
+        <div class="columns small-4">{{> select_field name="mod[operation]" values=""}}</div>
+      </div>
+      <div class="row">
+        <div class="columns small-4">{{> select_field name="mod[ability]" values=""}}</div>
+        <div class="columns small-4">{{> select_field name="mod[multiplier]" values=""}}</div>
+        <div class="columns small-4"> {{> input_field name="mod[value]" value="" labelWidth=5 inputWidth=7}} </div>
+      </div>
+    </fieldset>
   </div>
+
+  </div>
+
   <div class="row buttons">
     <button id="save" type="submit">Save</button>
     <button id="cancel" type="button">Back</button>

@@ -69,10 +69,14 @@ router.get('/cards/new', function* (next) {
 
 router.get('/cards/:id', function* (next) {
   var cardId = this.params.id,
-      card = cardPresenter.render(yield CardStorage.findOne({_id: cardId}));
+      card = cardPresenter.render(yield CardStorage.findOne({_id: cardId})),
+      input_field_template = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'input_field.hbs')),
+      select_field_template = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'select_field.hbs'));
 
   yield this.render('card', {
     card: card,
+    input_field_template: input_field_template,
+    select_field_template: select_field_template,
     isNew: false
   });
 });

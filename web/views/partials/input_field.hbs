@@ -1,8 +1,8 @@
 <div class="row collapse prefix-radius">
-  <div class="small-3 columns">
+<div class="small-{{#if labelWidth}}{{ labelWidth }}{{else}}3{{/if}} columns">
     <span class="prefix">{{ name }}</span>
   </div>
-  <div id="form-field-{{ name }}" class="small-9 columns">
+  <div id="form-field-{{ name }}" class="small-{{#if inputWidth}}{{inputWidth}}{{else}}9{{/if}} columns">
     <input name="{{ name }}" type="text" value="{{ value }}" {{#if isNew}}required{{/if}} {{#if placeholder}}placeholder="{{ placeholder }}"{{/if}} autocomplete="off"/>
   </div>
 </div>

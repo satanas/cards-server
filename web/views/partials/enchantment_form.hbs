@@ -1,0 +1,48 @@
+<fieldset>
+<form id="enchantment_form" action="" method="POST">
+<legend>Enchantments</legend>
+
+<label>Info</label>
+<div class="row">
+  <div class="columns small-6">
+    {{> input_field name="description" value="" }}
+  </div>
+  <div class="columns small-6">
+    {{> select_field name="event" values=events placeholder="n/a"}}
+  </div>
+</div>
+
+<label>Target</label>
+<div class="row">
+  <div class="columns small-4">{{> select_field name="target[select]" values=card.target.selects placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="target[type]" values=card.target.types placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="target[condition]" values=card.target.conditions placeholder="n/a"}}</div>
+</div>
+<div class="row">
+  <div class="columns small-4">{{> select_field name="target[band]" values=card.target.bands placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> input_field name="target[class]" value="" labelWidth=5 inputWidth=7}}</div>
+  <div class="columns small-4">{{> input_field name="target[quantity]" value="" labelWidth=5 inputWidth=7}}</div>
+</div>
+</form>
+
+<label>Modifications</label>
+
+<div class="row">
+  <table id="mods_table"></table>
+</div>
+
+<div class="row">
+  <div class="columns small-4">{{> select_field name="mod[spell]" values=card.mod.spells placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="mod[attribute]" values=card.mod.attributes placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="mod[operation]" values=card.mod.operations placeholder="n/a"}}</div>
+</div>
+<div class="row">
+  <div class="columns small-4">{{> select_field name="mod[ability]" values=card.mod.abilities placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="mod[multiplier]" values=card.mod.multipliers placeholder="n/a"}}</div>
+  <div class="columns small-4"> {{> input_field name="mod[value]" value="" labelWidth=5 inputWidth=7}} </div>
+</div>
+<div class="row">
+  <button class="tiny" id="add_enchantment" type="submit">Add enchantment</button>
+  <button class="tiny" id="cancel_enchantment" type="submit">Cancel</button>
+</div>
+</fieldset>

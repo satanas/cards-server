@@ -69,7 +69,7 @@ router.get('/cards/new', function* (next) {
 
 router.get('/cards/:id', function* (next) {
   var cardId = this.params.id,
-      card = CardPresenter(yield CardStorage.findOne({_id: cardId}));
+      card = cardPresenter.render(yield CardStorage.findOne({_id: cardId}));
 
   yield this.render('card', {
     card: card,
@@ -111,10 +111,9 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
 
   try {
     yield CardStorage.update({_id: cardId}, newCard);
-    var cardPresenter = CardPresenter(newCard);
 
     this.body = {
-      card: cardPresenter
+      card: cardPresenter.render(newCard)
     };
   } catch (e) {
     return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);
@@ -151,10 +150,9 @@ router.post('/cards', bodyParse({multipart: true, formidable: { uploadDir: UPLOA
     fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
 
     yield newCard.save();
-    var cardPresenter = CardPresenter(newCard);
 
     this.body = {
-      card: cardPresenter,
+      card: cardPresenter.render(newCard),
       redirect: true,
       flash: addFlashMessage(this, 'success', 'Card saved successfully'),
       url: '/cards/' + newCard.id

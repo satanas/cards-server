@@ -24,7 +24,7 @@ MongoClient.connect('mongodb://127.0.0.1:27017/magic', function(err, db) {
                             "protect_player", "mana_cost"],
                        'mod_spells');
   populateSingleValues(db, ["firststrike", "rush", "overwhelm", "deathtouch", "venom", "transfusion",
-                            "vampirism", "berserker", "stealth", "faint", "provoke"],
+                            "vampirism", "berserker", "stealth", "faint", "provoke", "endurance"],
                        'mod_abilities');
   populateSingleValues(db, ["controlled_creatures", "enemy_creatures"],
                        'mod_multipliers');

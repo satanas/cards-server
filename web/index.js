@@ -15,10 +15,13 @@ var mongoose = require('mongoose');
 var Global = require('../global');
 var CardStorage = require('../models/card_storage');
 var CardPresenter = require('../presenters/card');
+var EnchantmentFormPresenter = require('../presenters/enchantment_form');
 
 var app = koa();
 
 var cardPresenter = new CardPresenter();
+var enchantmentFormPresenter = new EnchantmentFormPresenter();
+
 var inputFieldTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'input_field.hbs'));
 var selectFieldTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'select_field.hbs'));
 var enchantmentFormTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'enchantment_form.hbs'));
@@ -72,10 +75,12 @@ router.get('/cards/new', function* (next) {
 
 router.get('/cards/:id', function* (next) {
   var cardId = this.params.id,
-      card = cardPresenter.render(yield CardStorage.findOne({_id: cardId}));
+      card = cardPresenter.render(yield CardStorage.findOne({_id: cardId})),
+      form = enchantmentFormPresenter.render();
 
   yield this.render('card', {
     card: card,
+    enchantment_form: JSON.stringify(form),
     templates: {
       input_field: inputFieldTemplate,
       select_field: selectFieldTemplate,

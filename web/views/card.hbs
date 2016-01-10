@@ -114,9 +114,10 @@ $(document).ready(function() {
   model = new Card({{{ card }}});
   cardView = new CardPopupView({model: model, popup: false});
   cardView.render(model);
-  newEnchantment = new Enchantment({});
-  enchantmentForm = new EnchantmentForm({model: newEnchantment});
+  newEnchantment = new EnchantmentFormModel({{{ enchantment_form }}});
+  enchantmentForm = new EnchantmentFormView({model: newEnchantment});
 
+  /*
   mods.forEach(function(m) {
     var record = '<tr>';
     record += '<td>' + m.spell + '</td>';
@@ -129,6 +130,7 @@ $(document).ready(function() {
     record += '</tr>';
     $('#mods_table').append(record);
   });
+  */
 
   $('form').on('keyup', function(value) {
     updateModel();

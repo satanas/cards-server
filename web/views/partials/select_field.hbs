@@ -5,7 +5,7 @@
   <div class="small-7 columns">
     <select name="{{ name }}" {{#if isNew}}required{{/if}}>
     {{#if placeholder}}
-      <option value="null" selected>{{ placeholder }}</option>
+      <option value selected>{{ placeholder }}</option>
     {{/if}}
     {{#values}}
         <option value="{{ value }}" {{#if selected}}selected{{/if}}>{{ name }}</option>

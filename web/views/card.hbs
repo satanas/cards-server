@@ -190,6 +190,13 @@ $(document).ready(function() {
     window.location = '/cards';
   });
 
+  $('#add_modification_button').on('click', function(ev) {
+    ev.preventDefault();
+    var mod = $('#modification_form').serializeObject();
+    console.log(mod);
+    return false;
+  });
+
   $('#add_enchantment_button').on('click', function(ev) {
     ev.preventDefault();
     console.log(newEnchantment);

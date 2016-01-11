@@ -114,7 +114,7 @@ $(document).ready(function() {
   model = new Card({{{ card }}});
   cardView = new CardPopupView({model: model, popup: false});
   cardView.render(model);
-  newEnchantment = new EnchantmentFormModel({{{ enchantment_form }}});
+  newEnchantment = new EnchantmentFormModel({form: {{{ enchantment_form }}} });
   enchantmentForm = new EnchantmentFormView({model: newEnchantment});
 
   /*

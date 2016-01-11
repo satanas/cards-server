@@ -8,18 +8,18 @@
     {{> input_field name="description" value="" }}
   </div>
   <div class="columns small-6">
-    {{> select_field name="event" values=enchantment_form.events placeholder="n/a"}}
+    {{> select_field name="event" values=form.events placeholder="n/a"}}
   </div>
 </div>
 
 <label>Target</label>
 <div class="row">
-  <div class="columns small-4">{{> select_field name="target[select]" values=card.target.selects placeholder="n/a"}}</div>
-  <div class="columns small-4">{{> select_field name="target[type]" values=card.target.types placeholder="n/a"}}</div>
-  <div class="columns small-4">{{> select_field name="target[condition]" values=card.target.conditions placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="target[select]" values=form.target.selects placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="target[type]" values=form.target.types placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="target[condition]" values=form.target.conditions placeholder="n/a"}}</div>
 </div>
 <div class="row">
-  <div class="columns small-4">{{> select_field name="target[band]" values=card.target.bands placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="target[band]" values=form.target.bands placeholder="n/a"}}</div>
   <div class="columns small-4">{{> input_field name="target[class]" value="" labelWidth=5 inputWidth=7}}</div>
   <div class="columns small-4">{{> input_field name="target[quantity]" value="" labelWidth=5 inputWidth=7}}</div>
 </div>
@@ -32,13 +32,13 @@
 </div>
 
 <div class="row">
-  <div class="columns small-4">{{> select_field name="mod[spell]" values=card.mod.spells placeholder="n/a"}}</div>
-  <div class="columns small-4">{{> select_field name="mod[attribute]" values=card.mod.attributes placeholder="n/a"}}</div>
-  <div class="columns small-4">{{> select_field name="mod[operation]" values=card.mod.operations placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="mod[spell]" values=form.mod.spells placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="mod[attribute]" values=form.mod.attributes placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="mod[operation]" values=form.mod.operations placeholder="n/a"}}</div>
 </div>
 <div class="row">
-  <div class="columns small-4">{{> select_field name="mod[ability]" values=card.mod.abilities placeholder="n/a"}}</div>
-  <div class="columns small-4">{{> select_field name="mod[multiplier]" values=card.mod.multipliers placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="mod[ability]" values=form.mod.abilities placeholder="n/a"}}</div>
+  <div class="columns small-4">{{> select_field name="mod[multiplier]" values=form.mod.multipliers placeholder="n/a"}}</div>
   <div class="columns small-4"> {{> input_field name="mod[value]" value="" labelWidth=5 inputWidth=7}} </div>
 </div>
 <div class="row">

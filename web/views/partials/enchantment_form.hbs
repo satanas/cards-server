@@ -1,8 +1,11 @@
 <fieldset>
-<form id="enchantment_form" action="" method="POST">
+<form id="enchantment_form" action="">
 <legend>Enchantments</legend>
 
-<label>Info</label>
+<div class="row">
+  <label>Info</label>
+</div>
+<div class="row">
 <div class="row">
   <div class="columns small-6">
     {{> input_field name="description" value="" }}
@@ -12,7 +15,9 @@
   </div>
 </div>
 
-<label>Target</label>
+<div class="row">
+  <label>Target</label>
+</div>
 <div class="row">
   <div class="columns small-4">{{> select_field name="target[select]" values=form.target.selects placeholder="n/a"}}</div>
   <div class="columns small-4">{{> select_field name="target[type]" values=form.target.types placeholder="n/a"}}</div>
@@ -25,7 +30,9 @@
 </div>
 </form>
 
-<label>Modifications</label>
+<div class="row">
+  <label>Modifications</label>
+</div>
 
 <div class="row">
   <table id="mods_table"></table>
@@ -42,7 +49,7 @@
   <div class="columns small-4"> {{> input_field name="mod[value]" value="" labelWidth=5 inputWidth=7}} </div>
 </div>
 <div class="row">
-  <button class="tiny" id="add_enchantment" type="submit">Add enchantment</button>
-  <button class="tiny" id="cancel_enchantment" type="submit">Cancel</button>
+  <a href="#" class="tiny button" id="add_enchantment">Add enchantment</a>
+  <a href="#" class="tiny button" id="cancel_enchantment_link">Cancel</a>
 </div>
 </fieldset>

@@ -57,7 +57,6 @@
       {{/card.abilities}}
     </div>
 
-    <div class="columns small-12" id="enchantment-div"></div>
   </div>
 
   <div class="row buttons">
@@ -65,6 +64,9 @@
     <button id="cancel" type="button">Back</button>
   </div>
 </form>
+
+
+    <div class="columns small-12" id="enchantment-div"></div>
 <script>
 
 var model = null,
@@ -132,7 +134,7 @@ $(document).ready(function() {
   });
   */
 
-  $('form').on('keyup', function(value) {
+  $('#card_form').on('keyup', function(value) {
     updateModel();
   });
 
@@ -188,8 +190,10 @@ $(document).ready(function() {
     });
   });
 
-  $('#card_form').on('submit', function(ev) {
+  $('#add_enchantment').on('click', function(ev) {
     ev.preventDefault();
+    console.log(newEnchantment);
+    return false;
   });
 });
 

@@ -17,7 +17,8 @@ var Card = Backbone.Model.extend({
     hidden: false,
     transfusion: false,
     vampirism: false,
-    berserker: false
+    berserker: false,
+    enchantments: []
   },
   setSick: function(value) {
     this.set({'sick': value});
@@ -31,7 +32,13 @@ var Card = Backbone.Model.extend({
   setInvenomed: function(value) {
     this.set({'invenomed': value});
   },
+  addEnchantment: function(ench) {
+    console.log('ench model', ench);
+    this.get('enchantments').push(ench);
+    this.trigger('change');
+  },
   update: function(card) {
+    // FIXME: Use one set for all properties
     if (card.hasOwnProperty('sick')) {
       this.set({'sick': card.sick});
     }

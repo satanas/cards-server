@@ -35,7 +35,19 @@
 </div>
 
 <div class="row">
-  <table id="mods_table"></table>
+  <table id="mods_table">
+  {{#mods}}
+  <tr>
+    <td>{{ spell }}</td>
+    <td>{{ attribute }}</td>
+    <td>{{ operation }}</td>
+    <td>{{ ability }}</td>
+    <td>{{ multiplier }}</td>
+    <td>{{ value }}</td>
+    <td> Actions </td>
+  </tr>
+  {{/mods}}
+  </table>
 </div>
 
 <fieldset>

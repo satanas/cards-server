@@ -196,7 +196,8 @@ router.delete('/cards/:id', function* (next) {
 });
 
 router.post('/modifications/validate', bodyParse(), function* (next) {
-  var errors = Mod.validate(JSON.parse(this.request.body));
+  var mod = JSON.parse(this.request.body);
+  var errors = Mod.validate(mod);
 
   if (errors.length > 0) {
     this.status = 400;
@@ -204,7 +205,7 @@ router.post('/modifications/validate', bodyParse(), function* (next) {
       errors: errors
     };
   } else {
-    this.body = 'ok';
+    this.body = mod;
   }
 });
 

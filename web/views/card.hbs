@@ -156,8 +156,7 @@ $(document).ready(function() {
   $('#save_button').on('click', function(ev) {
     ev.preventDefault();
 
-    $('small.field-error').remove();
-    $('input.field-error').removeClass('field-error');
+    clearErrors();
 
     $.ajax($(this).attr('action'), {
       data: new FormData($('form')[0]),
@@ -192,8 +191,14 @@ $(document).ready(function() {
 
   $('#add_modification_button').on('click', function(ev) {
     ev.preventDefault();
+
+    clearErrors();
+
     var mod = $('#modification_form').serializeObject();
-    console.log(mod);
+    errors = validateModification(mod);
+    if (errors.length > 0) {
+      highlightErrors(errors);
+    }
     return false;
   });
 
@@ -216,6 +221,35 @@ function updateModel() {
     $('#card-details > .image > img').attr('src', newImage);
   }
 }
+
+function validateModification(mod) {
+  var errors = [];
+  if (mod['spell'] === '') errors.push({field: 'spell', message: 'spell can not be empty'});
+  if (mod['spell'] === 'attribute') {
+    if (mod['attribute'] === '') errors.push({field: 'attribute', message: 'attribute can not be empty'});
+    if (mod['operation'] === '') errors.push({field: 'operation', message: 'operation can not be empty'});
+  }
+  if (mod['spell'] === 'ability') {
+    if (mod['ability'] === '') errors.push({field: 'ability', message: 'ability can not be empty'});
+  }
+  return errors;
+}
+
+// FIXME: Helper
+function highlightErrors(errors) {
+  errors.forEach(function(err) {
+    var field = $('#form-field-' + err.field);
+    field.append('<small class="field-error error">' + err.message + '</small>');
+    $('#form-field-' + err.field).find('[name="' + err.field + '"]').addClass('field-error');
+  });
+}
+
+// FIXME: Helper
+function clearErrors() {
+  $('small.field-error').remove();
+  $('.field-error').removeClass('field-error');
+}
+
 {{#if flash}}
 showMessage('{{ flash.type }}', '{{ flash.message }}');
 {{/if}}

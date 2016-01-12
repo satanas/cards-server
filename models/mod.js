@@ -16,7 +16,6 @@ var Mod = {
 };
 
 Mod.validate = function(mod) {
-  console.log('mod', mod);
   var errors = [];
 
   if (mod.spell === '') errors.push({field: 'spell', message: 'spell can not be empty'});

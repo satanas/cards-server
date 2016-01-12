@@ -15,7 +15,7 @@ var ModificationModel = Backbone.Model.extend({
       contentType: false,
       context: this,
       success: function(data) {
-        this.trigger('validated', null, data.responseJSON);
+        this.trigger('validated', null, data);
       },
       error: function(data) {
         this.trigger('validated', data.responseJSON.errors);

@@ -195,10 +195,19 @@ $(document).ready(function() {
     clearErrors();
 
     var mod = $('#modification_form').serializeObject();
-    errors = validateModification(mod);
-    if (errors.length > 0) {
-      highlightErrors(errors);
-    }
+    $.ajax('/modifications/validate', {
+      data: JSON.stringify(mod),
+      method: 'POST',
+      processData: false,
+      contentType: false,
+      success: function(data) {
+      },
+      error: function(data) {
+        if (data.responseJSON.errors.length > 0) {
+          highlightErrors(data.responseJSON.errors);
+        }
+      }
+    });
     return false;
   });
 
@@ -220,19 +229,6 @@ function updateModel() {
   if (newImage) {
     $('#card-details > .image > img').attr('src', newImage);
   }
-}
-
-function validateModification(mod) {
-  var errors = [];
-  if (mod['spell'] === '') errors.push({field: 'spell', message: 'spell can not be empty'});
-  if (mod['spell'] === 'attribute') {
-    if (mod['attribute'] === '') errors.push({field: 'attribute', message: 'attribute can not be empty'});
-    if (mod['operation'] === '') errors.push({field: 'operation', message: 'operation can not be empty'});
-  }
-  if (mod['spell'] === 'ability') {
-    if (mod['ability'] === '') errors.push({field: 'ability', message: 'ability can not be empty'});
-  }
-  return errors;
 }
 
 // FIXME: Helper

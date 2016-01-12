@@ -15,4 +15,19 @@ var Mod = {
   Multiplier: mongoose.model('mod_multipliers', schema),
 };
 
+Mod.validate = function(mod) {
+  console.log('mod', mod);
+  var errors = [];
+
+  if (mod.spell === '') errors.push({field: 'spell', message: 'spell can not be empty'});
+  if (mod.spell === 'attribute') {
+    if (mod.attribute === '') errors.push({field: 'attribute', message: 'attribute can not be empty'});
+    if (mod.operation === '') errors.push({field: 'operation', message: 'operation can not be empty'});
+  }
+  if (mod.spell === 'ability') {
+    if (mod.ability === '') errors.push({field: 'ability', message: 'ability can not be empty'});
+  }
+  return errors;
+};
+
 module.exports = Mod;

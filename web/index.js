@@ -13,6 +13,7 @@ var _ = require('underscore');
 var mongoose = require('mongoose');
 
 var Global = require('../global');
+var Mod = require('../models/mod');
 var CardStorage = require('../models/card_storage');
 var CardPresenter = require('../presenters/card');
 var EnchantmentFormPresenter = require('../presenters/enchantment_form');
@@ -194,6 +195,18 @@ router.delete('/cards/:id', function* (next) {
   }
 });
 
+router.post('/modifications/validate', bodyParse(), function* (next) {
+  var errors = Mod.validate(JSON.parse(this.request.body));
+
+  if (errors.length > 0) {
+    this.status = 400;
+    this.body = {
+      errors: errors
+    };
+  } else {
+    this.body = 'ok';
+  }
+});
 
 app.use(router.routes());
 

@@ -42,14 +42,14 @@
 <legend>New modification</legend>
   <form id="modification_form" action="">
     <div class="row">
-      <div class="columns small-4">{{> select_field name="mod[spell]" values=form.mod.spells placeholder="n/a"}}</div>
-      <div class="columns small-4">{{> select_field name="mod[attribute]" values=form.mod.attributes placeholder="n/a"}}</div>
-      <div class="columns small-4">{{> select_field name="mod[operation]" values=form.mod.operations placeholder="n/a"}}</div>
+      <div class="columns small-4">{{> select_field name="spell" values=form.mod.spells placeholder="n/a"}}</div>
+      <div class="columns small-4">{{> select_field name="attribute" values=form.mod.attributes placeholder="n/a"}}</div>
+      <div class="columns small-4">{{> select_field name="operation" values=form.mod.operations placeholder="n/a"}}</div>
     </div>
     <div class="row">
-      <div class="columns small-4">{{> select_field name="mod[ability]" values=form.mod.abilities placeholder="n/a"}}</div>
-      <div class="columns small-4">{{> select_field name="mod[multiplier]" values=form.mod.multipliers placeholder="n/a"}}</div>
-      <div class="columns small-4"> {{> input_field name="mod[value]" value="" labelWidth=5 inputWidth=7}} </div>
+      <div class="columns small-4">{{> select_field name="ability" values=form.mod.abilities placeholder="n/a"}}</div>
+      <div class="columns small-4">{{> select_field name="multiplier" values=form.mod.multipliers placeholder="n/a"}}</div>
+      <div class="columns small-4"> {{> input_field name="value" value="" labelWidth=5 inputWidth=7}} </div>
     </div>
   </form>
   <div class="row">

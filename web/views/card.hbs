@@ -194,20 +194,13 @@ $(document).ready(function() {
 
     clearErrors();
 
-    var mod = $('#modification_form').serializeObject();
-    $.ajax('/modifications/validate', {
-      data: JSON.stringify(mod),
-      method: 'POST',
-      processData: false,
-      contentType: false,
-      success: function(data) {
-      },
-      error: function(data) {
-        if (data.responseJSON.errors.length > 0) {
-          highlightErrors(data.responseJSON.errors);
-        }
-      }
+    var mod = new ModificationModel($('#modification_form').serializeObject());
+    mod.on('validated', function(err, data) {
+      if (err) return highlightErrors(err);
+
+      addModification(data);
     });
+    mod.validate();
     return false;
   });
 

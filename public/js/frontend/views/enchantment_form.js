@@ -8,6 +8,7 @@ var EnchantmentFormView = Backbone.View.extend({
   onChange: function() {
     this.render();
     $('#add_modification_button').on('click',addModification);
+    $('#add_enchantment_button').on('click', addEnchantment);
   },
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));

@@ -56,7 +56,6 @@
         {{> select_field name=name isNew=isNew values=values}}
       {{/card.abilities}}
     </div>
-
   </div>
 </form>
 
@@ -69,10 +68,9 @@
 
 <script>
 
-var model = null,
+var cardModel = null,
     newImage = null,
     cardView = null,
-    enchantments = [],
     newEnchantment = null, // Temporary object to hold enchantment to be saved
     newEnchantmentView = null;
 
@@ -95,9 +93,9 @@ $(document).ready(function() {
   Handlebars.registerPartial('input_field', Handlebars.compile($('#input-field-template').html()));
   Handlebars.registerPartial('select_field', Handlebars.compile($('#select-field-template').html()));
 
-  model = new Card({{{ card }}});
-  cardView = new CardPopupView({model: model, popup: false});
-  cardView.render(model);
+  cardModel = new Card({{{ card }}});
+  cardView = new CardPopupView({model: cardModel, popup: false});
+  cardView.render(cardModel);
   newEnchantment = new EnchantmentFormModel({form: {{{ enchantment_form }}} });
   newEnchantmentView = new EnchantmentFormView({model: newEnchantment});
 
@@ -138,7 +136,7 @@ $(document).ready(function() {
         if (data.redirect) {
           window.location = data.url;
         } else {
-          model.set(data.card);
+          cardModel.set(data.card);
           showMessage('success', 'Card saved successfully');
         }
       },
@@ -161,12 +159,7 @@ $(document).ready(function() {
   });
 
   $('#add_modification_button').on('click', addModification);
-
-  $('#add_enchantment_button').on('click', function(ev) {
-    ev.preventDefault();
-    console.log(newEnchantment);
-    return false;
-  });
+  $('#add_enchantment_button').on('click', addEnchantment);
 });
 
 function updateModel() {
@@ -176,7 +169,7 @@ function updateModel() {
   }
   _.extend(data, $('input').serializeObject());
   _.extend(data, $('textarea').serializeObject());
-  model.set(data);
+  cardModel.set(data);
   if (newImage) {
     $('#card-details > .image > img').attr('src', newImage);
   }
@@ -184,7 +177,6 @@ function updateModel() {
 
 function addModification(ev) {
   ev.preventDefault();
-
   clearErrors();
 
   var mod = new ModificationModel($('#modification_form').serializeObject());
@@ -195,6 +187,16 @@ function addModification(ev) {
   });
   mod.validate();
   return false;
+}
+
+function addEnchantment(ev) {
+  ev.preventDefault();
+  clearErrors();
+
+  // FIXME: Validate
+  newEnchantment.update($('#enchantment_form').serializeObject());
+  cardModel.addEnchantment(newEnchantment);
+  newEnchantment.reset();
 }
 
 // FIXME: Helper

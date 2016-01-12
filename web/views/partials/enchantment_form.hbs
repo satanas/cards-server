@@ -1,5 +1,5 @@
 <fieldset>
-<legend>Enchantments</legend>
+<legend>New enchantment</legend>
 
 <form id="enchantment_form" action="">
   <div class="row">
@@ -19,14 +19,14 @@
     <label>Target</label>
   </div>
   <div class="row">
-    <div class="columns small-4">{{> select_field name="target[select]" values=form.target.selects placeholder="n/a"}}</div>
-    <div class="columns small-4">{{> select_field name="target[type]" values=form.target.types placeholder="n/a"}}</div>
-    <div class="columns small-4">{{> select_field name="target[condition]" values=form.target.conditions placeholder="n/a"}}</div>
+    <div class="columns small-4">{{> select_field name="select" values=form.target.selects placeholder="n/a"}}</div>
+    <div class="columns small-4">{{> select_field name="type" values=form.target.types placeholder="n/a"}}</div>
+    <div class="columns small-4">{{> select_field name="condition" values=form.target.conditions placeholder="n/a"}}</div>
   </div>
   <div class="row">
-    <div class="columns small-4">{{> select_field name="target[band]" values=form.target.bands placeholder="n/a"}}</div>
-    <div class="columns small-4">{{> input_field name="target[class]" value="" labelWidth=5 inputWidth=7}}</div>
-    <div class="columns small-4">{{> input_field name="target[quantity]" value="" labelWidth=5 inputWidth=7}}</div>
+    <div class="columns small-4">{{> select_field name="band" values=form.target.bands placeholder="n/a"}}</div>
+    <div class="columns small-4">{{> input_field name="class" value="" labelWidth=5 inputWidth=7}}</div>
+    <div class="columns small-4">{{> input_field name="quantity" value="" labelWidth=5 inputWidth=7}}</div>
   </div>
 </form>
 

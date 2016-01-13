@@ -8,10 +8,10 @@
 
   <div class="row">
     <div class="columns small-6">
-      {{> input_field name="description" value="" }}
+      {{> input_field name="description" value=description belongsTo="enchantment"}}
     </div>
     <div class="columns small-6">
-      {{> select_field name="event" values=form.events placeholder="n/a"}}
+      {{> select_field name="event" values=form.events placeholder="n/a" belongsTo="enchantment"}}
     </div>
   </div>
 
@@ -19,14 +19,14 @@
     <label>Target</label>
   </div>
   <div class="row">
-    <div class="columns small-4">{{> select_field name="select" values=form.target.selects placeholder="n/a"}}</div>
-    <div class="columns small-4">{{> select_field name="type" values=form.target.types placeholder="n/a"}}</div>
-    <div class="columns small-4">{{> select_field name="condition" values=form.target.conditions placeholder="n/a"}}</div>
+    <div class="columns small-4">{{> select_field name="select" values=form.target.selects placeholder="n/a" belongsTo="enchantment"}}</div>
+    <div class="columns small-4">{{> select_field name="type" values=form.target.types placeholder="n/a" belongsTo="enchantment"}}</div>
+    <div class="columns small-4">{{> select_field name="condition" values=form.target.conditions placeholder="n/a" belongsTo="enchantment"}}</div>
   </div>
   <div class="row">
-    <div class="columns small-4">{{> select_field name="band" values=form.target.bands placeholder="n/a"}}</div>
-    <div class="columns small-4">{{> input_field name="class" value="" labelWidth=5 inputWidth=7}}</div>
-    <div class="columns small-4">{{> input_field name="quantity" value="" labelWidth=5 inputWidth=7}}</div>
+    <div class="columns small-4">{{> select_field name="band" values=form.target.bands placeholder="n/a" belongsTo="enchantment"}}</div>
+    <div class="columns small-4">{{> input_field name="class" value="" labelWidth=5 inputWidth=7 belongsTo="enchantment"}}</div>
+    <div class="columns small-4">{{> input_field name="quantity" value="" labelWidth=5 inputWidth=7 belongsTo="enchantment"}}</div>
   </div>
 </form>
 
@@ -35,19 +35,7 @@
 </div>
 
 <div class="row">
-  <table id="mods_table">
-  {{#mods}}
-  <tr>
-    <td>{{ spell }}</td>
-    <td>{{ attribute }}</td>
-    <td>{{ operation }}</td>
-    <td>{{ ability }}</td>
-    <td>{{ multiplier }}</td>
-    <td>{{ value }}</td>
-    <td> Actions </td>
-  </tr>
-  {{/mods}}
-  </table>
+  <table id="mods_table"></table>
 </div>
 
 <fieldset>

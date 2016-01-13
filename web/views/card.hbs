@@ -59,7 +59,12 @@
   </div>
 </form>
 
-<div class="columns small-12" id="enchantment-div"></div>
+<a href="#" class="button" data-reveal-id="myModal">Add enchantment</a>
+
+<div id="myModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+  <div class="columns small-12" id="enchantment-div"></div>
+  <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
 
 <div class="row buttons">
   <button id="save_button" type="submit" class="success">Save</button>
@@ -67,6 +72,7 @@
 </div>
 
 <script>
+$(document).foundation();
 
 var cardModel = null,
     newImage = null,
@@ -184,6 +190,7 @@ function addModification(ev) {
     if (err) return highlightErrors(err);
 
     newEnchantment.addModification(data);
+    $('#modification_form').trigger('reset');
   });
   mod.validate();
   return false;
@@ -193,13 +200,13 @@ function addEnchantment(ev) {
   ev.preventDefault();
   clearErrors();
 
-  // FIXME: Validate
+  // TODO: Validate
   newEnchantment.update($('#enchantment_form').serializeObject());
   cardModel.addEnchantment(newEnchantment);
   newEnchantment.reset();
 }
 
-// FIXME: Helper
+// TODO: Helper
 function highlightErrors(errors) {
   errors.forEach(function(err) {
     var field = $('#form-field-' + err.field);
@@ -208,7 +215,7 @@ function highlightErrors(errors) {
   });
 }
 
-// FIXME: Helper
+// TODO: Helper
 function clearErrors() {
   $('small.field-error').remove();
   $('.field-error').removeClass('field-error');

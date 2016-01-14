@@ -177,7 +177,6 @@ function updateModel() {
   for (var attr in data) {
     data[attr] = (data[attr] === 'true') ? true : (data[attr] === 'false' ? false : data[attr]);
   }
-  console.log('updating model', data);
   cardModel.set(data);
   if (newImage) {
     $('#card-details > .image > img').attr('src', newImage);
@@ -210,9 +209,10 @@ function addEnchantment(ev) {
   cardModel.addEnchantment(newEnchantment.toJSON());
   console.log('cardModel', cardModel.toJSON());
   newEnchantment.reset();
+  $('#enchantment_modal').foundation('reveal', 'close');
   $('#modification_form').trigger('reset');
   $('#enchantment_form').trigger('reset');
-  $('#enchantment_modal').foundation('reveal', 'close');
+  $('#mods_table').html('');
 }
 
 // TODO: Helper

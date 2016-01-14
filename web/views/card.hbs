@@ -173,12 +173,11 @@ $(document).ready(function() {
 });
 
 function updateModel() {
-  var data = $('select').serializeObject();
+  var data = $('#card_form').serializeObject();
   for (var attr in data) {
-    data[attr] = (data[attr] === 'true') ? true : false;
+    data[attr] = (data[attr] === 'true') ? true : (data[attr] === 'false' ? false : data[attr]);
   }
-  _.extend(data, $('input').serializeObject());
-  _.extend(data, $('textarea').serializeObject());
+  console.log('updating model', data);
   cardModel.set(data);
   if (newImage) {
     $('#card-details > .image > img').attr('src', newImage);
@@ -206,7 +205,10 @@ function addEnchantment(ev) {
 
   // TODO: Validate
   newEnchantment.update($('#enchantment_form').serializeObject());
-  cardModel.addEnchantment(newEnchantment);
+  console.log('serializeObject', $('#enchantment_form').serializeObject());
+  console.log('addEnchantment', newEnchantment.toJSON());
+  cardModel.addEnchantment(newEnchantment.toJSON());
+  console.log('cardModel', cardModel.toJSON());
   newEnchantment.reset();
 }
 

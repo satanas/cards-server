@@ -13,7 +13,7 @@ MongoClient.connect('mongodb://127.0.0.1:27017/magic', function(err, db) {
                        'target_bands');
   populateSingleValues(db, ["no", "yes", "random"],
                        'target_selects');
-  populateSingleValues(db, ["play", "turn", "damage_received", "damage_dealt", "dead"],
+  populateSingleValues(db, ["on_play", "every_turn", "on_damage_received", "on_damage_dealt", "on_dead"],
                        'events');
   populateSingleValues(db, ["health", "attack"],
                        'mod_attributes');

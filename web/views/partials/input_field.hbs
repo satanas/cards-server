@@ -4,7 +4,6 @@
   </div>
   <div id="form-field-{{ name }}" class="small-{{#if inputWidth}}{{inputWidth}}{{else}}9{{/if}} columns">
     <input name="{{ name }}" type="text" value="{{ value }}" {{#if isNew}}required{{/if}}
-    {{#if placeholder}}placeholder="{{ placeholder }}"{{/if}} autocomplete="off"
-    {{#if belongsTo }}data-belongs-to="{{belongsTo}}"{{/if}}/>
+    {{#if placeholder}}placeholder="{{ placeholder }}"{{/if}} autocomplete="off" />
   </div>
 </div>

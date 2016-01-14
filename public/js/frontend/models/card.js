@@ -33,7 +33,6 @@ var Card = Backbone.Model.extend({
     this.set({'invenomed': value});
   },
   addEnchantment: function(ench) {
-    console.log('ench model', ench);
     this.get('enchantments').push(ench);
     this.trigger('change');
   },

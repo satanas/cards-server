@@ -2,9 +2,7 @@ var EnchantmentFormModel = Backbone.Model.extend({
   defaults: {
     id: null,
     description: null,
-    event: {
-     on: null
-    },
+    event: null,
     target: {
       select: null,
       type: null,
@@ -28,9 +26,7 @@ var EnchantmentFormModel = Backbone.Model.extend({
   update: function(data) {
     var obj = {
       description: data.description,
-      event: {
-        on: data.event
-      },
+      event: data.event,
       target: {
         select: data.select,
         type: data.type,
@@ -45,9 +41,7 @@ var EnchantmentFormModel = Backbone.Model.extend({
   reset: function() {
     this.set({
       description: null,
-      event: {
-       on: null
-      },
+      event: null,
       target: {
         select: null,
         type: null,

@@ -4,7 +4,8 @@
   "description": "A Magic (TG) clone",
   "scripts": {
     "server": "nodemon server/index.js",
-    "webapp": "nodemon web/index.js"
+    "webapp": "nodemon web/index.js",
+    "populate": "node scripts/populate_db.js"
   },
   "dependencies": {
     "debug": "^2.2.0",

@@ -61,7 +61,7 @@
 
 <div class="row">
   <table id="enchantments_table"></table>
-  <a href="#" class="tiny button" data-reveal-id="enchantment-modal">Add enchantment</a>
+  <a href="#" class="tiny button" data-reveal-id="enchantment_modal">Add enchantment</a>
 </div>
 
 <div class="row buttons">
@@ -70,7 +70,7 @@
 </div>
 
 <!-- Enchantment modal form -->
-<div id="enchantment-modal" class="reveal-modal" data-reveal aria-labelledby="New enchantment" aria-hidden="true" role="dialog">
+<div id="enchantment_modal" class="reveal-modal" data-reveal aria-labelledby="New enchantment" aria-hidden="true" role="dialog">
   <div class="columns small-12" id="enchantment-div"></div>
   <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>
@@ -210,6 +210,9 @@ function addEnchantment(ev) {
   cardModel.addEnchantment(newEnchantment.toJSON());
   console.log('cardModel', cardModel.toJSON());
   newEnchantment.reset();
+  $('#modification_form').trigger('reset');
+  $('#enchantment_form').trigger('reset');
+  $('#enchantment_modal').foundation('reveal', 'close');
 }
 
 // TODO: Helper

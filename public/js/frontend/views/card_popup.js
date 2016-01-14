@@ -58,8 +58,8 @@ var CardPopupView = Backbone.View.extend({
 
     var enchantments = '';
     this.model.get('enchantments').forEach(function(e) {
-      console.log('ench', e);
-      enchantments += '<div>' + e.toJSON().description + '</div>';
+      console.log('card popup ench', e);
+      enchantments += '<div>' + e.description + '</div>';
     }, this);
 
     var fText = this.model.get('flavorText');

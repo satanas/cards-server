@@ -167,12 +167,6 @@ $(document).ready(function() {
   $('#cancel_button').on('click', function() {
     window.location = '/cards';
   });
-
-  $('#save_enchantment_button').on('click', addEnchantment);
-  $('#show_modification_form_button').on('click', showModificationForm);
-  $('#cancel_enchantment_button').on('click', hideEnchantmentForm);
-  $('#cancel_modification_button').on('click', hideModificationForm);
-  $('#save_modification_button').on('click', addModification);
 });
 
 function updateModel() {
@@ -184,53 +178,6 @@ function updateModel() {
   if (newImage) {
     $('#card-details > .image > img').attr('src', newImage);
   }
-}
-
-function addEnchantment(ev) {
-  ev.preventDefault();
-  clearErrors();
-
-  // TODO: Validate
-  newEnchantment.update($('#enchantment_form').serializeObject());
-  console.log('serializeObject', $('#enchantment_form').serializeObject());
-  console.log('addEnchantment', newEnchantment.toJSON());
-  cardModel.addEnchantment(newEnchantment.toJSON());
-  console.log('cardModel', cardModel.toJSON());
-  hideEnchantmentForm();
-}
-
-function addModification(ev) {
-  ev.preventDefault();
-  clearErrors();
-
-  var mod = new ModificationModel($('#modification_form').serializeObject());
-  mod.on('validated', function(err, data) {
-    if (err) return highlightErrors(err);
-
-    newEnchantment.addModification(data);
-    hideModificationForm();
-  });
-  mod.validate();
-  return false;
-}
-
-function showModificationForm() {
-  $('#enchantment_form_buttons').hide();
-  $('#modification_form').show();
-}
-
-function hideModificationForm() {
-  $('#enchantment_form_buttons').show();
-  $('#modification_form').hide();
-  $('#modification_form').trigger('reset');
-}
-
-function hideEnchantmentForm() {
-  newEnchantment.reset();
-  $('#enchantment_modal').foundation('reveal', 'close');
-  $('#modification_form').trigger('reset');
-  $('#enchantment_form').trigger('reset');
-  $('#mods_table').html('');
 }
 
 // TODO: Helper

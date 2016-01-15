@@ -139,7 +139,7 @@ $(document).ready(function() {
 
     $.ajax($(this).attr('action'), {
       data: new FormData($('form')[0]),
-      method: $(this).attr('method'),
+      method: 'POST',
       processData: false,
       contentType: false,
       success: function(data) {
@@ -168,8 +168,11 @@ $(document).ready(function() {
     window.location = '/cards';
   });
 
-  $('#add_modification_button').on('click', addModification);
-  $('#add_enchantment_button').on('click', addEnchantment);
+  $('#save_enchantment_button').on('click', addEnchantment);
+  $('#show_modification_form_button').on('click', showModificationForm);
+  $('#cancel_enchantment_button').on('click', hideEnchantmentForm);
+  $('#cancel_modification_button').on('click', hideModificationForm);
+  $('#save_modification_button').on('click', addModification);
 });
 
 function updateModel() {
@@ -183,21 +186,6 @@ function updateModel() {
   }
 }
 
-function addModification(ev) {
-  ev.preventDefault();
-  clearErrors();
-
-  var mod = new ModificationModel($('#modification_form').serializeObject());
-  mod.on('validated', function(err, data) {
-    if (err) return highlightErrors(err);
-
-    newEnchantment.addModification(data);
-    $('#modification_form').trigger('reset');
-  });
-  mod.validate();
-  return false;
-}
-
 function addEnchantment(ev) {
   ev.preventDefault();
   clearErrors();
@@ -208,6 +196,36 @@ function addEnchantment(ev) {
   console.log('addEnchantment', newEnchantment.toJSON());
   cardModel.addEnchantment(newEnchantment.toJSON());
   console.log('cardModel', cardModel.toJSON());
+  hideEnchantmentForm();
+}
+
+function addModification(ev) {
+  ev.preventDefault();
+  clearErrors();
+
+  var mod = new ModificationModel($('#modification_form').serializeObject());
+  mod.on('validated', function(err, data) {
+    if (err) return highlightErrors(err);
+
+    newEnchantment.addModification(data);
+    hideModificationForm();
+  });
+  mod.validate();
+  return false;
+}
+
+function showModificationForm() {
+  $('#enchantment_form_buttons').hide();
+  $('#modification_form').show();
+}
+
+function hideModificationForm() {
+  $('#enchantment_form_buttons').show();
+  $('#modification_form').hide();
+  $('#modification_form').trigger('reset');
+}
+
+function hideEnchantmentForm() {
   newEnchantment.reset();
   $('#enchantment_modal').foundation('reveal', 'close');
   $('#modification_form').trigger('reset');

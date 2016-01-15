@@ -1,7 +1,5 @@
-<fieldset>
-<legend>New enchantment</legend>
-
 <form id="enchantment_form" action="">
+<legend>New enchantment</legend>
   <div class="row">
     <label>Info</label>
   </div>
@@ -29,7 +27,6 @@
     <div class="columns small-4">{{> input_field name="quantity" value="" labelWidth=5 inputWidth=7 belongsTo="enchantment"}}</div>
   </div>
 </form>
-
 <div class="row">
   <label>Current Modifications</label>
 </div>
@@ -38,27 +35,26 @@
   <table id="mods_table"></table>
 </div>
 
-<fieldset>
-<legend>New modification</legend>
-  <form id="modification_form" action="">
-    <div class="row">
-      <div class="columns small-4">{{> select_field name="spell" values=form.mod.spells placeholder="n/a"}}</div>
-      <div class="columns small-4">{{> select_field name="attribute" values=form.mod.attributes placeholder="n/a"}}</div>
-      <div class="columns small-4">{{> select_field name="operation" values=form.mod.operations placeholder="n/a"}}</div>
-    </div>
-    <div class="row">
-      <div class="columns small-4">{{> select_field name="ability" values=form.mod.abilities placeholder="n/a"}}</div>
-      <div class="columns small-4">{{> select_field name="multiplier" values=form.mod.multipliers placeholder="n/a"}}</div>
-      <div class="columns small-4"> {{> input_field name="value" value="" labelWidth=5 inputWidth=7}} </div>
-    </div>
-  </form>
-  <div class="row">
-    <a href="#" class="tiny button" id="add_modification_button">Add modification</a>
-  </div>
-</fieldset>
-
-<div class="row">
-  <a href="#" class="tiny button" id="add_enchantment_button">Add enchantment</a>
+<div id="enchantment_form_buttons" class="row">
+  <a href="#" class="success tiny button" id="save_enchantment_button">Save enchantment</a>
+  <a href="#" class="tiny button" id="show_modification_form_button">Add modification</a>
   <a href="#" class="tiny button" id="cancel_enchantment_button">Cancel</a>
 </div>
-</fieldset>
+
+<form id="modification_form" action="">
+  <label>New modification</label>
+  <div class="row">
+    <div class="columns small-4">{{> select_field name="spell" values=form.mod.spells placeholder="n/a"}}</div>
+    <div class="columns small-4">{{> select_field name="attribute" values=form.mod.attributes placeholder="n/a"}}</div>
+    <div class="columns small-4">{{> select_field name="operation" values=form.mod.operations placeholder="n/a"}}</div>
+  </div>
+  <div class="row">
+    <div class="columns small-4">{{> select_field name="ability" values=form.mod.abilities placeholder="n/a"}}</div>
+    <div class="columns small-4">{{> select_field name="multiplier" values=form.mod.multipliers placeholder="n/a"}}</div>
+    <div class="columns small-4"> {{> input_field name="value" value="" labelWidth=5 inputWidth=7}} </div>
+  </div>
+  <div class="row">
+    <a href="#" class="success tiny button" id="save_modification_button">Save modification</a>
+    <a href="#" class="tiny button" id="cancel_modification_button">Cancel</a>
+  </div>
+</form>

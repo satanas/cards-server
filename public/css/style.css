@@ -21,6 +21,10 @@ select.active {
   background-color: #D0FFD0;
 }
 
+textarea {
+  border-radius: 3px;
+}
+
 [draggable] {
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -388,10 +392,10 @@ input.field-error, select.field-error {
   border: 1px solid red;
 }
 
-textarea {
-  border-radius: 3px;
-}
-
 #modification_form {
   display: none;
+}
+
+#mods_table {
+  width: 100%;
 }

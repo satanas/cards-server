@@ -190,9 +190,14 @@ function highlightErrors(errors) {
 }
 
 // TODO: Helper
-function clearErrors() {
-  $('small.field-error').remove();
-  $('.field-error').removeClass('field-error');
+function clearErrors(parent) {
+  if (parent) {
+    $(parent).find('small.field-error').remove();
+    $(parent).find('.field-error').removeClass('field-error');
+  } else {
+    $('small.field-error').remove();
+    $('.field-error').removeClass('field-error');
+  }
 }
 
 {{#if flash}}

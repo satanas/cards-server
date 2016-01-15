@@ -36,7 +36,7 @@ var EnchantmentFormView = Backbone.View.extend({
   },
   addEnchantment: function(ev) {
     ev.preventDefault();
-    clearErrors();
+    clearErrors('#enchantment_form');
 
     // TODO: Validate
     newEnchantment.update($('#enchantment_form').serializeObject());
@@ -48,7 +48,7 @@ var EnchantmentFormView = Backbone.View.extend({
   },
   addModification: function(ev) {
     ev.preventDefault();
-    clearErrors();
+    clearErrors('#modification_form');
 
     var mod = new ModificationModel($('#modification_form').serializeObject());
     mod.on('validated', function(err, data) {
@@ -71,6 +71,7 @@ var EnchantmentFormView = Backbone.View.extend({
     $('#modification_form').trigger('reset');
   },
   hideEnchantmentForm: function() {
+    clearErrors('#enchantment_modal');
     newEnchantment.reset();
     $('#enchantment_modal').foundation('reveal', 'close');
     $('#modification_form').trigger('reset');

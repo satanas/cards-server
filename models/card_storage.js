@@ -12,6 +12,7 @@ var cardSchema = mongoose.Schema({
   image: String,
   mana: Number,
   description: String,
+  enchantments: Object,
   flavorText: {type: String, default: ''},
   firstStrike: {type: Boolean, default: false},
   rush: {type: Boolean, default: false},

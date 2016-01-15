@@ -9,7 +9,7 @@ var Card = function(model) {
   this.invenomed = false;
   this.hidden = false;
 
-  this.spells = [];
+  this.enchantments = [];
   //this.flying = flying || false; // Can only be blocked by flying
   //this.shadow = shadow || false;
   //berserker: attacks twice

@@ -33,9 +33,6 @@ var Card = Backbone.Model.extend({
     this.set({'invenomed': value});
   },
   addEnchantment: function(ench) {
-    // Cleaning up form attribute
-    if (ench.hasOwnProperty('form')) delete ench.form;
-
     this.get('enchantments').push(ench);
     this.trigger('change');
   },

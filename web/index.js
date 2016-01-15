@@ -14,6 +14,7 @@ var mongoose = require('mongoose');
 
 var Global = require('../global');
 var Mod = require('../models/mod');
+var Enchantment = require('../models/enchantment');
 var CardStorage = require('../models/card_storage');
 var CardPresenter = require('../presenters/card');
 var EnchantmentFormPresenter = require('../presenters/enchantment_form');
@@ -118,6 +119,7 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
   newCard._id = cardId;
   newCard.id = cardId;
 
+  console.log('newCard', newCard);
   if (files.image.name !== '' && files.image.size > 0) {
     newCard.image = files.image.name;
     fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
@@ -206,6 +208,21 @@ router.post('/modifications/validate', bodyParse(), function* (next) {
     };
   } else {
     this.body = mod;
+  }
+});
+
+router.post('/enchantments/validate', bodyParse(), function* (next) {
+  var obj = JSON.parse(this.request.body);
+  console.log('validating', obj);
+  var errors = Enchantment.validate(obj);
+
+  if (errors.length > 0) {
+    this.status = 400;
+    this.body = {
+      errors: errors
+    };
+  } else {
+    this.body = obj;
   }
 });
 

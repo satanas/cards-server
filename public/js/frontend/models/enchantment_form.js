@@ -1,6 +1,5 @@
 var EnchantmentFormModel = Backbone.Model.extend({
   defaults: {
-    id: null,
     description: null,
     event: null,
     target: {
@@ -37,6 +36,27 @@ var EnchantmentFormModel = Backbone.Model.extend({
       }
     }
     this.set(obj);
+  },
+  validate: function(callback) {
+    $.ajax('/enchantments/validate', {
+      data: JSON.stringify(this.toOutput()),
+      method: 'POST',
+      processData: false,
+      contentType: false,
+      context: this,
+      success: function(data) {
+        callback(null, data);
+      },
+      error: function(data) {
+        callback(data.responseJSON.errors);
+      }
+    });
+  },
+  toOutput: function() {
+    var output = this.toJSON();
+    // Cleaning up form attribute
+    if (output.hasOwnProperty('form')) delete output.form;
+    return output;
   },
   reset: function() {
     this.set({

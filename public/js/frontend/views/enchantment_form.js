@@ -19,7 +19,6 @@ var EnchantmentFormView = Backbone.View.extend({
 
   renderModifications: function() {
     var table = '';
-    console.log('this model', this.model.toJSON());
     this.model.toJSON().mods.forEach(function(m, i) {
       table += '<tr>' +
         '  <td>' + m.spell + '</td>' +
@@ -32,7 +31,7 @@ var EnchantmentFormView = Backbone.View.extend({
         '</tr>';
     });
     $('#mods_table').html(table);
-    $('.delete-mod').on('click', this.deleteModification);
+    $('.delete-mod').on('click', { ctx: this }, this.deleteModification);
   },
   addEnchantment: function(ev) {
     ev.preventDefault();
@@ -83,6 +82,10 @@ var EnchantmentFormView = Backbone.View.extend({
     $('#mods_table').html('');
   },
   deleteModification: function(ev) {
-    console.log('delete', $(this).attr('data-id'));
+    var ctx = ev.data.ctx,
+        mods = ctx.model.toJSON().mods;
+
+    mods.splice(parseInt($(this).attr('data-id')), 1);
+    ctx.model.updateModifications(mods);
   }
 });

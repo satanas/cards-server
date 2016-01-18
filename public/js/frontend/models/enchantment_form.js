@@ -22,6 +22,10 @@ var EnchantmentFormModel = Backbone.Model.extend({
     var mods = this.get('mods').push(mod);
     this.trigger('modifications-updated');
   },
+  updateModifications: function(mods) {
+    var mods = this.set('mods', mods);
+    this.trigger('modifications-updated');
+  },
   update: function(data) {
     var obj = {
       description: data.description,

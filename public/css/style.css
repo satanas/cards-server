@@ -396,6 +396,6 @@ input.field-error, select.field-error {
   display: none;
 }
 
-#mods_table {
+#mods_table, #enchantments_table {
   width: 100%;
 }

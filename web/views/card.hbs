@@ -108,6 +108,7 @@ $(document).ready(function() {
   cardView.render(cardModel);
   newEnchantment = new EnchantmentFormModel({form: {{{ enchantment_form }}} });
   newEnchantmentView = new EnchantmentFormView({model: newEnchantment});
+  cardModel.on('change', renderEnchantments);
 
   $('#card_form').on('keyup', function(value) {
     updateModel();
@@ -168,6 +169,25 @@ $(document).ready(function() {
     window.location = '/cards';
   });
 });
+
+function renderEnchantments() {
+  console.log('renderEnchantments', this);
+  var table = '';
+  this.toJSON().enchantments.forEach(function(e, i) {
+    table += '<tr>' +
+      '  <td>' + e.description + '</td>' +
+      '  <td>' + e.event + '</td>' +
+      '  <td>' + e.target.select+ '</td>' +
+      '  <td>' + e.target.type + '</td>' +
+      '  <td>' + e.target.condition + '</td>' +
+      '  <td>' + e.target.band + '</td>' +
+      '  <td>' + e.target.class + '</td>' +
+      '  <td>' + e.target.quantity + '</td>' +
+      '  <td><a href="#" class="delete-enchantment" data-id="' + i + '">Delete</a></td>' +
+      '</tr>';
+  });
+  $('#enchantments_table').html(table);
+}
 
 function updateModel() {
   var data = $('#card_form').serializeObject();

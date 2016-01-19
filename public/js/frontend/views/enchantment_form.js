@@ -45,7 +45,6 @@ var EnchantmentFormView = Backbone.View.extend({
       if (err) return highlightErrors(err);
 
       cardModel.addEnchantment(newEnchantment.toOutput());
-      console.log('cardModel', cardModel.toJSON());
       this.hideEnchantmentForm();
     }.bind(this));
   },

@@ -7,7 +7,7 @@ var schema = mongoose.Schema({
   value: String,
 });
 
-var Mod = {
+var Modification = {
   Spell: mongoose.model('mod_spells', schema),
   Attribute: mongoose.model('mod_attributes', schema),
   Operation: mongoose.model('mod_operations', schema),
@@ -15,7 +15,7 @@ var Mod = {
   Multiplier: mongoose.model('mod_multipliers', schema),
 };
 
-Mod.validate = function(mod) {
+Modification.validate = function(mod) {
   var errors = [];
 
   if (mod.spell === '') errors.push({field: 'spell', message: 'spell can not be empty'});
@@ -29,4 +29,4 @@ Mod.validate = function(mod) {
   return errors;
 };
 
-module.exports = Mod;
+module.exports = Modification;

@@ -13,7 +13,7 @@ var _ = require('underscore');
 var mongoose = require('mongoose');
 
 var Global = require('../global');
-var Mod = require('../models/mod');
+var Modification = require('../models/modification');
 var Enchantment = require('../models/enchantment');
 var CardStorage = require('../models/card_storage');
 var CardPresenter = require('../presenters/card');
@@ -199,7 +199,7 @@ router.delete('/cards/:id', function* (next) {
 
 router.post('/modifications/validate', bodyParse(), function* (next) {
   var mod = JSON.parse(this.request.body);
-  var errors = Mod.validate(mod);
+  var errors = Modification.validate(mod);
 
   if (errors.length > 0) {
     this.status = 400;

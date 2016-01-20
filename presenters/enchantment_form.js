@@ -1,6 +1,6 @@
 var Target = require('../models/target');
 var Event = require('../models/event');
-var Mod = require('../models/mod');
+var Modification = require('../models/mod');
 
 var Presenter = function() {
   var self = this;
@@ -29,23 +29,23 @@ var Presenter = function() {
   });
 
   // Modifications information
-  Mod.Spell.find().select({_id: 0}).exec().then(function(data) {
+  Modification.Spell.find().select({_id: 0}).exec().then(function(data) {
     self.modSpells = data;
     console.log('Loaded mod spells');
   });
-  Mod.Attribute.find().select({_id: 0}).exec().then(function(data) {
+  Modification.Attribute.find().select({_id: 0}).exec().then(function(data) {
     self.modAttributes = data;
     console.log('Loaded mod attributes');
   });
-  Mod.Operation.find().select({_id: 0}).exec().then(function(data) {
+  Modification.Operation.find().select({_id: 0}).exec().then(function(data) {
     self.modOperations = data;
     console.log('Loaded mod operations');
   });
-  Mod.Ability.find().select({_id: 0}).exec().then(function(data) {
+  Modification.Ability.find().select({_id: 0}).exec().then(function(data) {
     self.modAbilities = data;
     console.log('Loaded mod abilities');
   });
-  Mod.Multiplier.find().select({_id: 0}).exec().then(function(data) {
+  Modification.Multiplier.find().select({_id: 0}).exec().then(function(data) {
     self.modMultipliers = data;
     console.log('Loaded mod multipliers');
   });

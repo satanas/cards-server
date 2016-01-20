@@ -1,6 +1,6 @@
 var Target = require('../models/target');
 var Event = require('../models/event');
-var Modification = require('../models/mod');
+var Modification = require('../models/modification');
 
 var Presenter = function() {
   var self = this;

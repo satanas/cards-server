@@ -18,13 +18,47 @@ var Modification = {
 Modification.validate = function(mod) {
   var errors = [];
 
+  var mustBePresent = function(obj, attr) {
+    if (attr instanceof Array) {
+      attr.forEach(function(e) {
+        if (obj[e] === '') errors.push({field: e, message: `${e} can not be empty`});
+      });
+    } else {
+      if (obj[attr] === '') errors.push({field: attr, message: `${attr} can not be empty`});
+    }
+  };
+  var mustBeAbsent = function(obj, attr) {
+    if (attr instanceof Array) {
+      attr.forEach(function(e) {
+        if (obj[e] !== '') errors.push({field: e, message: `spell '${obj.spell}' can not have ${e}`});
+      });
+    } else {
+      if (obj[attr] !== '') errors.push({field: attr, message: `spell '${obj.spell}' can not have ${attr}`});
+    }
+  };
+
+  // If you're adding a modification, it has to have a spell
   if (mod.spell === '') errors.push({field: 'spell', message: 'spell can not be empty'});
+
   if (mod.spell === 'attribute') {
-    if (mod.attribute === '') errors.push({field: 'attribute', message: 'attribute can not be empty'});
-    if (mod.operation === '') errors.push({field: 'operation', message: 'operation can not be empty'});
+    mustBePresent(mod, ['attribute', 'operation', 'value']);
+    mustBeAbsent(mod, 'ability');
   }
   if (mod.spell === 'ability') {
-    if (mod.ability === '') errors.push({field: 'ability', message: 'ability can not be empty'});
+    mustBePresent(mod, 'ability');
+    mustBeAbsent(mod, ['attribute', 'operation', 'multiplier', 'value']);
+  }
+  if (mod.spell === 'draw') {
+    mustBePresent(mod, 'value');
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
+  }
+  if (mod.spell === 'damage') {
+    mustBePresent(mod, 'value');
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
+  }
+  if (mod.spell === 'summon') {
+    mustBePresent(mod, 'value');
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
   }
   return errors;
 };

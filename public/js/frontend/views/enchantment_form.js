@@ -39,8 +39,6 @@ var EnchantmentFormView = Backbone.View.extend({
 
     // TODO: Validate
     newEnchantment.update($('#enchantment_form').serializeObject());
-    console.log('serializeObject', $('#enchantment_form').serializeObject());
-    console.log('addEnchantment', newEnchantment.toOutput());
     newEnchantment.validate(function(err, data) {
       if (err) return highlightErrors(err);
 

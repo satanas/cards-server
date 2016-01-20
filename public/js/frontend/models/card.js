@@ -36,6 +36,10 @@ var Card = Backbone.Model.extend({
     this.get('enchantments').push(ench);
     this.trigger('change');
   },
+  updateEnchantments: function(enchantments) {
+    this.set('enchantments', enchantments);
+    this.trigger('change');
+  },
   update: function(card) {
     // FIXME: Use one set for all properties
     if (card.hasOwnProperty('sick')) {

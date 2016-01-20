@@ -171,7 +171,6 @@ $(document).ready(function() {
 });
 
 function renderEnchantments() {
-  console.log('renderEnchantments', this);
   var table = '';
   this.toJSON().enchantments.forEach(function(e, i) {
     table += '<tr>' +
@@ -187,7 +186,15 @@ function renderEnchantments() {
       '</tr>';
   });
   $('#enchantments_table').html(table);
+  $('.delete-enchantment').on('click', deleteEnchantment);
 }
+
+function deleteEnchantment(ev) {
+    var enchantments = cardModel.toJSON().enchantments;
+
+    enchantments.splice(parseInt($(this).attr('data-id')), 1);
+    cardModel.updateEnchantments(enchantments);
+  }
 
 function updateModel() {
   var data = $('#card_form').serializeObject();

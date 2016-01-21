@@ -18,11 +18,25 @@ var schema = mongoose.Schema({
 
 var Enchantment = mongoose.model('enchantments', schema);
 
-Enchantment.validate = function(enc) {
+Enchantment.validate = function(enchantment) {
   var errors = [];
 
-  if (enc.description === '') errors.push({field: 'description', message: 'description can not be empty'});
-  if (enc.event === '') errors.push({field: 'event', message: 'event can not be empty'});
+  var mustBePresent = function(obj, attr) {
+    if (attr instanceof Array) {
+      attr.forEach(function(e) {
+        if (obj[e] === '') errors.push({field: e, message: `${e} can not be empty`});
+      });
+    } else {
+      if (obj[attr] === '') errors.push({field: attr, message: `${attr} can not be empty`});
+    }
+  };
+
+  if (enchantment.description === '') errors.push({field: 'description', message: 'description can not be empty'});
+  if (enchantment.event === '') errors.push({field: 'event', message: 'event can not be empty'});
+
+  if (enchantment.target.select === 'yes') {
+    mustBePresent(enchantment.target, ['type', 'quantity']);
+  }
 
   return errors;
 };

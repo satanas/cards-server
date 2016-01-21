@@ -40,7 +40,7 @@ var EnchantmentFormView = Backbone.View.extend({
     // TODO: Validate
     newEnchantment.update($('#enchantment_form').serializeObject());
     newEnchantment.validate(function(err, data) {
-      if (err) return highlightErrors(err);
+      if (err) return highlightErrors(err, '#enchantment_form');
 
       cardModel.addEnchantment(newEnchantment.toOutput());
       this.hideEnchantmentForm();

@@ -60,6 +60,41 @@ Modification.validate = function(mod) {
     mustBePresent(mod, 'value');
     mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
   }
+  if (mod.spell === 'transform') {
+    mustBePresent(mod, 'value');
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
+  }
+  if (mod.spell === 'protect_card') {
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier', 'value']);
+  }
+  if (mod.spell === 'disenchant') {
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier', 'value']);
+  }
+  if (mod.spell === 'return') {
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier', 'value']);
+  }
+  if (mod.spell === 'necromancy') {
+    mustBePresent(mod, 'value');
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
+  }
+  if (mod.spell === 'kill_target') {
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier', 'value']);
+  }
+  if (mod.spell === 'player_health') {
+    mustBePresent(mod, 'value');
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
+  }
+  if (mod.spell === 'freeze') {
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier', 'value']);
+  }
+  if (mod.spell === 'protect_player') {
+    mustBePresent(mod, 'value');
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
+  }
+  if (mod.spell === 'mana_cost') {
+    mustBePresent(mod, 'value');
+    mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
+  }
   return errors;
 };
 

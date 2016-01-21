@@ -208,11 +208,16 @@ function updateModel() {
 }
 
 // TODO: Helper
-function highlightErrors(errors) {
+function highlightErrors(errors, parent) {
+  var field;
   errors.forEach(function(err) {
-    var field = $('#form-field-' + err.field);
+    if (parent) {
+      field = $(parent).find('#form-field-' + err.field);
+    } else {
+      field = $('#form-field-' + err.field);
+    }
     field.append('<small class="field-error error">' + err.message + '</small>');
-    $('#form-field-' + err.field).find('[name="' + err.field + '"]').addClass('field-error');
+    field.find('[name="' + err.field + '"]').addClass('field-error');
   });
 }
 

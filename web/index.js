@@ -98,6 +98,8 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
       cardId = this.params.id,
       card = yield CardStorage.findOne({_id: cardId});
 
+  this.request.body.fields.enchantments = JSON.parse(this.request.body.fields.enchantments);
+
   this.checkBody('name').notEmpty();
   this.checkBody('mana').notEmpty().isInt();
   this.checkBody('attack').notEmpty().isInt();

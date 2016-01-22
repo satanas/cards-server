@@ -135,11 +135,13 @@ $(document).ready(function() {
 
   $('#save_button').on('click', function(ev) {
     ev.preventDefault();
-
     clearErrors();
 
+    var data = new FormData($('#card_form')[0]);
+    data.append('enchantments', JSON.stringify(cardModel.toJSON().enchantments));
+
     $.ajax($(this).attr('action'), {
-      data: new FormData($('form')[0]),
+      data: data,
       method: 'POST',
       processData: false,
       contentType: false,

@@ -54,8 +54,12 @@ var EnchantmentFormView = Backbone.View.extend({
     mod.on('validated', function(err, data) {
       if (err) return highlightErrors(err);
 
-      this.model.addModification(data);
-      this.hideModificationForm();
+      var duplicatedError = this.model.addModification(data);
+      if (!duplicatedError) {
+        this.hideModificationForm();
+      } else {
+        return highlightErrors(duplicatedError)
+      }
     }.bind(this));
 
     mod.validate();

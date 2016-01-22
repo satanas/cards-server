@@ -21,5 +21,14 @@ var ModificationModel = Backbone.Model.extend({
         this.trigger('validated', data.responseJSON.errors);
       }
     });
+  },
+  compare: function(obj) {
+    if (obj.spell === 'draw' && obj.spell === this.get('spell')) return true;
+
+    var equal = true;
+    for (var attr in obj.attributes) {
+      equal = equal && this.get(attr) === obj.get(attr);
+    }
+    return equal;
   }
 });

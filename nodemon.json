@@ -3,7 +3,11 @@
   "ignore": [
     ".git",
     "node_modules",
-    "tmp"
+    "tmp",
+    "public/js/frontend/models/validator.js"
   ],
-  "ext": "js hbs json css"
+  "ext": "js hbs json css",
+  "events": {
+    "restart": "gulp build"
+  }
 }

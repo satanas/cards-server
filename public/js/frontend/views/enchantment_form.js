@@ -50,19 +50,14 @@ var EnchantmentFormView = Backbone.View.extend({
     ev.preventDefault();
     clearErrors('#modification_form');
 
-    var mod = new ModificationModel($('#modification_form').serializeObject());
-    mod.on('validated', function(err, data) {
-      if (err) return highlightErrors(err);
-
-      var duplicatedError = this.model.addModification(data);
-      if (!duplicatedError) {
-        this.hideModificationForm();
-      } else {
-        return highlightErrors(duplicatedError)
-      }
-    }.bind(this));
-
-    mod.validate();
+    var mod = $('#modification_form').serializeObject();
+    var errors = new Validator().validateModifications(mod);
+    if (errors.length > 0) {
+      return highlightErrors(errors);
+    } else {
+      this.model.addModification(mod);
+      this.hideModificationForm();
+    }
     return false;
   },
   showModificationForm: function() {

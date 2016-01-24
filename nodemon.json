@@ -1,5 +1,5 @@
 {
-  "verbose": false,
+  "verbose": true,
   "ignore": [
     ".git",
     "node_modules",

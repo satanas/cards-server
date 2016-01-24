@@ -8,6 +8,7 @@
     "populate": "node scripts/populate_db.js"
   },
   "dependencies": {
+    "browserify": "^13.0.0",
     "debug": "^2.2.0",
     "koa": "^1.1.2",
     "koa-body": "^1.4.0",

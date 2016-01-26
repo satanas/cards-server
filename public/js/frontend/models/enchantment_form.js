@@ -19,26 +19,8 @@ var EnchantmentFormModel = Backbone.Model.extend({
     }
   },
   addModification: function(mod) {
-    var mods = this.get('mods');
-    var duplicated = false;
-    mods.forEach(function(m) {
-      var m1 = new ModificationModel(m),
-          m2 = new ModificationModel(mod);
-
-      console.log('test mod', m1, m2);
-      if (m1.compare(m2)) duplicated = true;
-    });
-
-    if (duplicated) {
-      return [{
-        field: 'generic-error',
-        message: 'You can not add duplicated modifications'
-      }];
-    } else {
-      mods.push(mod);
-      this.trigger('modifications-updated');
-      return;
-    }
+    this.get('mods').push(mod);
+    this.trigger('modifications-updated');
   },
   updateModifications: function(mods) {
     var mods = this.set('mods', mods);

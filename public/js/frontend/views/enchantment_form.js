@@ -8,6 +8,8 @@ var EnchantmentFormView = Backbone.View.extend({
     'click #save_enchantment_button': 'addEnchantment'
   },
   initialize: function(options) {
+    this.modificationFormId = '#modification_form';
+    this.enchantmentFormId = '#enchantment_form';
     this.template = Handlebars.compile($('#enchantment-form-template').html());
     this.model.on('modifications-updated', this.renderModifications, this);
     this.render();
@@ -35,12 +37,12 @@ var EnchantmentFormView = Backbone.View.extend({
   },
   addEnchantment: function(ev) {
     ev.preventDefault();
-    clearErrors('#enchantment_form');
+    clearErrors(this.enchantmentFormId);
 
     // TODO: Validate
-    newEnchantment.update($('#enchantment_form').serializeObject());
+    newEnchantment.update($(this.enchantmentFormId).serializeObject());
     newEnchantment.validate(function(err, data) {
-      if (err) return highlightErrors(err, '#enchantment_form');
+      if (err) return highlightErrors(err, this.enchantmentFormId);
 
       cardModel.addEnchantment(newEnchantment.toOutput());
       this.hideEnchantmentForm();
@@ -48,10 +50,17 @@ var EnchantmentFormView = Backbone.View.extend({
   },
   addModification: function(ev) {
     ev.preventDefault();
-    clearErrors('#modification_form');
+    clearErrors(this.modificationFormId);
 
-    var mod = $('#modification_form').serializeObject();
-    var errors = new Validator().validateModifications(mod);
+    var mod = $(this.modificationFormId).serializeObject(),
+        mods = this.model.toJSON().mods;
+
+    console.log('1 mod', mod);
+    console.log('2 mods', this.model.toJSON().mods);
+    console.log('3 union', _.union(mods, [mod]));
+    var errors = new Validator()._validateModificationAttributes(mod);
+    errors.union(new Validator()._validateModificationDuplicates(_.union(mods, [mod])));
+
     if (errors.length > 0) {
       return highlightErrors(errors);
     } else {
@@ -62,19 +71,19 @@ var EnchantmentFormView = Backbone.View.extend({
   },
   showModificationForm: function() {
     $('#enchantment_form_buttons').hide();
-    $('#modification_form').show();
+    $(this.modificationFormId).show();
   },
   hideModificationForm: function() {
     $('#enchantment_form_buttons').show();
-    $('#modification_form').hide();
-    $('#modification_form').trigger('reset');
+    $(this.modificationFormId).hide();
+    $(this.modificationFormId).trigger('reset');
   },
   hideEnchantmentForm: function() {
     clearErrors('#enchantment_modal');
     newEnchantment.reset();
     $('#enchantment_modal').foundation('reveal', 'close');
-    $('#modification_form').trigger('reset');
-    $('#enchantment_form').trigger('reset');
+    $(this.modificationFormId).trigger('reset');
+    $(this.enchantmentFormId).trigger('reset');
     $('#mods_table').html('');
   },
   deleteModification: function(ev) {

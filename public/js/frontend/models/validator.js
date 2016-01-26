@@ -1,7 +1,9 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Validator = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Validator = function() {
+  // FIXME: Create only local variables for errors and always return an array with errors (or empty)
   this.errors = [];
-  this.genericErrorId = 'generic-error';
+  this.modificationErrorId = 'modification-error';
+  this.enchantmentErrorId = 'enchantment-error';
 };
 
 Validator.prototype.constructor = Validator;
@@ -43,16 +45,19 @@ ModificationValidator.prototype.validate = function(mod) {
     this._mustBePresent(mod, ['attribute', 'operation', 'value']);
     this._mustBeAbsent(mod, 'ability');
   }
+
   if (mod.spell === 'ability') {
     this._mustBePresent(mod, 'ability');
     this._mustBeAbsent(mod, ['attribute', 'operation', 'multiplier', 'value']);
   }
+
   if (mod.spell === 'draw' || mod.spell === 'damage' || mod.spell === 'summon' || mod.spell === 'transform' ||
      mod.spell === 'necromancy' || mod.spell === 'player_health' || mod.spell === 'protect_player' ||
      mod.spell === 'mana_cost') {
     this._mustBePresent(mod, 'value');
     this._mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier']);
   }
+
   if (mod.spell === 'protect_card' || mod.spell === 'disenchant' || mod.spell === 'return' ||
       mod.spell === 'kill_target' || mod.spell === 'freeze') {
     this._mustBeAbsent(mod, ['attribute', 'operation', 'ability', 'multiplier', 'value']);
@@ -73,15 +78,55 @@ ModificationValidator.prototype.compare = function(obj1, obj2) {
   for (var attr in obj1) {
     equal = equal && obj2[attr] === obj1[attr];
   }
-  if (equal) {
-    this.errors.push({field: this.genericErrorId, message: 'you can not add duplicated spells'});
+
+  if (equal)
+    this.errors.push({field: this.modificationErrorId, message: 'you can not add duplicated spells'});
+
+  return this.errors;
+};
+
+var EnchantmentValidator = function() {
+  Validator.call(this);
+};
+
+EnchantmentValidator.prototype = Object.create(Validator.prototype);
+EnchantmentValidator.prototype.constructor = EnchantmentValidator;
+
+EnchantmentValidator.prototype.validate = function(enchantment) {
+  this.errors = [];
+
+  console.log('enchantment', enchantment);
+  if (enchantment.description === '')
+    this.errors.push({field: 'description', message: 'description can not be empty'});
+
+  if (enchantment.event === '')
+    this.errors.push({field: 'event', message: 'event can not be empty'});
+
+  if (enchantment.target.select === 'yes')
+    this._mustBePresent(enchantment.target, ['type', 'quantity']);
+
+  if (enchantment.mods.length === 0)
+    this.errors.push({field: this.enchantmentErrorId, message: 'you can not add enchantment without modifications'});
+
+  var mods = enchantment.mods.slice(0);
+  console.log('comparing enchantment modifications', mods);
+  while (mods.length > 1) {
+    var mod = mods.splice(0, 1);
+
+    for (var i=0; i < mods.length; i++) {
+      var err = new ModificationValidator().compare(mods[i], mod);
+      if (err.length > 0) {
+        this.errors = _.union(this.errors, err);
+        break;
+      }
+    }
   }
   return this.errors;
 };
 
 module.exports = {
   Modifications: ModificationValidator,
-  Enchantments: null
+  Enchantments: EnchantmentValidator
 };
 
 },{}]},{},[1])(1)

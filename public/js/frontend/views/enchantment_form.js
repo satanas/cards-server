@@ -41,20 +41,21 @@ var EnchantmentFormView = Backbone.View.extend({
 
     // TODO: Validate
     newEnchantment.update($(this.enchantmentFormId).serializeObject());
-    newEnchantment.validate(function(err, data) {
-      if (err) return highlightErrors(err, this.enchantmentFormId);
+    var errors = new Validator.Enchantments().validate(newEnchantment.toJSON());
 
+    if (errors.length > 0) {
+      return highlightErrors(errors, this.enchantmentFormId);
+    } else {
       cardModel.addEnchantment(newEnchantment.toOutput());
       this.hideEnchantmentForm();
-    }.bind(this));
+    }
   },
   addModification: function(ev) {
     ev.preventDefault();
     clearErrors(this.modificationFormId);
 
-    var mod = $(this.modificationFormId).serializeObject(),
-        mods = this.model.toJSON().mods;
-
+    var mod = $(this.modificationFormId).serializeObject();
+    var mods = this.model.toJSON().mods;
     var errors = new Validator.Modifications().validate(mod);
 
     for (var i=0; i < mods.length; i++) {

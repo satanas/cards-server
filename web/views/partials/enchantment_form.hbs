@@ -26,6 +26,7 @@
     <div class="columns small-4">{{> input_field name="class" value="" labelWidth=5 inputWidth=7 belongsTo="enchantment"}}</div>
     <div class="columns small-4">{{> input_field name="quantity" value="" labelWidth=5 inputWidth=7 belongsTo="enchantment"}}</div>
   </div>
+  <div id="form-field-enchantment-error" class="row"></div>
 </form>
 <div class="row">
   <label>Current Modifications</label>
@@ -53,7 +54,7 @@
     <div class="columns small-4">{{> select_field name="multiplier" values=form.mod.multipliers placeholder="n/a"}}</div>
     <div class="columns small-4"> {{> input_field name="value" value="" labelWidth=5 inputWidth=7}} </div>
   </div>
-  <div id="form-field-generic-error" class="row"></div>
+  <div id="form-field-modification-error" class="row"></div>
   <div class="row">
     <a href="#" class="success tiny button" id="save_modification_button">Save modification</a>
     <a href="#" class="tiny button" id="cancel_modification_button">Cancel</a>

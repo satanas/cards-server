@@ -199,35 +199,6 @@ router.delete('/cards/:id', function* (next) {
   }
 });
 
-router.post('/modifications/validate', bodyParse(), function* (next) {
-  var mod = JSON.parse(this.request.body);
-  var errors = Modification.validate(mod);
-
-  if (errors.length > 0) {
-    this.status = 400;
-    this.body = {
-      errors: errors
-    };
-  } else {
-    this.body = mod;
-  }
-});
-
-router.post('/enchantments/validate', bodyParse(), function* (next) {
-  var obj = JSON.parse(this.request.body);
-  console.log('validating', obj);
-  var errors = Enchantment.validate(obj);
-
-  if (errors.length > 0) {
-    this.status = 400;
-    this.body = {
-      errors: errors
-    };
-  } else {
-    this.body = obj;
-  }
-});
-
 app.use(router.routes());
 
 app.listen(8000);

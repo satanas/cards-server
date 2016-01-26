@@ -55,11 +55,15 @@ var EnchantmentFormView = Backbone.View.extend({
     var mod = $(this.modificationFormId).serializeObject(),
         mods = this.model.toJSON().mods;
 
-    console.log('1 mod', mod);
-    console.log('2 mods', this.model.toJSON().mods);
-    console.log('3 union', _.union(mods, [mod]));
-    var errors = new Validator()._validateModificationAttributes(mod);
-    errors.union(new Validator()._validateModificationDuplicates(_.union(mods, [mod])));
+    var errors = new Validator.Modifications().validate(mod);
+
+    for (var i=0; i < mods.length; i++) {
+      var err = new Validator.Modifications().compare(mods[i], mod);
+      if (err.length > 0) {
+        errors = _.union(errors, err);
+        break;
+      }
+    }
 
     if (errors.length > 0) {
       return highlightErrors(errors);

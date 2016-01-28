@@ -109,6 +109,7 @@ $(document).ready(function() {
   newEnchantment = new EnchantmentFormModel({form: {{{ enchantment_form }}} });
   newEnchantmentView = new EnchantmentFormView({model: newEnchantment});
   cardModel.on('change', renderEnchantments);
+  renderEnchantments();
 
   $('#card_form').on('keyup', function(value) {
     updateModel();
@@ -174,7 +175,7 @@ $(document).ready(function() {
 
 function renderEnchantments() {
   var table = '';
-  this.toJSON().enchantments.forEach(function(e, i) {
+  cardModel.toJSON().enchantments.forEach(function(e, i) {
     table += '<tr>' +
       '  <td>' + e.description + '</td>' +
       '  <td>' + e.event + '</td>' +

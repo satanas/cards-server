@@ -13,6 +13,7 @@ var EnchantmentFormView = Backbone.View.extend({
     this.template = Handlebars.compile($('#enchantment-form-template').html());
     this.model.on('modifications-updated', this.renderModifications, this);
     this.render();
+    this.renderModifications();
   },
 
   render: function() {

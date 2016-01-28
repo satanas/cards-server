@@ -27,6 +27,7 @@ var enchantmentFormPresenter = new EnchantmentFormPresenter();
 var inputFieldTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'input_field.hbs'));
 var selectFieldTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'select_field.hbs'));
 var enchantmentFormTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'enchantment_form.hbs'));
+var enchantmentTemplate = fs.readFileSync(path.join(__dirname, 'views', 'partials', 'enchantment.hbs'));
 
 const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'images');
 
@@ -86,7 +87,8 @@ router.get('/cards/:id', function* (next) {
     templates: {
       input_field: inputFieldTemplate,
       select_field: selectFieldTemplate,
-      enchantment_form: enchantmentFormTemplate
+      enchantment_form: enchantmentFormTemplate,
+      enchantment: enchantmentTemplate
     },
     isNew: false
   });

@@ -1,3 +1,16 @@
+{{#if enchantments.length}}
+<thead>
+  <td>Description</td>
+  <td>Event</td>
+  <td>Select</td>
+  <td>Type</td>
+  <td>Condition</td>
+  <td>Band</td>
+  <td>Class</td>
+  <td>Quantity</td>
+  <td>Mods</td>
+  <td>Actions</td>
+</thead>
 {{#enchantments}}
 <tr>
   <td>{{description}}</td>
@@ -8,6 +21,19 @@
   <td>{{target.band}}</td>
   <td>{{target.class}}</td>
   <td>{{target.quantity}}</td>
+  <td>
+  {{#mods}}
+    <div><strong>{{spell}}</strong></div>
+    <ul>
+      {{#if attribute}}<li>{{attribute}}</li>{{/if}}
+      {{#if ability}}<li>{{ability}}</li>{{/if}}
+      {{#if operation}}<li>{{operation}}</li>{{/if}}
+      {{#if multiplier}}<li>{{multiplier}}</li>{{/if}}
+      {{#if value}}<li>{{value}}</li>{{/if}}
+    </ul>
+  {{/mods}}
+  </td>
   <td><a href="#" class="delete-enchantment" data-id="{{@index}}">Delete</a></td>
 </tr>
 {{/enchantments}}
+{{/if}}

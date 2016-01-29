@@ -60,7 +60,7 @@
 </form>
 
 <div class="row">
-  <table id="enchantments_table"></table>
+  <div id="enchantments_table"></div>
   <a href="#" class="tiny button" data-reveal-id="enchantment_modal">Add enchantment</a>
 </div>
 
@@ -178,12 +178,18 @@ function renderEnchantments() {
   var table = enchantmentTemplate(cardModel.toJSON());
   $('#enchantments_table').html(table);
   $('.delete-enchantment').on('click', deleteEnchantment);
+  $('.show-enchantment-details').on('click', showEnchantmentDetails);
 }
 
 function deleteEnchantment(ev) {
     var enchantments = cardModel.toJSON().enchantments;
     enchantments.splice(parseInt($(this).attr('data-id')), 1);
     cardModel.updateEnchantments(enchantments);
+}
+
+function showEnchantmentDetails(ev) {
+  var id = $(this).attr('data-id');
+  $('.enchantment-details[data-id="' + id + '"]').show();
 }
 
 function updateModel() {

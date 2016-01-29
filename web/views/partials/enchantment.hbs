@@ -1,39 +1,43 @@
 {{#if enchantments.length}}
-<thead>
-  <td>Description</td>
-  <td>Event</td>
-  <td>Select</td>
-  <td>Type</td>
-  <td>Condition</td>
-  <td>Band</td>
-  <td>Class</td>
-  <td>Quantity</td>
-  <td>Mods</td>
-  <td>Actions</td>
-</thead>
+<div class="row">
+  <span class="columns small-3">Description</span>
+  <span class="columns small-1">Event</span>
+  <span class="columns small-1">Select</span>
+  <span class="columns small-1">Type</span>
+  <span class="columns small-1">Condition</span>
+  <span class="columns small-1">Band</span>
+  <span class="columns small-1">Class</span>
+  <span class="columns small-1">Quantity</span>
+  <span class="columns small-2">Actions</span>
+</div>
 {{#enchantments}}
-<tr>
-  <td>{{description}}</td>
-  <td>{{event}}</td>
-  <td>{{target.select}}</td>
-  <td>{{target.type}}</td>
-  <td>{{target.condition}}</td>
-  <td>{{target.band}}</td>
-  <td>{{target.class}}</td>
-  <td>{{target.quantity}}</td>
-  <td>
-  {{#mods}}
-    <div><strong>{{spell}}</strong></div>
-    <ul>
-      {{#if attribute}}<li>{{attribute}}</li>{{/if}}
-      {{#if ability}}<li>{{ability}}</li>{{/if}}
-      {{#if operation}}<li>{{operation}}</li>{{/if}}
-      {{#if multiplier}}<li>{{multiplier}}</li>{{/if}}
-      {{#if value}}<li>{{value}}</li>{{/if}}
-    </ul>
-  {{/mods}}
-  </td>
-  <td><a href="#" class="delete-enchantment" data-id="{{@index}}">Delete</a></td>
-</tr>
+<div class="row">
+  <div class="row">
+    <span class="columns small-3">{{description}}</span>
+    <span class="columns small-1">{{event}}</span>
+    <span class="columns small-1">{{target.select}}</span>
+    <span class="columns small-1">{{target.type}}</span>
+    <span class="columns small-1">{{target.condition}}</span>
+    <span class="columns small-1">{{target.band}}</span>
+    <span class="columns small-1">{{target.class}}</span>
+    <span class="columns small-1">{{target.quantity}}</span>
+    <span class="columns small-2">
+      <a href="#" class="delete-enchantment" data-id="{{@index}}">Delete</a> | 
+      <a href="#" class="show-enchantment-details" data-id="{{@index}}">Details</a>
+    </span>
+  </div>
+  <div class="row expand enchantment-details" data-id="{{@index}}">
+    {{#mods}}
+    <div class="row">
+      <span class="columns small-2"><strong>{{spell}}</strong></span>
+      <span class="columns small-2">{{attribute}}</span>
+      <span class="columns small-2">{{ability}}</span>
+      <span class="columns small-2">{{operation}}</span>
+      <span class="columns small-2">{{multiplier}}</span>
+      <span class="columns small-2">{{value}}</span>
+    </div>
+    {{/mods}}
+  </div>
+</div>
 {{/enchantments}}
 {{/if}}

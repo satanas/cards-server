@@ -188,8 +188,17 @@ function deleteEnchantment(ev) {
 }
 
 function showEnchantmentDetails(ev) {
+  var action = $(this).attr('data-action');
   var id = $(this).attr('data-id');
-  $('.enchantment-details[data-id="' + id + '"]').show();
+  if (action === 'show') {
+    $(this).attr('data-action', 'hide');
+    $(this).text('Less');
+    $('.enchantment-details[data-id="' + id + '"]').show();
+  } else {
+    $(this).attr('data-action', 'show');
+    $(this).text('More');
+    $('.enchantment-details[data-id="' + id + '"]').hide();
+  }
 }
 
 function updateModel() {

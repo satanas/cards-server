@@ -60,9 +60,11 @@
 </form>
 
 <div class="row">
-  <div class="columns">
-  <div id="enchantments_table" class="row"></div>
-  <a href="#" class="tiny button" data-reveal-id="enchantment_modal">Add enchantment</a>
+  <div class="columns enchantments-wrapper">
+    <div id="enchantments_table" class="row"></div>
+    <div id="add-enchantment-link">
+      <a href="#" class="tiny button" data-reveal-id="enchantment_modal">Add enchantment</a>
+    </div>
   </div>
 </div>
 
@@ -201,11 +203,11 @@ function showEnchantmentDetails(ev) {
   var id = $(this).attr('data-id');
   if (action === 'show') {
     $(this).attr('data-action', 'hide');
-    $(this).text('Less');
+    $(this).html('<i class="fa fa-caret-up"></i>');
     $('.enchantment-details[data-id="' + id + '"]').show();
   } else {
     $(this).attr('data-action', 'show');
-    $(this).text('More');
+    $(this).html('<i class="fa fa-caret-down"></i>');
     $('.enchantment-details[data-id="' + id + '"]').hide();
   }
 }

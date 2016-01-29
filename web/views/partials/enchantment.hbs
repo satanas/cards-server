@@ -26,20 +26,20 @@
       <span class="columns small-1">{{target.quantity}}</span>
       <span class="columns small-2">
         <a href="#" class="delete-enchantment" data-id="{{@index}}">Delete</a> | 
-        <a href="#" class="show-enchantment-details" data-id="{{@index}}" data-action="show">More</a>
+        <a href="#" class="show-enchantment-details" data-id="{{@index}}" data-action="show"><i class="fa fa-caret-down"></i></a>
       </span>
     </div>
 
     <div class="row expand enchantment-details" data-id="{{@index}}">
       <div class="columns">
       {{#mods}}
-        <div class="row">
-          <span class="columns small-2"><strong>{{spell}}</strong></span>
-          <span class="columns small-2">{{attribute}}</span>
-          <span class="columns small-2">{{ability}}</span>
-          <span class="columns small-2">{{operation}}</span>
-          <span class="columns small-2">{{multiplier}}</span>
-          <span class="columns small-2">{{value}}</span>
+        <div class="row modification">
+          <span class="columns small-1"><strong>{{spell}}</strong></span>
+          <span class="columns small-1">{{attribute}}</span>
+          <span class="columns small-1">{{ability}}</span>
+          <span class="columns small-1">{{operation}}</span>
+          <span class="columns small-1">{{multiplier}}</span>
+          <span class="columns small-6">{{value}}</span>
         </div>
       {{/mods}}
       </div>

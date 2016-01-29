@@ -60,8 +60,10 @@
 </form>
 
 <div class="row">
-  <div id="enchantments_table"></div>
+  <div class="columns">
+  <div id="enchantments_table" class="row"></div>
   <a href="#" class="tiny button" data-reveal-id="enchantment_modal">Add enchantment</a>
+  </div>
 </div>
 
 <div class="row buttons">
@@ -103,6 +105,13 @@ $(document).ready(function() {
   enchantmentTemplate = Handlebars.compile($('#enchantment-template').html());
   Handlebars.registerPartial('input_field', Handlebars.compile($('#input-field-template').html()));
   Handlebars.registerPartial('select_field', Handlebars.compile($('#select-field-template').html()));
+  Handlebars.registerHelper('if_odd', function(conditional, options) {
+    if ((conditional % 2) == 0) {
+      return options.inverse(this);
+    } else {
+      return options.fn(this);
+    }
+  });
 
   cardModel = new Card({{{ card }}});
   cardView = new CardPopupView({model: cardModel, popup: false});

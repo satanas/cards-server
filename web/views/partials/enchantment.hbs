@@ -1,5 +1,6 @@
+<div class="columns">
 {{#if enchantments.length}}
-<div class="row">
+<div class="row header">
   <span class="columns small-3">Description</span>
   <span class="columns small-1">Event</span>
   <span class="columns small-1">Select</span>
@@ -11,33 +12,41 @@
   <span class="columns small-2">Actions</span>
 </div>
 {{#enchantments}}
-<div class="row">
-  <div class="row">
-    <span class="columns small-3">{{description}}</span>
-    <span class="columns small-1">{{event}}</span>
-    <span class="columns small-1">{{target.select}}</span>
-    <span class="columns small-1">{{target.type}}</span>
-    <span class="columns small-1">{{target.condition}}</span>
-    <span class="columns small-1">{{target.band}}</span>
-    <span class="columns small-1">{{target.class}}</span>
-    <span class="columns small-1">{{target.quantity}}</span>
-    <span class="columns small-2">
-      <a href="#" class="delete-enchantment" data-id="{{@index}}">Delete</a> | 
-      <a href="#" class="show-enchantment-details" data-id="{{@index}}" data-action="show">More</a>
-    </span>
-  </div>
-  <div class="row expand enchantment-details" data-id="{{@index}}">
-    {{#mods}}
+<div class="row {{#if_odd @index}}odd{{/if_odd}}">
+  <div class="columns">
+
     <div class="row">
-      <span class="columns small-2"><strong>{{spell}}</strong></span>
-      <span class="columns small-2">{{attribute}}</span>
-      <span class="columns small-2">{{ability}}</span>
-      <span class="columns small-2">{{operation}}</span>
-      <span class="columns small-2">{{multiplier}}</span>
-      <span class="columns small-2">{{value}}</span>
+      <span class="columns small-3">{{description}}</span>
+      <span class="columns small-1">{{event}}</span>
+      <span class="columns small-1">{{target.select}}</span>
+      <span class="columns small-1">{{target.type}}</span>
+      <span class="columns small-1">{{target.condition}}</span>
+      <span class="columns small-1">{{target.band}}</span>
+      <span class="columns small-1">{{target.class}}</span>
+      <span class="columns small-1">{{target.quantity}}</span>
+      <span class="columns small-2">
+        <a href="#" class="delete-enchantment" data-id="{{@index}}">Delete</a> | 
+        <a href="#" class="show-enchantment-details" data-id="{{@index}}" data-action="show">More</a>
+      </span>
     </div>
-    {{/mods}}
-  </div>
+
+    <div class="row expand enchantment-details" data-id="{{@index}}">
+      <div class="columns">
+      {{#mods}}
+        <div class="row">
+          <span class="columns small-2"><strong>{{spell}}</strong></span>
+          <span class="columns small-2">{{attribute}}</span>
+          <span class="columns small-2">{{ability}}</span>
+          <span class="columns small-2">{{operation}}</span>
+          <span class="columns small-2">{{multiplier}}</span>
+          <span class="columns small-2">{{value}}</span>
+        </div>
+      {{/mods}}
+      </div>
+    </div>
+
+  </div> <!-- columns -->
 </div>
 {{/enchantments}}
 {{/if}}
+</div>

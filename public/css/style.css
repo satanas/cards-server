@@ -397,9 +397,19 @@ input.field-error, select.field-error {
 }
 
 #mods_table, #enchantments_table {
-  width: 100%;
+  font-size: 0.9rem;
+  font-size: 0.9em;
+}
+
+#enchantments_table .header {
+  font-weight: bold;
+  background-color: lightgray;
 }
 
 .enchantment-details {
   display: none;
+}
+
+.row.odd {
+  background-color: whitesmoke;
 }

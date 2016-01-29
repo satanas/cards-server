@@ -203,11 +203,11 @@ function showEnchantmentDetails(ev) {
   var id = $(this).attr('data-id');
   if (action === 'show') {
     $(this).attr('data-action', 'hide');
-    $(this).html('<i class="fa fa-caret-up"></i>');
+    $(this).html('<i class="fa fa-caret-up">Less</i>');
     $('.enchantment-details[data-id="' + id + '"]').show();
   } else {
     $(this).attr('data-action', 'show');
-    $(this).html('<i class="fa fa-caret-down"></i>');
+    $(this).html('<i class="fa fa-caret-down">More</i>');
     $('.enchantment-details[data-id="' + id + '"]').hide();
   }
 }

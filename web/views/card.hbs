@@ -10,30 +10,20 @@
 </div>
 {{/if}}
 
-{{#if card}}
-{{#isNew}}
-<h1>New card</h1>
-<form id="card_form" action="/cards" method="POST" enctype="multipart/form-data">
-{{/isNew}}
-{{^isNew}}
-<h1>Edit card</h1>
-
-<form id="card_form" action="/cards/{{ card.id }}" method="POST" enctype="multipart/form-data">
-{{/isNew}}
-
-{{/if}}
+<h1>{{#if isNew}}New card{{else}}Edit card{{/if}}</h1>
+<form id="card_form" method="POST" action="/cards/{{#if isNew}}{{else}}{{cardId}}{{/if}}"enctype="multipart/form-data">
   <div class="row">
     <div class="columns small-4">
-      {{> input_field name="name" value=card.name isNew=isNew }}
-      {{> input_field name="mana" value=card.mana isNew=isNew }}
-      {{> input_field name="attack" value=card.attack isNew=isNew }}
-      {{> input_field name="health" value=card.health isNew=isNew }}
-      {{> select_field name="type" isNew=isNew values=card.types }}
+      {{> input_field name="name" value=cardPresenter.name isNew=isNew }}
+      {{> input_field name="mana" value=cardPresenter.mana isNew=isNew }}
+      {{> input_field name="attack" value=cardPresenter.attack isNew=isNew }}
+      {{> input_field name="health" value=cardPresenter.health isNew=isNew }}
+      {{> select_field name="type" isNew=isNew values=cardPresenter.types }}
 
       <div class="row">
         <div id="form-field-image" class="columns">
         <label>Image
-          <input type="file" id="image" name="image" value="{{ card.image }}" {{#if isNew}}required{{/if}} />
+          <input type="file" id="image" name="image" value="{{ cardPresenter.image }}" {{#if isNew}}required{{/if}} />
         </label>
         </div>
       </div>
@@ -41,7 +31,7 @@
       <div class="row">
         <div class="columns">
         <label>Flavor Text
-          <textarea rows="3" name="flavorText">{{ card.flavorText }}</textarea>
+          <textarea rows="3" name="flavorText">{{ cardPresenter.flavorText }}</textarea>
         </label>
         </div>
       </div>
@@ -52,9 +42,9 @@
     </div>
 
     <div class="columns small-4">
-      {{#card.abilities}}
+      {{#cardPresenter.abilities}}
         {{> select_field name=name isNew=isNew values=values}}
-      {{/card.abilities}}
+      {{/cardPresenter.abilities}}
     </div>
   </div>
 </form>
@@ -104,6 +94,9 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 }
 
 $(document).ready(function() {
+  cardModel = new Card(JSON.parse('{{{ cardModel }}}'));
+
+  // Templates
   enchantmentTemplate = Handlebars.compile($('#enchantment-template').html());
   Handlebars.registerPartial('input_field', Handlebars.compile($('#input-field-template').html()));
   Handlebars.registerPartial('select_field', Handlebars.compile($('#select-field-template').html()));
@@ -115,13 +108,14 @@ $(document).ready(function() {
     }
   });
 
-  cardModel = new Card({{{ card }}});
   cardView = new CardPopupView({model: cardModel, popup: false});
   cardView.render(cardModel);
-  newEnchantment = new EnchantmentFormModel({form: {{{ enchantment_form }}} });
+  newEnchantment = new EnchantmentFormModel({form: JSON.parse('{{{ enchantment_form }}}') });
   newEnchantmentView = new EnchantmentFormView({model: newEnchantment});
-  cardModel.on('change', renderEnchantments);
   renderEnchantments();
+
+  // Events
+  cardModel.on('change', renderEnchantments);
 
   $('#card_form').on('keyup', function(value) {
     updateModel();

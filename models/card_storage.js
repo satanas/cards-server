@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 var cardSchema = mongoose.Schema({
   id: String,
-  type: Number,
+  type: {type: Number},
   attack: Number,
   health: Number,
   maxHealth: Number,
@@ -12,7 +12,7 @@ var cardSchema = mongoose.Schema({
   image: String,
   mana: Number,
   description: String,
-  enchantments: Object,
+  enchantments: mongoose.Schema.Types.Mixed,
   flavorText: {type: String, default: ''},
   firstStrike: {type: Boolean, default: false},
   rush: {type: Boolean, default: false},

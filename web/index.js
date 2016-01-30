@@ -82,7 +82,9 @@ router.get('/cards/:id', function* (next) {
       form = enchantmentFormPresenter.render();
 
   yield this.render('card', {
-    card: card,
+    cardId: cardId,
+    cardPresenter: card,
+    cardModel: JSON.stringify(card),
     enchantment_form: JSON.stringify(form),
     templates: {
       input_field: inputFieldTemplate,
@@ -99,8 +101,6 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
       files = this.request.body.files,
       cardId = this.params.id,
       card = yield CardStorage.findOne({_id: cardId});
-
-  this.request.body.fields.enchantments = JSON.parse(this.request.body.fields.enchantments);
 
   this.checkBody('name').notEmpty();
   this.checkBody('mana').notEmpty().isInt();

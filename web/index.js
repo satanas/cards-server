@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('underscore');
 var fs = require('fs');
 var koa = require('koa');
 var path = require('path');
@@ -9,16 +10,16 @@ var bodyParse = require('koa-body');
 var router = require('koa-router')();
 var session = require('koa-session');
 var validate = require('koa-validate');
-var _ = require('underscore');
 var mongoose = require('mongoose');
 
 var Global = require('../global');
+var flash = require('./middleware/flash');
 var Modification = require('../models/modification');
 var Enchantment = require('../models/enchantment');
 var CardStorage = require('../models/card_storage');
 var CardPresenter = require('../presenters/card');
+var cardsController = require('./controllers/cards');
 
-var cardsController = require('./controllers/cards.js');
 var app = koa();
 
 var cardPresenter = new CardPresenter();
@@ -43,6 +44,7 @@ app.use(function* (next) {
 
 app.use(validate());
 app.use(serve('public'));
+app.use(flash);
 
 app.use(hbs.middleware({
   viewPath: __dirname + '/views',
@@ -60,7 +62,7 @@ router.get('/cards', function* (next) {
 
   yield this.render('cards', {
     cards: cards,
-    flash: getFlashMessage(this)
+    flash: this.getFlashMessage(this)
   });
 });
 
@@ -209,7 +211,7 @@ router.delete('/cards/:id', function* (next) {
     var name = card.name;
     yield card.remove();
 
-    addFlashMessage(this, 'success', "Card '" + name + "' deleted successfully");
+    this.addFlashMessage('success', "Card '" + name + "' deleted successfully");
   } catch (e) {
     return errorResponse(this, [{field: null, message: 'Card not found'}]);
   }
@@ -238,17 +240,4 @@ function errorResponse(ctx, errors, status) {
   ctx.body = {
     errors: errors
   };
-}
-
-function addFlashMessage(ctx, type, message) {
-  ctx.session.flash = {
-    type: type,
-    message: message
-  };
-}
-
-function getFlashMessage(ctx) {
-  var flash = ctx.session.flash;
-  if (flash) delete ctx.session.flash;
-  return flash;
 }

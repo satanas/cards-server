@@ -12,6 +12,7 @@
 
 <h1>{{#if isNew}}New card{{else}}Edit card{{/if}}</h1>
 <form id="card_form" method="POST" action="/cards/{{#if isNew}}{{else}}{{cardId}}{{/if}}"enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" id="_csrf" value="{{csrf}}" />
   <div class="row">
     <div class="columns small-4">
       {{> input_field name="name" value=cardPresenter.name isNew=isNew }}

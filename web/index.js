@@ -36,6 +36,7 @@ mongoose.connect('mongodb://localhost/magic');
 // Init session
 app.keys = ['123456', 'foobar'];
 app.use(session(app));
+require('koa-csrf')(app);
 
 // Request logging
 app.use(function* (next) {
@@ -72,6 +73,7 @@ router.get('/cards', function* (next) {
 router.get('/cards/new', function* (next) {
   yield this.render('card', {
     card: cardPresenter.render(new CardStorage()),
+    csrf: this.csrf,
     isNew: true
   });
 });
@@ -92,6 +94,7 @@ router.get('/cards/:id', function* (next) {
       enchantment_form: enchantmentFormTemplate,
       enchantment: enchantmentTemplate
     },
+    csrf: this.csrf,
     isNew: false
   });
 });
@@ -101,6 +104,12 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
       files = this.request.body.files,
       cardId = this.params.id,
       card = yield CardStorage.findOne({_id: cardId});
+
+  try {
+    this.assertCSRF(this.request.body.fields);
+  } catch (e) {
+    return errorResponse(this, [{field: null, message: 'Request forbidden: ' + e.toString()}]);
+  }
 
   this.request.body.fields.enchantments = JSON.parse(this.request.body.fields.enchantments);
   console.log('new enchantments', this.request.body.fields.enchantments);
@@ -145,6 +154,12 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
 router.post('/cards', bodyParse({multipart: true, formidable: { uploadDir: UPLOAD_DIR}}), function* (next) {
   var errors = [],
       files = this.request.body.files;
+
+  try {
+    this.assertCSRF(this.request.body.fields);
+  } catch (e) {
+    return errorResponse(this, [{field: null, message: 'Request forbidden: ' + e.toString()}]);
+  }
 
   this.checkBody('name').notEmpty();
   this.checkBody('mana').notEmpty().isInt();

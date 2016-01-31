@@ -16,9 +16,18 @@ var cardPresenter = new CardPresenter();
 var enchantmentFormPresenter = new EnchantmentFormPresenter();
 
 
-var cardController = {};
+var controller = {};
 
-cardController.getCard = function *(next) {
+controller.listCards = function* (next) {
+  var cards = yield CardStorage.find().sort({ _id: 1});
+
+  yield this.render('cards', {
+    cards: cards,
+    flash: this.getFlashMessage(this)
+  });
+};
+
+controller.getCard = function *(next) {
   var card = null;
   var cardId = (this.params.id === 'new') ? null : this.params.id;
   var form = enchantmentFormPresenter.render();
@@ -45,4 +54,4 @@ cardController.getCard = function *(next) {
   });
 };
 
-module.exports = cardController;
+module.exports = controller;

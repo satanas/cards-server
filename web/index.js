@@ -52,19 +52,11 @@ app.use(hbs.middleware({
   layoutsPath: __dirname + '/views/layouts'
 }));
 
-// Routes
 router.get('/', function* (next) {
   yield this.render('game');
 });
 
-router.get('/cards', function* (next) {
-  var cards = yield CardStorage.find().sort({ _id: 1});
-
-  yield this.render('cards', {
-    cards: cards,
-    flash: this.getFlashMessage(this)
-  });
-});
+router.get('/cards', cardsController.listCards);
 
 router.get('/cards/new', cardsController.getCard);
 

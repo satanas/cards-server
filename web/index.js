@@ -102,6 +102,8 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
       cardId = this.params.id,
       card = yield CardStorage.findOne({_id: cardId});
 
+  this.request.body.fields.enchantments = JSON.parse(this.request.body.fields.enchantments);
+  console.log('new enchantments', this.request.body.fields.enchantments);
   this.checkBody('name').notEmpty();
   this.checkBody('mana').notEmpty().isInt();
   this.checkBody('attack').notEmpty().isInt();
@@ -123,7 +125,7 @@ router.post('/cards/:id', bodyParse({multipart: true, formidable: { uploadDir: U
   newCard._id = cardId;
   newCard.id = cardId;
 
-  console.log('newCard', newCard);
+  console.log('newCard', newCard.toJSON());
   if (files.image.name !== '' && files.image.size > 0) {
     newCard.image = files.image.name;
     fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));

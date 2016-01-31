@@ -11,8 +11,12 @@
 {{/if}}
 
 <h1>{{#if isNew}}New card{{else}}Edit card{{/if}}</h1>
-<form id="card_form" method="POST" action="/cards/{{#if isNew}}{{else}}{{cardId}}{{/if}}"enctype="multipart/form-data">
+<form id="card_form" method="POST" action="/cards/" enctype="multipart/form-data">
   <input type="hidden" name="_csrf" id="_csrf" value="{{csrf}}" />
+  {{#if isNew}}
+  {{ else }}
+  <input type="hidden" name="id" id="id" value="{{ cardId }}" />
+  {{/if}}
   <div class="row">
     <div class="columns small-4">
       {{> input_field name="name" value=cardPresenter.name isNew=isNew }}
@@ -148,7 +152,7 @@ $(document).ready(function() {
     var data = new FormData($('#card_form')[0]);
     data.append('enchantments', JSON.stringify(cardModel.toJSON().enchantments));
 
-    $.ajax($(this).attr('action'), {
+    $.ajax($('#card_form').attr('action'), {
       data: data,
       method: 'POST',
       processData: false,

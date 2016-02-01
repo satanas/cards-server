@@ -63,15 +63,21 @@ router.get('/cards/new', cardsController.getCard);
 router.get('/cards/:id', cardsController.getCard);
 
 router.post('/cards/', bodyParse({multipart: true, formidable: { uploadDir: UPLOAD_DIR}}), function* (next) {
-  var errors = [],
-      card = null,
-      files = this.request.body.files,
-      cardId = this.request.body.fields.id;
+  var errors = [];
+  var card = null;
+  var files = this.request.body.files;
+  var cardId = this.request.body.fields.id;
 
   try {
     this.assertCSRF(this.request.body.fields);
   } catch (e) {
     return errorResponse(this, [{field: null, message: 'Request forbidden: ' + e.toString()}]);
+  }
+
+  if (cardId) {
+    var card = yield CardStorage.findOne({_id: cardId});
+    if (!card)
+      return errorResponse(this, [{field: null, message: `Card ${cardId} does not exist`}]);
   }
 
   // Request validation
@@ -83,7 +89,10 @@ router.post('/cards/', bodyParse({multipart: true, formidable: { uploadDir: UPLO
   this.checkBody('').clearAttributes();
 
   this.request.body.fields.enchantments = JSON.parse(this.request.body.fields.enchantments);
-  console.log('new enchantments', this.request.body.fields.enchantments);
+
+  // Image is required for new cards
+  if (!cardId && (files.image.name === '' || files.image.size === 0))
+    errors.push({field: 'image', message: 'image can not be empty'});
 
   errors = errors.concat(_.map(this.errors, function(err) {
     for(var i in err) return { field: i, message: err[i] }
@@ -92,118 +101,46 @@ router.post('/cards/', bodyParse({multipart: true, formidable: { uploadDir: UPLO
   if (errors.length > 0)
     return errorResponse(this, errors);
 
-  if (cardId) {
-    // Existing cards
-    card = yield CardStorage.findOne({_id: cardId});
-    if (!card)
-      return errorResponse(this, [{field: null, message: `Card ${cardId} does not exist`}]);
-  } else {
-    // New cards
-    if (files.image.name === '' || files.image.size === 0) {
-      errors.push({field: 'image', message: 'image can not be empty'});
-    }
+  var newCard = new CardStorage(this.request.body.fields);
+  newCard.id = cardId ? cardId : newCard._id.toString();
+
+  console.log('newCard', newCard);
+  if (files.image.name !== '' && files.image.size > 0) {
+    newCard.image = files.image.name;
+    fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
   }
 
-  this.body = 'ok';
-  //var newCard = new CardStorage(this.request.body.fields);
-  //newCard._id = cardId;
-  //newCard.id = cardId;
+  try {
+    if (cardId) {
+      delete newCard._id;
+      yield CardStorage.update({_id: cardId}, newCard.toJSON());
+    } else {
+      yield newCard.save();
+    }
 
-  //console.log('newCard', newCard.toJSON());
-  //if (files.image.name !== '' && files.image.size > 0) {
-  //  newCard.image = files.image.name;
-  //  fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
-  //}
-  //
-
-  //try {
-  //  yield CardStorage.update({_id: cardId}, newCard);
-
-  //  this.body = {
-  //    card: cardPresenter.render(newCard)
-  //  };
-  //} catch (e) {
-  //  return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);
-  //}
-  //
-
-//  var newCard = new CardStorage(this.request.body.fields);
-//  newCard.id = newCard._id.toString();
-//
-//  try {
-//    newCard.image = files.image.name;
-//    fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
-//
-//    yield newCard.save();
-//
-//    this.body = {
-//      card: cardPresenter.render(newCard),
-//      redirect: true,
-//      flash: addFlashMessage(this, 'success', 'Card saved successfully'),
-//      url: '/cards/' + newCard.id
-//    };
-//  } catch (e) {
-//    return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);
-//  }
+    var response = {
+      card: cardPresenter.render(newCard)
+    };
+    if (!cardId) {
+      response.redirect = true;
+      response.url = '/cards/' + newCard.id;
+      this.addFlashMessage('success', 'Card saved successfully');
+    }
+    this.body = response;
+  } catch (e) {
+    return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);
+  }
 });
 
-//router.post('/cards', bodyParse({multipart: true, formidable: { uploadDir: UPLOAD_DIR}}), function* (next) {
-//  var errors = [],
-//      files = this.request.body.files;
-//
-//  try {
-//    this.assertCSRF(this.request.body.fields);
-//  } catch (e) {
-//    return errorResponse(this, [{field: null, message: 'Request forbidden: ' + e.toString()}]);
-//  }
-//
-//  this.checkBody('name').notEmpty();
-//  this.checkBody('mana').notEmpty().isInt();
-//  this.checkBody('attack').notEmpty().isInt();
-//  this.checkBody('health').notEmpty().isInt().gt(0);
-//  this.checkBody('type').notEmpty().isInt();
-//  this.checkBody('').clearAttributes();
-//
-//  errors = errors.concat(_.map(this.errors, function(err) {
-//    for(var i in err) return { field: i, message: err[i] }
-//  }));
-//
-//  if (files.image.name === '' || files.image.size === 0) {
-//    errors.push({field: 'image', message: 'image can not be empty'});
-//  }
-//
-//  if (errors.length > 0)
-//    return errorResponse(this, errors);
-//
-//  var newCard = new CardStorage(this.request.body.fields);
-//  newCard.id = newCard._id.toString();
-//
-//  try {
-//    newCard.image = files.image.name;
-//    fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
-//
-//    yield newCard.save();
-//
-//    this.body = {
-//      card: cardPresenter.render(newCard),
-//      redirect: true,
-//      flash: addFlashMessage(this, 'success', 'Card saved successfully'),
-//      url: '/cards/' + newCard.id
-//    };
-//  } catch (e) {
-//    return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);
-//  }
-//});
-
 router.delete('/cards/:id', function* (next) {
-  var cardId = this.params.id,
-      card = yield CardStorage.findOne({_id: cardId});
+  var cardId = this.params.id;
+  var card = yield CardStorage.findOne({_id: cardId});
 
   try {
     var name = card.name;
     yield card.remove();
 
-    this.addFlashMessage('success', "Card '" + name + "' deleted successfully");
+    this.addFlashMessage('success', `Card ${name} deleted successfully`);
   } catch (e) {
     return errorResponse(this, [{field: null, message: 'Card not found'}]);
   }
@@ -211,7 +148,7 @@ router.delete('/cards/:id', function* (next) {
   this.body = {
     redirect: true,
     url: '/cards'
-  }
+  };
 });
 
 app.use(router.routes());

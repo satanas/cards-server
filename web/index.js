@@ -14,6 +14,7 @@ var mongoose = require('mongoose');
 
 var Global = require('../global');
 var flash = require('./middleware/flash');
+var errorResponse = require('./middleware/error_response');
 var Modification = require('../models/modification');
 var Enchantment = require('../models/enchantment');
 var CardStorage = require('../models/card_storage');
@@ -45,6 +46,7 @@ app.use(function* (next) {
 app.use(validate());
 app.use(serve('public'));
 app.use(flash);
+app.use(errorResponse);
 
 app.use(hbs.middleware({
   viewPath: __dirname + '/views',
@@ -71,13 +73,13 @@ router.post('/cards/', bodyParse({multipart: true, formidable: { uploadDir: UPLO
   try {
     this.assertCSRF(this.request.body.fields);
   } catch (e) {
-    return errorResponse(this, [{field: null, message: 'Request forbidden: ' + e.toString()}]);
+    return this.addErrorAndRespond([{field: null, message: 'Request forbidden: ' + e.toString()}]);
   }
 
   if (cardId) {
     var card = yield CardStorage.findOne({_id: cardId});
     if (!card)
-      return errorResponse(this, [{field: null, message: `Card ${cardId} does not exist`}]);
+      return this.addErrorAndRespond([{field: null, message: `Card ${cardId} does not exist`}]);
   }
 
   // Request validation
@@ -97,9 +99,10 @@ router.post('/cards/', bodyParse({multipart: true, formidable: { uploadDir: UPLO
   errors = errors.concat(_.map(this.errors, function(err) {
     for(var i in err) return { field: i, message: err[i] }
   }));
+  this.errors = errors;
 
   if (errors.length > 0)
-    return errorResponse(this, errors);
+    return this.respondErrors();
 
   var newCard = new CardStorage(this.request.body.fields);
   newCard.id = cardId ? cardId : newCard._id.toString();
@@ -128,7 +131,7 @@ router.post('/cards/', bodyParse({multipart: true, formidable: { uploadDir: UPLO
     }
     this.body = response;
   } catch (e) {
-    return errorResponse(this, [{field: null, message: 'Error saving card: ' + e.toString()}]);
+    return this.addErrorAndRespond([{field: null, message: 'Error saving card: ' + e.toString()}]);
   }
 });
 
@@ -137,12 +140,13 @@ router.delete('/cards/:id', function* (next) {
   var card = yield CardStorage.findOne({_id: cardId});
 
   try {
+    throw new Error('ble');
     var name = card.name;
     yield card.remove();
 
     this.addFlashMessage('success', `Card ${name} deleted successfully`);
   } catch (e) {
-    return errorResponse(this, [{field: null, message: 'Card not found'}]);
+    return this.addErrorAndRespond([{field: null, message: 'Card not found'}]);
   }
 
   this.body = {
@@ -163,10 +167,3 @@ validate.Validator.prototype.clearAttributes = function() {
     if (this.params[key] === 'true') this.params[key] = true;
   }, this)
 };
-
-function errorResponse(ctx, errors, status) {
-  ctx.status = status || 400;
-  ctx.body = {
-    errors: errors
-  };
-}

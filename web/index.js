@@ -15,15 +15,9 @@ var mongoose = require('mongoose');
 var Global = require('../global');
 var flash = require('./middleware/flash');
 var errorResponse = require('./middleware/error_response');
-var Modification = require('../models/modification');
-var Enchantment = require('../models/enchantment');
-var CardStorage = require('../models/card_storage');
-var CardPresenter = require('../presenters/card');
 var cardsController = require('./controllers/cards');
 
 var app = koa();
-
-var cardPresenter = new CardPresenter();
 
 const UPLOAD_DIR = os.tmpdir();
 

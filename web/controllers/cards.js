@@ -16,6 +16,7 @@ var enchantmentTemplate = fs.readFileSync(path.join(__dirname, '..', 'views', 'p
 var cardPresenter = new CardPresenter();
 var enchantmentFormPresenter = new EnchantmentFormPresenter();
 
+const IMAGES_DIR = path.join(__dirname, '..', '..', 'public', 'images');
 
 var controller = {};
 
@@ -99,17 +100,19 @@ controller.saveCard = function *(next) {
   var newCard = new CardStorage(this.request.body.fields);
   newCard.id = cardId ? cardId : newCard._id.toString();
 
-  console.log('newCard', newCard);
   if (files.image.name !== '' && files.image.size > 0) {
     newCard.image = files.image.name;
-    fs.rename(files.image.path, path.join(UPLOAD_DIR, files.image.name));
+    fs.rename(files.image.path, path.join(IMAGES_DIR, files.image.name));
   }
 
   try {
     if (cardId) {
-      delete newCard._id;
-      yield CardStorage.update({_id: cardId}, newCard.toJSON());
+      var params = newCard.toJSON();
+      delete params._id;
+      console.log('newCard update', params);
+      yield CardStorage.update({_id: cardId}, params);
     } else {
+      console.log('newCard save', newCard);
       yield newCard.save();
     }
 
@@ -121,7 +124,6 @@ controller.saveCard = function *(next) {
       response.url = '/cards/' + newCard.id;
       this.addFlashMessage('success', 'Card saved successfully');
     }
-    console.log('response', response);
     this.body = response;
   } catch (e) {
     console.log('err', e);

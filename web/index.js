@@ -1,5 +1,6 @@
 'use strict';
 
+var os = require('os');
 var fs = require('fs');
 var koa = require('koa');
 var path = require('path');
@@ -24,7 +25,7 @@ var app = koa();
 
 var cardPresenter = new CardPresenter();
 
-const UPLOAD_DIR = path.join(__dirname, '..', 'public', 'images');
+const UPLOAD_DIR = os.tmpdir();
 
 mongoose.connect('mongodb://localhost/magic');
 

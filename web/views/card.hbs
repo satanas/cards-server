@@ -192,9 +192,10 @@ function renderEnchantments() {
 }
 
 function deleteEnchantment(ev) {
-    var enchantments = cardModel.toJSON().enchantments;
-    enchantments.splice(parseInt($(this).attr('data-id')), 1);
-    cardModel.updateEnchantments(enchantments);
+  var enchantments = cardModel.toJSON().enchantments;
+  enchantments.splice(parseInt($(this).attr('data-id')), 1);
+  cardModel.updateEnchantments(enchantments);
+  updateImage();
 }
 
 function showEnchantmentDetails(ev) {
@@ -217,6 +218,10 @@ function updateModel() {
     data[attr] = (data[attr] === 'true') ? true : (data[attr] === 'false' ? false : data[attr]);
   }
   cardModel.set(data);
+  updateImage();
+}
+
+function updateImage() {
   if (newImage) {
     $('#card-details > .image > img').attr('src', newImage);
   }

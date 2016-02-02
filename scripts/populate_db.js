@@ -7,7 +7,7 @@ MongoClient.connect('mongodb://127.0.0.1:27017/magic', function(err, db) {
 
   populateSingleValues(db, ["player", "card", "self", "hand", "any"],
                        'target_types');
-  populateSingleValues(db, ["undamaged", "damaged", "class", "any"],
+  populateSingleValues(db, ["undamaged", "damaged", "attacking", "defending", "class", "any"],
                        'target_conditions');
   populateSingleValues(db, ["friend", "foe", "any"],
                        'target_bands');

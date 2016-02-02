@@ -66,24 +66,7 @@ router.get('/cards/:id', cardsController.getCard);
 
 router.post('/cards/', bodyParse({multipart: true, formidable: { uploadDir: UPLOAD_DIR}}), cardsController.saveCard);
 
-router.delete('/cards/:id', function* (next) {
-  var cardId = this.params.id;
-  var card = yield CardStorage.findOne({_id: cardId});
-
-  try {
-    var name = card.name;
-    yield card.remove();
-
-    this.addFlashMessage('success', `Card ${name} deleted successfully`);
-  } catch (e) {
-    return this.addErrorAndRespond([{field: null, message: 'Card not found'}]);
-  }
-
-  this.body = {
-    redirect: true,
-    url: '/cards'
-  };
-});
+router.delete('/cards/:id', cardsController.destroyCard);
 
 app.use(router.routes());
 

@@ -135,4 +135,23 @@ controller.saveCard = function *(next) {
   }
 };
 
+controller.destroyCard = function* (next) {
+  var cardId = this.params.id;
+  var card = yield CardStorage.findOne({_id: cardId});
+
+  try {
+    var name = card.name;
+    yield card.remove();
+
+    this.addFlashMessage('success', `Card ${name} deleted successfully`);
+  } catch (e) {
+    return this.addErrorAndRespond([{field: null, message: 'Card not found'}]);
+  }
+
+  this.body = {
+    redirect: true,
+    url: '/cards'
+  };
+};
+
 module.exports = controller;

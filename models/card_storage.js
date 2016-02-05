@@ -18,6 +18,7 @@ var cardSchema = mongoose.Schema({
   rush: {type: Boolean, default: false},
   overwhelm: {type: Boolean, default: false},
   deathtouch: {type: Boolean, default: false},
+  curse: {type: Boolean, default: false},
   venom: {type: Boolean, default: false},
   transfusion: {type: Boolean, default: false},
   vampirism: {type: Boolean, default: false},

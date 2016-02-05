@@ -249,12 +249,15 @@ Match.prototype.attack = function(playerId, data) {
   }
 
   // Deathtouch
-  if (attacker.health <= 0 && attacker.deathtouch) {
-    console.log('Defender killed due to deathtouch');
+
+
+  // Curse
+  if (attacker.health <= 0 && attacker.curse) {
+    console.log('Defender killed due to curse');
     defender.health = 0;
   }
-  if (defender.health <= 0 && defender.deathtouch) {
-    console.log('Attacker killed due to deathtouch');
+  if (defender.health <= 0 && defender.curse) {
+    console.log('Attacker killed due to curse');
     attacker.health = 0;
   }
 

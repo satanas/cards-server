@@ -18,6 +18,6 @@ module.exports = {
     'Started': 2,
     'Ended': 3
   },
-  ABILITIES: ['rush', 'overwhelm', 'firstStrike', 'deathtouch', 'venom', 'transfusion', 'vampirism', 'berserker']
+  ABILITIES: ['rush', 'overwhelm', 'firstStrike', 'deathtouch', 'venom', 'transfusion', 'vampirism', 'berserker', 'curse']
 }
 

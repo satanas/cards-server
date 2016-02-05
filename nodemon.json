@@ -1,6 +1,7 @@
 {
   "verbose": true,
   "ignore": [
+    ".DS_Store",
     ".git",
     "node_modules",
     "tmp",

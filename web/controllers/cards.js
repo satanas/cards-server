@@ -101,8 +101,8 @@ controller.saveCard = function *(next) {
   newCard.id = cardId ? cardId : newCard._id.toString();
 
   if (files.image.name !== '' && files.image.size > 0) {
-    newCard.image = files.image.name;
-    fs.rename(files.image.path, path.join(IMAGES_DIR, files.image.name));
+    newCard.image = `${newCard.id}${path.extname(files.image.name)}`;
+    fs.rename(files.image.path, path.join(IMAGES_DIR, newCard.image));
   }
 
   try {

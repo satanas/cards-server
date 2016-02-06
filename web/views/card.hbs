@@ -99,7 +99,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 }
 
 $(document).ready(function() {
-  cardModel = new Card(JSON.parse('{{{ cardModel }}}'));
+  cardModel = new Card({{{ cardModel }}});
 
   // Templates
   enchantmentTemplate = Handlebars.compile($('#enchantment-template').html());

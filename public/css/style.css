@@ -440,3 +440,7 @@ input.field-error, select.field-error {
 .row.odd {
   background-color: whitesmoke;
 }
+
+#gallery img {
+  max-width: 48px;
+}

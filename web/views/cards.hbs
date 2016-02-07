@@ -2,15 +2,13 @@
 <h1>Cards Gallery</h1>
 
 <a href="/cards/new">Add new</a>
-<table>
+<table id="gallery">
   <thead>
     <tr>
+      <th>Image</th>
       <th>Name</th>
       <th>Mana</th>
-      <th>Attack</th>
-      <th>Health</th>
-      <th>Type</th>
-      <th>Image</th>
+      <th>Attack / Health</th>
       <th>First Strike</th>
       <th>Rush</th>
       <th>Overwhelm</th>
@@ -27,12 +25,10 @@
   <tbody>
     {{#cards}}
     <tr>
+      <td><img src="/public/images/{{image}}" /></td>
       <td>{{name}}</td>
       <td>{{mana}}</td>
-      <td>{{attack}}</td>
-      <td>{{health}}</td>
-      <td>{{type}}</td>
-      <td>{{image}}</td>
+      <td>{{attack}} / {{health}}</td>
       <td>{{firstStrike}}</td>
       <td>{{rush}}</td>
       <td>{{overwhelm}}</td>

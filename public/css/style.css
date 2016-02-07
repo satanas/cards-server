@@ -441,6 +441,15 @@ input.field-error, select.field-error {
   background-color: whitesmoke;
 }
 
+#gallery .buttons {
+  text-align: right;
+  padding: 0 1rem;
+}
+
+#gallery .buttons span {
+  padding: 0 2rem;
+}
+
 #gallery img {
   max-width: 48px;
 }

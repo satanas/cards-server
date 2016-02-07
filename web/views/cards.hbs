@@ -1,49 +1,57 @@
 {{!< editor }}
 <h1>Cards Gallery</h1>
 
-<a href="/cards/new">Add new</a>
-<table id="gallery">
-  <thead>
-    <tr>
-      <th>Image</th>
-      <th>Name</th>
-      <th>Mana</th>
-      <th>Attack / Health</th>
-      <th>First Strike</th>
-      <th>Rush</th>
-      <th>Overwhelm</th>
-      <th>Deathtouch</th>
-      <th>Curse</th>
-      <th>Venom</th>
-      <th>Transfusion</th>
-      <th>Vampirism</th>
-      <th>Berserker</th>
-      <th>Flavor Text</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#cards}}
-    <tr>
-      <td><img src="/public/images/{{image}}" /></td>
-      <td>{{name}}</td>
-      <td>{{mana}}</td>
-      <td>{{attack}} / {{health}}</td>
-      <td>{{firstStrike}}</td>
-      <td>{{rush}}</td>
-      <td>{{overwhelm}}</td>
-      <td>{{deathtouch}}</td>
-      <td>{{curse}}</td>
-      <td>{{venom}}</td>
-      <td>{{transfusion}}</td>
-      <td>{{vampirism}}</td>
-      <td>{{berserker}}</td>
-      <td>{{flavorText}}</td>
-      <td><a class="edit-link" href="/cards/{{_id}}">Edit</a> | <a class="delete-link" data-card-name="{{name}}" href="/cards/{{_id}}">Delete</a></td>
-    </tr>
-    {{/cards}}
-  </tbody>
-</table>
+<div id="gallery">
+  <div class="buttons">
+    <span>{{ cards.length }} registered cards</span>
+    <a class="button" href="/cards/new">Add new card</a>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Mana</th>
+        <th>Attack / Health</th>
+        <th>First Strike</th>
+        <th>Rush</th>
+        <th>Overwhelm</th>
+        <th>Deathtouch</th>
+        <th>Curse</th>
+        <th>Venom</th>
+        <th>Transfusion</th>
+        <th>Vampirism</th>
+        <th>Berserker</th>
+        <th>Flavor Text</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#cards}}
+      <tr>
+        <td><img src="/public/images/{{image}}" /></td>
+        <td>{{name}}</td>
+        <td>{{mana}}</td>
+        <td>{{attack}} / {{health}}</td>
+        <td>{{firstStrike}}</td>
+        <td>{{rush}}</td>
+        <td>{{overwhelm}}</td>
+        <td>{{deathtouch}}</td>
+        <td>{{curse}}</td>
+        <td>{{venom}}</td>
+        <td>{{transfusion}}</td>
+        <td>{{vampirism}}</td>
+        <td>{{berserker}}</td>
+        <td>{{flavorText}}</td>
+        <td>
+          <a class="edit-link" href="/cards/{{_id}}" alt="Edit" title="Edit"><i class="fa fa-pencil-square-o"></i></a> | 
+          <a class="delete-link" data-card-name="{{name}}" href="/cards/{{_id}}" alt="Delete" title="Delete"><i class="fa fa-trash-o"></i></a>
+        </td>
+      </tr>
+      {{/cards}}
+    </tbody>
+  </table>
+</div>
 
 <script>
 $(document).ready(function() {

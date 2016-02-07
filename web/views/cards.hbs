@@ -13,15 +13,7 @@
         <th>Name</th>
         <th>Mana</th>
         <th>Attack / Health</th>
-        <th>First Strike</th>
-        <th>Rush</th>
-        <th>Overwhelm</th>
-        <th>Deathtouch</th>
-        <th>Curse</th>
-        <th>Venom</th>
-        <th>Transfusion</th>
-        <th>Vampirism</th>
-        <th>Berserker</th>
+        <th>Abilities</th>
         <th>Flavor Text</th>
         <th>Actions</th>
       </tr>
@@ -33,16 +25,18 @@
         <td>{{name}}</td>
         <td>{{mana}}</td>
         <td>{{attack}} / {{health}}</td>
-        <td>{{firstStrike}}</td>
-        <td>{{rush}}</td>
-        <td>{{overwhelm}}</td>
-        <td>{{deathtouch}}</td>
-        <td>{{curse}}</td>
-        <td>{{venom}}</td>
-        <td>{{transfusion}}</td>
-        <td>{{vampirism}}</td>
-        <td>{{berserker}}</td>
-        <td>{{flavorText}}</td>
+        <td>
+          {{#if firstStrike}}firstStrike{{/if}}
+          {{#if rush}}rush{{/if}}
+          {{#if overwhelm}}overwhelm{{/if}}
+          {{#if deathtouch}}deathtouch{{/if}}
+          {{#if curse}}curse{{/if}}
+          {{#if venom}}venom{{/if}}
+          {{#if transfusion}}transfusion{{/if}}
+          {{#if vampirism}}vampirism{{/if}}
+          {{#if berserker}}berserker{{/if}}
+        </td>
+        <td>{{flavorText}}
         <td>
           <a class="edit-link" href="/cards/{{_id}}" alt="Edit" title="Edit"><i class="fa fa-pencil-square-o"></i></a> | 
           <a class="delete-link" data-card-name="{{name}}" href="/cards/{{_id}}" alt="Delete" title="Delete"><i class="fa fa-trash-o"></i></a>

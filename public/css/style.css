@@ -441,6 +441,10 @@ input.field-error, select.field-error {
   background-color: whitesmoke;
 }
 
+#gallery table {
+  width: 100%;
+}
+
 #gallery .buttons {
   text-align: right;
   padding: 0 1rem;

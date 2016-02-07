@@ -105,10 +105,6 @@ controller.saveCard = function *(next) {
     fs.rename(files.image.path, path.join(IMAGES_DIR, newCard.image));
   }
 
-  //if (newCard.flavorText !== '') {
-  //  newCard.flavorText = encodeURIComponent(newCard.flavorText);
-  //}
-
   try {
     if (cardId) {
       var params = newCard.toJSON();

@@ -66,6 +66,9 @@ var CardView = Backbone.View.extend({
       if (this.model.get('stealth')) {
         abilities += '<span>Stealth</span>';
       }
+      if (this.model.get('endurance')) {
+        abilities += '<span>Endurance</span>';
+      }
 
       html = '<div class="mana">' + this.model.get('mana') + '</div>' +
         '<div class="image"><img src="' + IMAGES_PATH + this.model.get('image') + '" /></div>' +

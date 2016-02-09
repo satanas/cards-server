@@ -23,6 +23,7 @@ var cardSchema = mongoose.Schema({
   transfusion: {type: Boolean, default: false},
   vampirism: {type: Boolean, default: false},
   berserker: {type: Boolean, default: false},
+  endurance: {type: Boolean, default: false},
 });
 
 module.exports = mongoose.model('Card', cardSchema);

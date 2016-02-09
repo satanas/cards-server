@@ -3,7 +3,8 @@ var CardPopupView = Backbone.View.extend({
   initialize: function(options) {
     this.visible = false;
     this.popupTimer = null;
-    this.abilities = ['rush', 'overwhelm', 'firstStrike', 'deathtouch', 'venom', 'transfusion', 'vampirism', 'berserker', 'curse'];
+    this.abilities = ['rush', 'overwhelm', 'firstStrike', 'deathtouch', 'venom', 'transfusion', 'vampirism',
+      'berserker', 'curse', 'endurance'];
     if (this.model) {
       this.model.on('change', this.render, this);
     }

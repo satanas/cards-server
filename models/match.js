@@ -208,7 +208,7 @@ Match.prototype.attack = function(playerId, data) {
     }
   }
 
-  // First strike
+  // First strike and regular attack
   if (attacker.firstStrike && !defender.firstStrike) {
     defender.health -= attacker.attack;
     damageReceivedByDefender = attacker.attack;
@@ -236,6 +236,17 @@ Match.prototype.attack = function(playerId, data) {
     defender.health -= attacker.attack;
     damageReceivedByDefender = attacker.attack;
   }
+
+  // Endurance
+  if (attacker.endurance && attacker.health > 0) {
+    attacker.health += damageReceivedByAttacker;
+    damageReceivedByAttacker = 0;
+  }
+  if (defender.endurance && defender.health > 0) {
+    defender.health += damageReceivedByDefender;
+    damageReceivedByDefender = 0;
+  }
+
   console.log('Attacker: atk =', damageReceivedByDefender, '| health =', attacker.health);
   console.log('Defender: atk =', damageReceivedByAttacker, '| health =', defender.health);
 

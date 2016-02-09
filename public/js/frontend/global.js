@@ -50,7 +50,8 @@ var abilitiesDescription = {
   'berserker': "Can attack two times in the same turn.",
   'stealth': "Can't be attacked until it attacks the first time.",
   'faint': "Indicate how many turns this creature will fight until it dies. In each turn, the faint counter is decreased until it gets to zero.",
-  'provoke': "If a card has provoke, then the attacking player could not attack other creatures except the ones with provoke."
+  'provoke': "If a card has provoke, then the attacking player could not attack other creatures except the ones with provoke.",
+  'endurance': "This creature won’t receive any damage unless the damage is greater or equal to its health"
 }
 var IMAGES_PATH = '/public/images/';
 

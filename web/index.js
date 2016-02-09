@@ -42,6 +42,14 @@ app.use(serve('public'));
 app.use(flash);
 app.use(errorResponse);
 
+hbs.registerHelper('if_lt_eight', function(conditional, options) {
+  if (conditional < 8) {
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
 app.use(hbs.middleware({
   viewPath: __dirname + '/views',
   partialsPath: __dirname + '/views/partials',

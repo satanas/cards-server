@@ -18,7 +18,7 @@
   <input type="hidden" name="id" id="id" value="{{ cardId }}" />
   {{/if}}
   <div class="row">
-    <div class="columns small-4">
+    <div class="columns small-1 medium-3">
       {{> input_field name="name" value=cardPresenter.name isNew=isNew }}
       {{> input_field name="mana" value=cardPresenter.mana isNew=isNew }}
       {{> input_field name="attack" value=cardPresenter.attack isNew=isNew }}
@@ -42,13 +42,24 @@
       </div>
     </div>
 
-    <div class="columns small-4">
+    <div class="columns small-1 medium-3">
       <div id="card-details" class="preview"></div>
     </div>
 
-    <div class="columns small-4">
+    <div class="columns small-1 medium-3">
       {{#cardPresenter.abilities}}
-        {{> select_field name=name isNew=isNew values=values}}
+        {{#if_lt_eight @index}}
+          {{> select_field name=name isNew=isNew values=values}}
+        {{/if_lt_eight}}
+      {{/cardPresenter.abilities}}
+    </div>
+
+    <div class="columns small-1 medium-3">
+      {{#cardPresenter.abilities}}
+        {{#if_lt_eight @index}}
+        {{else}}
+          {{> select_field name=name isNew=isNew values=values}}
+        {{/if_lt_eight}}
       {{/cardPresenter.abilities}}
     </div>
   </div>

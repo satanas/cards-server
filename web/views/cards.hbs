@@ -15,6 +15,7 @@
         <th>Attack / Health</th>
         <th>Abilities</th>
         <th>Flavor Text</th>
+        <th>Enchantments</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -37,7 +38,12 @@
           {{#if berserker}}berserker{{/if}}
           {{#if endurance}}endurance{{/if}}
         </td>
-        <td>{{flavorText}}
+        <td>{{flavorText}}</td>
+        <td>
+        {{#enchantments}}
+          <div>{{description}}</div>
+        {{/enchantments}}
+        </td>
         <td>
           <a class="edit-link" href="/cards/{{_id}}" alt="Edit" title="Edit"><i class="fa fa-pencil-square-o"></i></a> | 
           <a class="delete-link" data-card-name="{{name}}" href="/cards/{{_id}}" alt="Delete" title="Delete"><i class="fa fa-trash-o"></i></a>

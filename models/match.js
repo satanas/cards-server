@@ -168,7 +168,9 @@ Match.prototype.attack = function(playerId, data) {
       attackerBloodFed = 0,
       defenderBloodFed = 0,
       damageReceivedByAttacker = 0,
-      damageReceivedByDefender = 0;
+      damageReceivedByDefender = 0,
+      actionAttacker = null,
+      actionDefender = null;
 
   if (!attacker) {
     console.log('Attacker not found');

@@ -3,6 +3,7 @@ var Global = require('../global');
 var Deck = require('./deck');
 
 function Player(socket, cardStorage) {
+  console.log('asdasdasdasd', socket.id);
   this.id = socket.id;
   this.health = Global.MAX_HEALTH;
   this.totalMana = 0;

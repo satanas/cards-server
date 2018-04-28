@@ -1,6 +1,6 @@
 var Card = require('../models/card');
 
-var Deck = function (playerId, cardStorage) {
+function Deck(playerId, cardStorage) {
   this.playerId = playerId;
   this.cards = [];
   cardStorage.forEach(function(c) {
